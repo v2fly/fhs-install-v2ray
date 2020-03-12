@@ -37,6 +37,7 @@ DAEMON_OPTS="-config /usr/local/etc/v2ray/config.json"
 #
 do_start()
 {
+    V2RAY_LOCATION_ASSET=/usr/local/lib/v2ray
     mkdir -p /var/log/v2ray
     # Return
     #   0 if daemon has been started
