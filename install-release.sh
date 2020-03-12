@@ -283,7 +283,7 @@ installV2Ray(){
     fi
     makeExecutable v2ray
     copyFile v2ctl && makeExecutable v2ctl
-    mkdir /usr/local/lib/v2ray
+    mkdir -p /usr/local/lib/v2ray
     copyFile geoip.dat
     copyFile geosite.dat
 
