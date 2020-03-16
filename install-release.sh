@@ -155,7 +155,7 @@ downloadV2Ray(){
         colorEcho ${RED} "Failed to download! Please check your network or try again."
         return 3
     fi
-    for LISTSUM in 'md5' 'sha1' 'sha256' 'sha512'; do
+    for LISTSUM in 'md5sum' 'sha1sum' 'sha256sum' 'sha512sum'; do
         SUM="$($LISTSUM $ZIPFILE | sed 's/.* //')"
         CHECKSUM="$(grep ${LISTSUM^^} $ZIPFILE.dgst | sed 's/.* //')"
         if [[ "$SUM" != "$CHECKSUM" ]]; then
