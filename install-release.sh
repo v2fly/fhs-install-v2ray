@@ -156,7 +156,7 @@ downloadV2Ray(){
         return 3
     fi
     for LISTSUM in 'md5' 'sha1' 'sha256' 'sha512'; do
-        SUM="$(${LISTSUM}sum $ZIPFILE | sed 's/.* //')"
+        SUM="$(${LISTSUM}sum $ZIPFILE | sed 's/ .*//')"
         CHECKSUM="$(grep ${LISTSUM^^} $ZIPFILE.dgst | sed 's/.* //')"
         if [[ "$SUM" != "$CHECKSUM" ]]; then
             colorEcho "$RED" 'Check failed! Please check your network or try again.'
