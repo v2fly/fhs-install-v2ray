@@ -9,16 +9,25 @@
 # 2: Application error
 # 3: Network error
 
+# CLI arguments
+PROXY=''
+HELP=''
+FORCE=''
+CHECK=''
+REMOVE=''
+VERSION=''
+VSRC_ROOT='/tmp/v2ray'
+EXTRACT_ONLY=''
+LOCAL=''
+LOCAL_INSTALL=''
+DIST_SRC='github'
+ERROR_IF_UPTODATE=''
+
 CUR_VER=""
 NEW_VER=""
-ARCH=""
-VDIS="64"
+VDIS=''
 ZIPFILE="/tmp/v2ray/v2ray.zip"
 V2RAY_RUNNING=0
-VSRC_ROOT="/tmp/v2ray"
-EXTRACT_ONLY=0
-ERROR_IF_UPTODATE=0
-DIST_SRC="github"
 
 CMD_INSTALL=""
 CMD_UPDATE=""
@@ -26,10 +35,6 @@ SOFTWARE_UPDATED=0
 
 SYSTEMCTL_CMD=$(command -v systemctl 2>/dev/null)
 SERVICE_CMD=$(command -v service 2>/dev/null)
-
-CHECK=""
-FORCE=""
-HELP=""
 
 #######color code########
 RED="31m"      # Error message
@@ -40,83 +45,98 @@ BLUE="36m"     # Info message
 
 #########################
 while [[ $# > 0 ]];do
-    key="$1"
-    case $key in
+    case "$1" in
         -p|--proxy)
-        PROXY="-x ${2}"
-        shift # past argument
-        ;;
+            PROXY="-x ${2}"
+            shift # past argument
+            ;;
         -h|--help)
-        HELP="1"
-        ;;
+            HELP="1"
+            ;;
         -f|--force)
-        FORCE="1"
-        ;;
+            FORCE="1"
+            ;;
         -c|--check)
-        CHECK="1"
-        ;;
+            CHECK="1"
+            ;;
         --remove)
-        REMOVE="1"
-        ;;
+            REMOVE="1"
+            ;;
         --version)
-        VERSION="$2"
-        shift
-        ;;
+            VERSION="$2"
+            shift
+            ;;
         --extract)
-        VSRC_ROOT="$2"
-        shift
-        ;;
+            VSRC_ROOT="$2"
+            shift
+            ;;
         --extractonly)
-        EXTRACT_ONLY="1"
-        ;;
+            EXTRACT_ONLY="1"
+            ;;
         -l|--local)
-        LOCAL="$2"
-        LOCAL_INSTALL="1"
-        shift
-        ;;
+            LOCAL="$2"
+            LOCAL_INSTALL="1"
+            shift
+            ;;
         --source)
-        DIST_SRC="$2"
-        shift
-        ;;
+            DIST_SRC="$2"
+            shift
+            ;;
         --errifuptodate)
-        ERROR_IF_UPTODATE="1"
-        ;;
+            ERROR_IF_UPTODATE="1"
+            ;;
         *)
-                # unknown option
-        ;;
+            # unknown option
+            ;;
     esac
     shift # past argument or value
 done
 
 ###############################
 colorEcho(){
-    COLOR=$1
-    echo -e "\033[${COLOR}${@:2}\033[0m"
+    echo -e "\033[${1}${@:2}\033[0m"
 }
 
-sysArch(){
-    ARCH=$(uname -m)
-    if [[ "$ARCH" == "i686" ]] || [[ "$ARCH" == "i386" ]]; then
-        VDIS="32"
-    elif [[ "$ARCH" == *"armv7"* ]] || [[ "$ARCH" == "armv6l" ]]; then
-        VDIS="arm"
-    elif [[ "$ARCH" == *"armv8"* ]] || [[ "$ARCH" == "aarch64" ]]; then
-        VDIS="arm64"
-    elif [[ "$ARCH" == *"mips64le"* ]]; then
-        VDIS="mips64le"
-    elif [[ "$ARCH" == *"mips64"* ]]; then
-        VDIS="mips64"
-    elif [[ "$ARCH" == *"mipsle"* ]]; then
-        VDIS="mipsle"
-    elif [[ "$ARCH" == *"mips"* ]]; then
-        VDIS="mips"
-    elif [[ "$ARCH" == *"s390x"* ]]; then
-        VDIS="s390x"
-    elif [[ "$ARCH" == "ppc64le" ]]; then
-        VDIS="ppc64le"
-    elif [[ "$ARCH" == "ppc64" ]]; then
-        VDIS="ppc64"
-    fi
+archAffix(){
+    case "${1:-"$(uname -m)"}" in
+        i686|i386)
+            echo '32'
+            ;;
+        x86_64|amd64)
+            echo '64'
+            ;;
+        *armv7*|armv6l)
+            echo 'arm'
+            ;;
+        *armv8*|aarch64)
+            echo 'arm64'
+            ;;
+        *mips64le*)
+            echo 'mips64le'
+            ;;
+        *mips64*)
+            echo 'mips64'
+            ;;
+        *mipsle*)
+            echo 'mipsle'
+            ;;
+        *mips*)
+            echo 'mips'
+            ;;
+        *s390x*)
+            echo 's390x'
+            ;;
+        ppc64le)
+            echo 'ppc64le'
+            ;;
+        ppc64)
+            echo 'ppc64'
+            ;;
+        *)
+            return 1
+            ;;
+    esac
+
     return 0
 }
 
@@ -130,10 +150,19 @@ downloadV2Ray(){
     fi
     colorEcho ${BLUE} "Downloading V2Ray: ${DOWNLOAD_LINK}"
     curl ${PROXY} -L -H "Cache-Control: no-cache" -o ${ZIPFILE} ${DOWNLOAD_LINK}
+    curl ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIPFILE.dgst" "$DOWNLOAD_LINK.dgst"
     if [ $? != 0 ];then
         colorEcho ${RED} "Failed to download! Please check your network or try again."
         return 3
     fi
+    for LISTSUM in 'md5' 'sha1' 'sha256' 'sha512'; do
+        SUM="$($LISTSUM $ZIPFILE | sed 's/.* //')"
+        CHECKSUM="$(grep ${LISTSUM^^} $ZIPFILE.dgst | sed 's/.* //')"
+        if [[ "$SUM" != "$CHECKSUM" ]]; then
+            colorEcho "$RED" 'Check failed! Please check your network or try again.'
+            return 3
+        fi
+    done
     return 0
 }
 
@@ -146,11 +175,11 @@ installSoftware(){
     getPMT
     if [[ $? -eq 1 ]]; then
         colorEcho ${RED} "The system package manager tool isn't APT or YUM, please install ${COMPONENT} manually."
-        return 1 
+        return 1
     fi
     if [[ $SOFTWARE_UPDATED -eq 0 ]]; then
         colorEcho ${BLUE} "Updating software repo"
-        $CMD_UPDATE      
+        $CMD_UPDATE
         SOFTWARE_UPDATED=1
     fi
 
@@ -189,39 +218,47 @@ extract(){
         return 2
     fi
     if [[ -d "/tmp/v2ray/v2ray-${NEW_VER}-linux-${VDIS}" ]]; then
-      VSRC_ROOT="/tmp/v2ray/v2ray-${NEW_VER}-linux-${VDIS}"
+        VSRC_ROOT="/tmp/v2ray/v2ray-${NEW_VER}-linux-${VDIS}"
     fi
     return 0
 }
 
+normalizeVersion() {
+    if [ -n "$1" ]; then
+        case "$1" in
+            v*)
+                echo "$1"
+                ;;
+            *)
+                echo "v$1"
+                ;;
+        esac
+    else
+        echo ""
+    fi
+}
 
 # 1: new V2Ray. 0: no. 2: not installed. 3: check failed. 4: don't check.
 getVersion(){
     if [[ -n "$VERSION" ]]; then
-        NEW_VER="$VERSION"
-        if [[ ${NEW_VER} != v* ]]; then
-          NEW_VER=v${NEW_VER}
-        fi
+        NEW_VER="$(normalizeVersion "$VERSION")"
         return 4
     else
         VER=`/usr/local/bin/v2ray -version 2>/dev/null`
-        RETVAL="$?"
-        CUR_VER=`echo $VER | head -n 1 | cut -d " " -f2`
-        if [[ ${CUR_VER} != v* ]]; then
-            CUR_VER=v${CUR_VER}
-        fi
+        RETVAL=$?
+        CUR_VER="$(normalizeVersion "$(echo "$VER" | head -n 1 | cut -d " " -f2)")"
         TAG_URL="https://api.github.com/repos/v2ray/v2ray-core/releases/latest"
-        NEW_VER=`curl ${PROXY} -s ${TAG_URL} --connect-timeout 10| grep 'tag_name' | cut -d\" -f4`
-        if [[ ${NEW_VER} != v* ]]; then
-          NEW_VER=v${NEW_VER}
-        fi
+        NEW_VER="$(normalizeVersion "$(curl ${PROXY} -s "${TAG_URL}" --connect-timeout 10| grep 'tag_name' | cut -d\" -f4)")"
         if [[ $? -ne 0 ]] || [[ $NEW_VER == "" ]]; then
             colorEcho ${RED} "Failed to fetch release information. Please check your network or try again."
             return 3
         elif [[ $RETVAL -ne 0 ]];then
             return 2
         elif [[ $NEW_VER != $CUR_VER ]];then
-            return 1
+            IF_VER="$(echo "$NEW_VER $CUR_VER" | awk '{ if ( $1 > $2 ) print $1; else print $2 }')"
+            if [[ $IF_VER == $NEW_VER ]]; then
+                return 1
+            fi
         fi
         return 0
     fi
@@ -329,7 +366,7 @@ installInitScript(){
     return
 }
 
-Help(){
+showHelp(){
     echo "./install-release.sh [-h] [-c] [--remove] [-p proxy] [-f] [--version vx.y.z] [-l file]"
     echo "  -h, --help            Show help"
     echo "  -p, --proxy           To download through a proxy server, use -p socks5://127.0.0.1:1080 or -p http://127.0.0.1:3128 etc"
@@ -338,7 +375,6 @@ Help(){
     echo "  -l, --local           Install from a local file"
     echo "      --remove          Remove installed V2Ray"
     echo "  -c, --check           Check for update"
-    return 0
 }
 
 remove(){
@@ -394,10 +430,10 @@ checkUpdate(){
     VERSION=""
     getVersion
     RETVAL="$?"
-    if [[ $RETVAL -eq 1 ]]; then
-        colorEcho ${BLUE} "Found new version ${NEW_VER} for V2Ray.(Current version:$CUR_VER)"
-    elif [[ $RETVAL -eq 0 ]]; then
+    if [[ $RETVAL -eq 0 ]]; then
         colorEcho ${BLUE} "No new version. Current version is ${NEW_VER}."
+    elif [[ $RETVAL -eq 1 ]]; then
+        colorEcho ${BLUE} "Found new version ${NEW_VER} for V2Ray.(Current version:$CUR_VER)"
     elif [[ $RETVAL -eq 2 ]]; then
         colorEcho ${YELLOW} "No V2Ray installed."
         colorEcho ${BLUE} "The newest version for V2Ray is ${NEW_VER}."
@@ -407,11 +443,13 @@ checkUpdate(){
 
 main(){
     #helping information
-    [[ "$HELP" == "1" ]] && Help && return
+    [[ "$HELP" == "1" ]] && showHelp && return
     [[ "$CHECK" == "1" ]] && checkUpdate && return
     [[ "$REMOVE" == "1" ]] && remove && return
-    
-    sysArch
+
+    local ARCH=$(uname -m)
+    VDIS="$(archAffix)"
+
     # extract local file
     if [[ $LOCAL_INSTALL -eq 1 ]]; then
         colorEcho ${YELLOW} "Installing V2Ray via local file. Please make sure the file is a valid V2Ray package, as we are not able to determine that."
@@ -438,7 +476,7 @@ main(){
         if [[ $RETVAL == 0 ]] && [[ "$FORCE" != "1" ]]; then
             colorEcho ${BLUE} "Latest version ${CUR_VER} is already installed."
             if [[ "${ERROR_IF_UPTODATE}" == "1" ]]; then
-              return 10
+                return 10
             fi
             return
         elif [[ $RETVAL == 3 ]]; then
@@ -450,7 +488,7 @@ main(){
             extract ${ZIPFILE} || return $?
         fi
     fi 
-    
+
     if [[ "${EXTRACT_ONLY}" == "1" ]]; then
         colorEcho ${GREEN} "V2Ray extracted to ${VSRC_ROOT}, and exiting..."
         return 0
