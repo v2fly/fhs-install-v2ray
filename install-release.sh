@@ -152,7 +152,6 @@ installSoftware() {
             PACKAGE_MANAGEMENT_INSTALL='zypper install'
             ;;
     esac
-    fi
     "$PACKAGE_MANAGEMENT_UPDATE"
     "$PACKAGE_MANAGEMENT_INSTALL" "$COMPONENT--"
     if [[ "$?" -ne '0' ]]; then
