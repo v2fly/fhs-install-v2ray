@@ -14,7 +14,7 @@
 
 # Judge computer systems and architecture
 if [[ "$(uname)" == 'Linux' ]]; then
-    case "$(arch -s)" in
+    case "$(uname -m)" in
         i686 | i386)
             BIT='32'
             ;;
