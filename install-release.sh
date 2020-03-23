@@ -251,10 +251,10 @@ downloadV2Ray() {
     fi
     # Verification of V2Ray archive
     for LISTSUM in 'md5' 'sha1' 'sha256' 'sha512'; do
-        SUM="$($LISTSUM $ZIP_FILE | sed 's/.* //')"
-        CHECKSUM="$(grep ${LISTSUM^^} $ZIP_FILE.dgst | sed 's/.* //')"
+        SUM="$(${LISTSUM}sum $ZIPFILE | sed 's/ .*//')"
+        CHECKSUM="$(grep ${LISTSUM^^} $ZIPFILE.dgst | sed 's/.* //')"
         if [[ "$SUM" != "$CHECKSUM" ]]; then
-            echo 'error: Check failed! Please check your network or try again.'
+            colorEcho "$RED" 'Check failed! Please check your network or try again.'
             return 1
         fi
     done
