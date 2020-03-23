@@ -232,7 +232,7 @@ getVersion() {
 }
 downloadV2Ray() {
     mkdir "$TMP_DIRECTORY"
-    DOWNLOAD_LINK="https://github.com/v2ray/v2ray-core/releases/download/$RELEASE_VERSION/v2ray-openbsd-$BIT.zip"
+    DOWNLOAD_LINK="https://github.com/v2ray/v2ray-core/releases/download/$RELEASE_VERSION/v2ray-linux-$BIT.zip"
     echo "Downloading V2Ray archive: $DOWNLOAD_LINK"
     curl ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE" "$DOWNLOAD_LINK" -#
     if [[ "$?" -ne '0' ]]; then
@@ -399,7 +399,7 @@ main() {
 
     # Two very important variables
     TMP_DIRECTORY="$(mktemp -du)/"
-    ZIP_FILE="${TMP_DIRECTORY}v2ray-openbsd-$BIT.zip"
+    ZIP_FILE="${TMP_DIRECTORY}v2ray-linux-$BIT.zip"
 
     # Install V2Ray from a local file, but still need to make sure the network is available
     if [[ "$LOCAL_INSTALL" -eq '1' ]]; then
