@@ -272,9 +272,9 @@ decompression(){
 installFile() {
     NAME="$1"
     if [[ "$NAME" == 'v2ray' ]] || [[ "$NAME" == 'v2ctl' ]]; then
-        install -m 755 "$TMP_DIRECTORY/$NAME" "/usr/local/bin/$NAME"
+        install -m 755 "${TMP_DIRECTORY}$NAME" "/usr/local/bin/$NAME"
     elif [[ "$NAME" == 'geoip.dat' ]] || [[ "$NAME" == 'geosite.dat' ]]; then
-        install -m 755 "$TMP_DIRECTORY/$NAME" "/usr/local/lib/v2ray/$NAME"
+        install -m 755 "${TMP_DIRECTORY}$NAME" "/usr/local/lib/v2ray/$NAME"
     fi
 }
 installV2Ray(){
@@ -288,7 +288,7 @@ installV2Ray(){
     # Install V2Ray server config to /usr/local/etc/v2ray/
     if [[ ! -f '/usr/local/etc/v2ray/config.json' ]]; then
         install -d /usr/local/etc/v2ray/
-        install -m 644 "$TMP_DIRECTORY/vpoint_vmess_freedom.json" /usr/local/etc/v2ray/config.json
+        install -m 644 "${TMP_DIRECTORY}vpoint_vmess_freedom.json" /usr/local/etc/v2ray/config.json
 
         let PORT="$RANDOM+10000"
         UUID="$(cat /proc/sys/kernel/random/uuid)"
@@ -304,12 +304,12 @@ installV2Ray(){
 }
 installStartupServiceFile() {
     if [[ ! -f '/etc/systemd/system/v2ray.service' ]]; then
-        curl ${PROXY} -o "$TMP_DIRECTORY/systemd/v2ray.service" https://raw.githubusercontent.workers.dev/v2fly/fhs-install-v2ray/master/systemd/v2ray.service -s
+        curl ${PROXY} -o "${TMP_DIRECTORY}systemd/v2ray.service" https://raw.githubusercontent.workers.dev/v2fly/fhs-install-v2ray/master/systemd/v2ray.service -s
         if [[ "$?" -ne '0' ]]; then
             echo 'error: Failed to start service file download! Please check your network or try again.'
             exit 1
         fi
-        install -m 755 "$TMP_DIRECTORY/systemd/v2ray.service" /etc/systemd/system/v2ray.service
+        install -m 755 "${TMP_DIRECTORY}systemd/v2ray.service" /etc/systemd/system/v2ray.service
     fi
 }
 
@@ -399,7 +399,7 @@ main() {
 
     # Two very important variables
     TMP_DIRECTORY="$(mktemp -du)/"
-    ZIP_FILE="$TMP_DIRECTORY/v2ray-openbsd-$BIT.zip"
+    ZIP_FILE="${TMP_DIRECTORY}v2ray-openbsd-$BIT.zip"
 
     # Install V2Ray from a local file, but still need to make sure the network is available
     if [[ "$LOCAL_INSTALL" -eq '1' ]]; then
