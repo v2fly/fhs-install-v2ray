@@ -415,7 +415,7 @@ main() {
         getVersion
         NUMBER="$?"
         if [[ "$NUMBER" -eq '0' ]] || [[ "$FORCE" -eq '1' ]] || [[ "$NUMBER" -eq 2 ]]; then
-            echo "info: Installing V2Ray $RELEASE_VERSION for $(arch -s)"
+            echo "info: Installing V2Ray $RELEASE_VERSION for $(uname -m)"
             downloadV2Ray
             if [[ "$?" -eq '1' ]]; then
                 rm -r "$TMP_DIRECTORY"
