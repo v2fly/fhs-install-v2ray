@@ -152,8 +152,8 @@ installSoftware() {
             PACKAGE_MANAGEMENT_INSTALL='zypper install'
             ;;
     esac
-    "$PACKAGE_MANAGEMENT_UPDATE"
-    "$PACKAGE_MANAGEMENT_INSTALL" "$COMPONENT--"
+    ${PACKAGE_MANAGEMENT_UPDATE}
+    ${PACKAGE_MANAGEMENT_INSTALL} "$COMPONENT--"
     if [[ "$?" -ne '0' ]]; then
         echo "error: Installation of $COMPONENT failed, please check your network."
         exit 1
