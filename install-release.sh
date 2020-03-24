@@ -30,6 +30,22 @@ if [[ "$(uname)" == 'Linux' ]]; then
         echo "error: Don't use outdated Linux distributions."
         exit 1
     fi
+    if [[ "$(command -v apt)" ]]; then
+        PACKAGE_MANAGEMENT_UPDATE='apt update'
+        PACKAGE_MANAGEMENT_INSTALL='apt install'
+        PACKAGE_MANAGEMENT_REMOVE='apt remove'
+    elif [[ "$(command -v yum)" ]]; then
+        PACKAGE_MANAGEMENT_UPDATE='yum makecache'
+        PACKAGE_MANAGEMENT_INSTALL='yum install'
+        PACKAGE_MANAGEMENT_REMOVE='yum remove'
+    elif [[ "$(command -v zypper)" ]]; then
+        PACKAGE_MANAGEMENT_UPDATE='zypper refresh'
+        PACKAGE_MANAGEMENT_INSTALL='zypper install'
+        PACKAGE_MANAGEMENT_REMOVE='zypper remove'
+    else
+        echo "error: The script does not support the package manager in this operating system."
+        exit 1
+    fi
 else
     echo "error: This operating system is not supported."
     exit 1
@@ -138,21 +154,6 @@ installSoftware() {
     if [[ -n "$(command -v $COMPONENT)" ]]; then
         return
     fi
-    case "$(cat /etc/os-release | grep '^NAME' | awk -F '"' '{print $2}')" in
-        'Debian GNU/Linux')
-            PACKAGE_MANAGEMENT_UPDATE='apt update'
-            PACKAGE_MANAGEMENT_INSTALL='apt install'
-            ;;
-        'CentOS Linux')
-            PACKAGE_MANAGEMENT_UPDATE='yum makecache'
-            PACKAGE_MANAGEMENT_INSTALL='yum install'
-            ;;
-        'openSUSE Leap')
-            PACKAGE_MANAGEMENT_UPDATE='zypper refresh'
-            PACKAGE_MANAGEMENT_INSTALL='zypper install'
-            ;;
-    esac
-    ${PACKAGE_MANAGEMENT_UPDATE}
     ${PACKAGE_MANAGEMENT_INSTALL} "$COMPONENT"
     if [[ "$?" -ne '0' ]]; then
         echo "error: Installation of $COMPONENT failed, please check your network."
@@ -162,7 +163,7 @@ installSoftware() {
 }
 versionNumber() {
     case "$1" in
-        v*)
+        'v'*)
             echo "$1"
             ;;
         *)
@@ -365,7 +366,7 @@ removeV2Ray() {
             echo 'removed: /usr/local/bin/v2ctl'
             echo 'removed: /usr/local/bin/v2ray'
             echo 'Please execute the command: systemctl disable v2ray'
-            echo 'You may need to execute a command to remove dependent software: pkg_delete -ac curl unzip'
+            echo "You may need to execute a command to remove dependent software: $PACKAGE_MANAGEMENT_REMOVE -ac curl unzip"
             echo 'info: V2Ray has been removed.'
             echo 'info: If necessary, manually delete the configuration and log files.'
             echo 'info: e.g., /usr/local/etc/v2ray/ and /var/log/v2ray/ ...'
@@ -406,11 +407,13 @@ main() {
         echo 'warn: Install V2Ray from a local file, but still need to make sure the network is available.'
         echo -n 'warn: Please make sure the file is valid because we cannot confirm it. (Press any key) ...'
         read
+        ${PACKAGE_MANAGEMENT_UPDATE}
         installSoftware unzip
         mkdir "$TMP_DIRECTORY"
         decompression "$LOCAL_FILE"
     else
         # Normal way
+        ${PACKAGE_MANAGEMENT_UPDATE}
         installSoftware curl
         getVersion
         NUMBER="$?"
@@ -451,7 +454,7 @@ main() {
     if [[ "$V2RAY_RUNNING" -ne '1' ]]; then
         echo 'Please execute the command: systemctl enable v2ray; systemctl start v2ray'
     fi
-    echo 'You may need to execute a command to remove dependent software: pkg_delete -ac curl unzip'
+    echo "You may need to execute a command to remove dependent software: $PACKAGE_MANAGEMENT_REMOVE -ac curl unzip"
     if [[ "$V2RAY_RUNNING" -eq '1' ]]; then
         startV2Ray
     fi
