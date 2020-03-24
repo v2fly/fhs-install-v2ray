@@ -214,6 +214,7 @@ getVersion() {
         fi
         # Get V2Ray release version number
         TMP_FILE="$(mktemp)"
+        # Avoid errors when installing cURL for the first time
         /usr/bin/curl ${PROXY} -o "$TMP_FILE" https://api.github.com/repos/v2ray/v2ray-core/releases/latest -s
         if [[ "$?" -ne '0' ]]; then
             rm "$TMP_FILE"
