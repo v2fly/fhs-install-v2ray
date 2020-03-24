@@ -56,6 +56,10 @@ if [[ "$(uname)" == 'Linux' ]]; then
     if [[ ! -f '/etc/os-release' ]]; then
         echo "error: Don't use outdated Linux distributions."
         exit 1
+        if [[ -z "$(ls -l /sbin/init | grep systemd)" ]]; then
+            echo "error: Only Linux distributions using systemd are supported."
+            exit 1
+        fi
     fi
     if [[ "$(command -v apt)" ]]; then
         PACKAGE_MANAGEMENT_UPDATE='apt update'
