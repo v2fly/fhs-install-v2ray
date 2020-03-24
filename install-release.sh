@@ -15,11 +15,38 @@
 # Judge computer systems and architecture
 if [[ "$(uname)" == 'Linux' ]]; then
     case "$(uname -m)" in
-        i686 | i386)
-            BIT='32'
+        'i686' | 'i386')
+            MACHINE='32'
             ;;
-        x86_64 | amd64)
-            BIT='64'
+        'x86_64' | 'amd64')
+            MACHINE='64'
+            ;;
+        'armv7' | 'armv6l')
+            MACHINE='arm'
+            ;;
+        'armv8' | 'aarch64')
+            MACHINE='arm64'
+            ;;
+        'mips')
+            MACHINE='mips'
+            ;;
+        'mips64')
+            MACHINE='mips64'
+            ;;
+        'mips64le')
+            MACHINE='mips64le'
+            ;;
+        'mipsle')
+            MACHINE='mipsle'
+            ;;
+        's390x')
+            MACHINE='s390x'
+            ;;
+        'ppc64')
+            MACHINE='ppc64'
+            ;;
+        'ppc64le')
+            MACHINE='ppc64le'
             ;;
         *)
             echo "error: The architecture is not supported."
@@ -233,7 +260,7 @@ getVersion() {
 }
 downloadV2Ray() {
     mkdir "$TMP_DIRECTORY"
-    DOWNLOAD_LINK="https://github.com/v2ray/v2ray-core/releases/download/$RELEASE_VERSION/v2ray-linux-$BIT.zip"
+    DOWNLOAD_LINK="https://github.com/v2ray/v2ray-core/releases/download/$RELEASE_VERSION/v2ray-linux-$MACHINE.zip"
     echo "Downloading V2Ray archive: $DOWNLOAD_LINK"
     curl ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE" "$DOWNLOAD_LINK" -#
     if [[ "$?" -ne '0' ]]; then
@@ -366,7 +393,7 @@ removeV2Ray() {
             echo 'removed: /usr/local/bin/v2ctl'
             echo 'removed: /usr/local/bin/v2ray'
             echo 'Please execute the command: systemctl disable v2ray'
-            echo "You may need to execute a command to remove dependent software: $PACKAGE_MANAGEMENT_REMOVE -ac curl unzip"
+            echo "You may need to execute a command to remove dependent software: $PACKAGE_MANAGEMENT_REMOVE curl unzip"
             echo 'info: V2Ray has been removed.'
             echo 'info: If necessary, manually delete the configuration and log files.'
             echo 'info: e.g., /usr/local/etc/v2ray/ and /var/log/v2ray/ ...'
@@ -400,7 +427,7 @@ main() {
 
     # Two very important variables
     TMP_DIRECTORY="$(mktemp -du)/"
-    ZIP_FILE="${TMP_DIRECTORY}v2ray-linux-$BIT.zip"
+    ZIP_FILE="${TMP_DIRECTORY}v2ray-linux-$MACHINE.zip"
 
     # Install V2Ray from a local file, but still need to make sure the network is available
     if [[ "$LOCAL_INSTALL" -eq '1' ]]; then
@@ -454,7 +481,7 @@ main() {
     if [[ "$V2RAY_RUNNING" -ne '1' ]]; then
         echo 'Please execute the command: systemctl enable v2ray; systemctl start v2ray'
     fi
-    echo "You may need to execute a command to remove dependent software: $PACKAGE_MANAGEMENT_REMOVE -ac curl unzip"
+    echo "You may need to execute a command to remove dependent software: $PACKAGE_MANAGEMENT_REMOVE curl unzip"
     if [[ "$V2RAY_RUNNING" -eq '1' ]]; then
         startV2Ray
     fi
