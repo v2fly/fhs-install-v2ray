@@ -167,6 +167,10 @@ if [[ "$#" -gt '0' ]]; then
                     fi
                     FORCE='1'
                     ;;
+                *)
+                    echo "$0: unknown option -- -"
+                    exit 1
+                    ;;
             esac
             ;;
         *)
@@ -221,7 +225,7 @@ getVersion() {
             echo 'error: Failed to get release list, please check your network.'
             exit 1
         fi
-        RELEASE_LATEST="$(cat $TMP_FILE | sed 's/,/,\n/g' | grep 'tag_name' | awk -F '"' '{print $4}')"
+        RELEASE_LATEST="$(cat $TMP_FILE | sed 'y/,/\n/' | grep 'tag_name' | awk -F '"' '{print $4}')"
         rm "$TMP_FILE"
         RELEASE_VERSION="$(versionNumber $RELEASE_LATEST)"
         # Compare V2Ray version numbers
