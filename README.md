@@ -35,7 +35,7 @@ or
 ## 下載
 
 ```
-# curl https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh -O
+# curl -O https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh
 ```
 
 ## 使用
