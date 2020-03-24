@@ -214,7 +214,7 @@ getVersion() {
         fi
         # Get V2Ray release version number
         TMP_FILE="$(mktemp)"
-        curl ${PROXY} -o "$TMP_FILE" --connect-timeout 10 https://api.github.com/repos/v2ray/v2ray-core/releases/latest -s
+        /usr/bin/curl ${PROXY} -o "$TMP_FILE" https://api.github.com/repos/v2ray/v2ray-core/releases/latest -s
         if [[ "$?" -ne '0' ]]; then
             rm "$TMP_FILE"
             echo 'error: Failed to get release list, please check your network.'
