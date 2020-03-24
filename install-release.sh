@@ -347,7 +347,7 @@ installStartupServiceFile() {
             echo 'error: Failed to start service file download! Please check your network or try again.'
             exit 1
         fi
-        install -m 755 "${TMP_DIRECTORY}systemd/v2ray.service" /etc/systemd/system/v2ray.service
+        install -m 755 "${TMP_DIRECTORY}systemd/system/v2ray.service" /etc/systemd/system/v2ray.service
     fi
 }
 
