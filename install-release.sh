@@ -393,15 +393,15 @@ removeV2Ray() {
             stopV2Ray
         fi
         NAME="$1"
-        rm -r /etc/systemd/system/v2ray.service /usr/local/lib/v2ray/ /usr/local/bin/{v2ray,v2ctl}
+        rm -r /usr/local/bin/{v2ray,v2ctl} /usr/local/lib/v2ray/ /etc/systemd/system/v2ray.service
         if [[ "$?" -ne '0' ]]; then
             echo 'error: Failed to remove V2Ray.'
             exit 1
         else
-            echo 'removed: /etc/systemd/system/v2ray.service'
-            echo 'removed: /usr/local/lib/v2ray/'
-            echo 'removed: /usr/local/bin/v2ctl'
             echo 'removed: /usr/local/bin/v2ray'
+            echo 'removed: /usr/local/bin/v2ctl'
+            echo 'removed: /usr/local/lib/v2ray/'
+            echo 'removed: /etc/systemd/system/v2ray.service'
             echo 'Please execute the command: systemctl disable v2ray'
             echo "You may need to execute a command to remove dependent software: $PACKAGE_MANAGEMENT_REMOVE curl unzip"
             echo 'info: V2Ray has been removed.'
