@@ -341,7 +341,7 @@ installV2Ray(){
 
     # Used to store V2Ray log files
     if [[ ! -d '/var/log/v2ray/' ]]; then
-        install -d -o nobody -g nobody /var/log/v2ray/
+        install -do nobody /var/log/v2ray/
     fi
 }
 installStartupServiceFile() {
