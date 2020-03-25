@@ -341,18 +341,20 @@ installV2Ray(){
 
     # Used to store V2Ray log files
     if [[ ! -d '/var/log/v2ray/' ]]; then
-        install -d /var/log/v2ray/
+        install -d -o nobody -g nobody /var/log/v2ray/
     fi
 }
 installStartupServiceFile() {
     if [[ ! -f '/etc/systemd/system/v2ray.service' ]]; then
         mkdir "${TMP_DIRECTORY}systemd/system/"
         curl ${PROXY} -o "${TMP_DIRECTORY}systemd/system/v2ray.service" https://raw.githubusercontent.workers.dev/v2fly/fhs-install-v2ray/master/systemd/system/v2ray.service -s
+        curl ${PROXY} -o "${TMP_DIRECTORY}systemd/system/v2ray@.service" https://raw.githubusercontent.workers.dev/v2fly/fhs-install-v2ray/master/systemd/system/v2ray@.service -s
         if [[ "$?" -ne '0' ]]; then
             echo 'error: Failed to start service file download! Please check your network or try again.'
             exit 1
         fi
         install -m 755 "${TMP_DIRECTORY}systemd/system/v2ray.service" /etc/systemd/system/v2ray.service
+        install -m 755 "${TMP_DIRECTORY}systemd/system/v2ray@.service" /etc/systemd/system/v2ray@.service
     fi
 }
 
