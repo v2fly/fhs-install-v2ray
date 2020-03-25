@@ -69,6 +69,11 @@ if [[ "$(uname)" == 'Linux' ]]; then
         PACKAGE_MANAGEMENT_UPDATE='yum makecache'
         PACKAGE_MANAGEMENT_INSTALL='yum install'
         PACKAGE_MANAGEMENT_REMOVE='yum remove'
+        if [[ "$(command -v dnf)" ]]; then
+            PACKAGE_MANAGEMENT_UPDATE='dnf makecache'
+            PACKAGE_MANAGEMENT_INSTALL='dnf install'
+            PACKAGE_MANAGEMENT_REMOVE='dnf remove'
+        fi
     elif [[ "$(command -v zypper)" ]]; then
         PACKAGE_MANAGEMENT_UPDATE='zypper refresh'
         PACKAGE_MANAGEMENT_INSTALL='zypper install'
