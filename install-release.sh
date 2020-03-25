@@ -341,7 +341,11 @@ installV2Ray(){
 
     # Used to store V2Ray log files
     if [[ ! -d '/var/log/v2ray/' ]]; then
-        install -do nobody /var/log/v2ray/
+        if [[ -n "$(id nobody | grep nogroup)" ]]; then
+            install -d -o nobody -g nogroup /var/log/v2ray/
+        else
+            install -do nobody /var/log/v2ray/
+        fi
     fi
 }
 installStartupServiceFile() {
