@@ -135,17 +135,17 @@ if [[ "$#" -gt '0' ]]; then
             ;;
         '-p' | '--proxy')
             case "$2" in
-                http://*)
+                'http://'*)
                     ;;
-                https://*)
+                'https://'*)
                     ;;
-                socks4://*)
+                'socks4://'*)
                     ;;
-                socks4a://*)
+                'socks4a://'*)
                     ;;
-                socks5://*)
+                'socks5://'*)
                     ;;
-                socks5h://*)
+                'socks5h://'*)
                     ;;
                 *)
                     echo 'error: Please specify the correct proxy server address.'
