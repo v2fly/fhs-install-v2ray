@@ -348,6 +348,10 @@ installStartupServiceFile() {
     if [[ ! -f '/etc/systemd/system/v2ray.service' ]]; then
         mkdir "${TMP_DIRECTORY}systemd/system/"
         curl ${PROXY} -o "${TMP_DIRECTORY}systemd/system/v2ray.service" https://raw.githubusercontent.workers.dev/v2fly/fhs-install-v2ray/master/systemd/system/v2ray.service -s
+        if [[ "$?" -ne '0' ]]; then
+            echo 'error: Failed to start service file download! Please check your network or try again.'
+            exit 1
+        fi
         curl ${PROXY} -o "${TMP_DIRECTORY}systemd/system/v2ray@.service" https://raw.githubusercontent.workers.dev/v2fly/fhs-install-v2ray/master/systemd/system/v2ray@.service -s
         if [[ "$?" -ne '0' ]]; then
             echo 'error: Failed to start service file download! Please check your network or try again.'
