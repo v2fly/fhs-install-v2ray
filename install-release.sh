@@ -314,16 +314,17 @@ decompression(){
 installFile() {
     NAME="$1"
     if [[ "$NAME" == 'v2ray' ]] || [[ "$NAME" == 'v2ctl' ]]; then
-        install -m 755 "${TMP_DIRECTORY}$NAME" "/usr/local/bin/$NAME"
+        ln -s "../lib/v2ray/$NAME" "/usr/local/bin/$NAME"
+        install -m 755 "${TMP_DIRECTORY}$NAME" "/usr/local/lib/v2ray/$NAME"
     elif [[ "$NAME" == 'geoip.dat' ]] || [[ "$NAME" == 'geosite.dat' ]]; then
         install -m 755 "${TMP_DIRECTORY}$NAME" "/usr/local/lib/v2ray/$NAME"
     fi
 }
 installV2Ray(){
     # Install V2Ray binary to /usr/local/bin/ and /usr/local/lib/v2ray/
+    install -d /usr/local/lib/v2ray/
     installFile v2ray
     installFile v2ctl
-    install -d /usr/local/lib/v2ray/
     installFile geoip.dat
     installFile geosite.dat
 
@@ -344,7 +345,7 @@ installV2Ray(){
         if [[ -n "$(id nobody | grep nogroup)" ]]; then
             install -d -o nobody -g nogroup /var/log/v2ray/
         else
-            install -do nobody /var/log/v2ray/
+            install -d -o nobody -g nobody /var/log/v2ray/
         fi
     fi
 }
@@ -408,15 +409,20 @@ removeV2Ray() {
             stopV2Ray
         fi
         NAME="$1"
-        rm -r /usr/local/bin/{v2ray,v2ctl} /usr/local/lib/v2ray/ /etc/systemd/system/v2ray.service
+        unlink /usr/local/bin/v2ray
+        unlink /usr/local/bin/v2ctl
+        rm -r /usr/local/lib/v2ray/
+        rm /etc/systemd/system/v2ray.service
+        rm /etc/systemd/system/v2ray@.service
         if [[ "$?" -ne '0' ]]; then
             echo 'error: Failed to remove V2Ray.'
             exit 1
         else
-            echo 'removed: /usr/local/bin/v2ray'
-            echo 'removed: /usr/local/bin/v2ctl'
+            echo 'removed: /usr/local/bin/v2ray -> ../lib/v2ray/v2ray'
+            echo 'removed: /usr/local/bin/v2ctl -> ../lib/v2ray/v2ctl'
             echo 'removed: /usr/local/lib/v2ray/'
             echo 'removed: /etc/systemd/system/v2ray.service'
+            echo 'removed: /etc/systemd/system/v2ray@.service'
             echo 'Please execute the command: systemctl disable v2ray'
             echo "You may need to execute a command to remove dependent software: $PACKAGE_MANAGEMENT_REMOVE curl unzip"
             echo 'info: V2Ray has been removed.'
@@ -491,13 +497,16 @@ main() {
     fi
     installV2Ray
     installStartupServiceFile
-    echo 'installed: /usr/local/bin/v2ray'
-    echo 'installed: /usr/local/bin/v2ctl'
+    echo 'installed: /usr/local/bin/v2ray -> ../lib/v2ray/v2ray'
+    echo 'installed: /usr/local/bin/v2ctl -> ../lib/v2ray/v2ctl'
+    echo 'installed: /usr/local/lib/v2ray/v2ray'
+    echo 'installed: /usr/local/lib/v2ray/v2ctl'
     echo 'installed: /usr/local/lib/v2ray/geoip.dat'
     echo 'installed: /usr/local/lib/v2ray/geosite.dat'
     echo 'installed: /usr/local/etc/v2ray/config.json'
     echo 'installed: /var/log/v2ray/'
     echo 'installed: /etc/systemd/system/v2ray.service'
+    echo 'installed: /etc/systemd/system/v2ray@.service'
     if [[ -n "$PORT" ]] && [[ -n "$UUID" ]]; then
         echo "PORT: $PORT"
         echo "UUID: $UUID"
