@@ -331,21 +331,36 @@ installV2Ray(){
     # Install V2Ray configuration file to /usr/local/etc/v2ray/
     if [[ ! -d '/usr/local/etc/v2ray/' ]]; then
         install -d /usr/local/etc/v2ray/
-        echo '{' > /usr/local/etc/v2ray/00_base.json
-        echo '    "log": {},' >> /usr/local/etc/v2ray/00_base.json
-        echo '    "api": {},' >> /usr/local/etc/v2ray/00_base.json
-        echo '    "dns": {},' >> /usr/local/etc/v2ray/00_base.json
-        echo '    "routing": {},' >> /usr/local/etc/v2ray/00_base.json
-        echo '    "policy": {},' >> /usr/local/etc/v2ray/00_base.json
-        echo '    "inbounds": [],' >> /usr/local/etc/v2ray/00_base.json
-        echo '    "outbounds": [],' >> /usr/local/etc/v2ray/00_base.json
-        echo '    "transport": {},' >> /usr/local/etc/v2ray/00_base.json
-        echo '    "stats": {},' >> /usr/local/etc/v2ray/00_base.json
-        echo '    "reverse": {}' >> /usr/local/etc/v2ray/00_base.json
-        echo '}' >> /usr/local/etc/v2ray/00_base.json
-        for BASE in 01_log 02_api 03_dns 04_routing 05_policy 06_inbounds 07_outbounds 08_transport 09_stats 10_reverse; do
-            touch "/usr/local/etc/v2ray/$BASE.json"
-        done
+        echo '{' > /usr/local/etc/v2ray/0_log.json
+        echo '    "log": {}' >> /usr/local/etc/v2ray/0_log.json
+        echo '}' >> /usr/local/etc/v2ray/0_log.json
+        echo '{' > /usr/local/etc/v2ray/1_api.json
+        echo '    "api": {}' >> /usr/local/etc/v2ray/1_api.json
+        echo '}' >> /usr/local/etc/v2ray/1_api.json
+        echo '{' > /usr/local/etc/v2ray/2_dns.json
+        echo '    "dns": {}' >> /usr/local/etc/v2ray/2_dns.json
+        echo '}' >> /usr/local/etc/v2ray/2_dns.json
+        echo '{' > /usr/local/etc/v2ray/3_routing.json
+        echo '    "routing": {}' >> /usr/local/etc/v2ray/3_routing.json
+        echo '}' >> /usr/local/etc/v2ray/3_routing.json
+        echo '{' > /usr/local/etc/v2ray/4_policy.json
+        echo '    "policy": {}' >> /usr/local/etc/v2ray/4_policy.json
+        echo '}' >> /usr/local/etc/v2ray/4_policy.json
+        echo '{' > /usr/local/etc/v2ray/5_inbounds.json
+        echo '    "inbounds": []' >> /usr/local/etc/v2ray/5_inbounds.json
+        echo '}' >> /usr/local/etc/v2ray/5_inbounds.json
+        echo '{' > /usr/local/etc/v2ray/6_outbounds.json
+        echo '    "outbounds": []' >> /usr/local/etc/v2ray/6_outbounds.json
+        echo '}' >> /usr/local/etc/v2ray/6_outbounds.json
+        echo '{' > /usr/local/etc/v2ray/7_transport.json
+        echo '    "transport": {}' >> /usr/local/etc/v2ray/7_transport.json
+        echo '}' >> /usr/local/etc/v2ray/7_transport.json
+        echo '{' > /usr/local/etc/v2ray/8_stats.json
+        echo '    "stats": {}' >> /usr/local/etc/v2ray/8_stats.json
+        echo '}' >> /usr/local/etc/v2ray/8_stats.json
+        echo '{' > /usr/local/etc/v2ray/9_reverse.json
+        echo '    "reverse": {}' >> /usr/local/etc/v2ray/9_reverse.json
+        echo '}' >> /usr/local/etc/v2ray/9_reverse.json
     fi
 
     # Used to store V2Ray log files
@@ -511,17 +526,16 @@ main() {
     echo 'installed: /usr/local/lib/v2ray/v2ctl'
     echo 'installed: /usr/local/lib/v2ray/geoip.dat'
     echo 'installed: /usr/local/lib/v2ray/geosite.dat'
-    echo 'installed: /usr/local/etc/v2ray/00_base.json'
-    echo 'installed: /usr/local/etc/v2ray/01_log.json'
-    echo 'installed: /usr/local/etc/v2ray/02_api.json'
-    echo 'installed: /usr/local/etc/v2ray/03_dns.json'
-    echo 'installed: /usr/local/etc/v2ray/04_routing.json'
-    echo 'installed: /usr/local/etc/v2ray/05_policy.json'
-    echo 'installed: /usr/local/etc/v2ray/06_inbounds.json'
-    echo 'installed: /usr/local/etc/v2ray/07_outbounds.json'
-    echo 'installed: /usr/local/etc/v2ray/08_transport.json'
-    echo 'installed: /usr/local/etc/v2ray/09_stats.json'
-    echo 'installed: /usr/local/etc/v2ray/10_reverse.json'
+    echo 'installed: /usr/local/etc/v2ray/0_log.json'
+    echo 'installed: /usr/local/etc/v2ray/1_api.json'
+    echo 'installed: /usr/local/etc/v2ray/2_dns.json'
+    echo 'installed: /usr/local/etc/v2ray/3_routing.json'
+    echo 'installed: /usr/local/etc/v2ray/4_policy.json'
+    echo 'installed: /usr/local/etc/v2ray/5_inbounds.json'
+    echo 'installed: /usr/local/etc/v2ray/6_outbounds.json'
+    echo 'installed: /usr/local/etc/v2ray/7_transport.json'
+    echo 'installed: /usr/local/etc/v2ray/8_stats.json'
+    echo 'installed: /usr/local/etc/v2ray/9_reverse.json'
     echo 'installed: /var/log/v2ray/'
     echo 'installed: /etc/systemd/system/v2ray.service'
     echo 'installed: /etc/systemd/system/v2ray@.service'
