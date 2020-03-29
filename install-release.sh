@@ -331,9 +331,8 @@ installV2Ray(){
     # Install V2Ray configuration file to /usr/local/etc/v2ray/
     if [[ ! -d '/usr/local/etc/v2ray/' ]]; then
         install -d /usr/local/etc/v2ray/
-        for BASE in 0_log 1_api 2_dns 3_routing 4_policy 5_inbounds 6_outbounds 7_transport 8_stats 9_reverse; do
-            echo '{' > "/usr/local/etc/v2ray/$BASE.json"
-            echo '}' >> "/usr/local/etc/v2ray/$BASE.json"
+        for BASE in 00_log 01_api 02_dns 03_routing 04_policy 05_inbounds 06_outbounds 07_transport 08_stats 09_reverse; do
+            echo '{}' > "/usr/local/etc/v2ray/$BASE.json"
         done
     fi
 
@@ -500,16 +499,16 @@ main() {
     echo 'installed: /usr/local/lib/v2ray/v2ctl'
     echo 'installed: /usr/local/lib/v2ray/geoip.dat'
     echo 'installed: /usr/local/lib/v2ray/geosite.dat'
-    echo 'installed: /usr/local/etc/v2ray/0_log.json'
-    echo 'installed: /usr/local/etc/v2ray/1_api.json'
-    echo 'installed: /usr/local/etc/v2ray/2_dns.json'
-    echo 'installed: /usr/local/etc/v2ray/3_routing.json'
-    echo 'installed: /usr/local/etc/v2ray/4_policy.json'
-    echo 'installed: /usr/local/etc/v2ray/5_inbounds.json'
-    echo 'installed: /usr/local/etc/v2ray/6_outbounds.json'
-    echo 'installed: /usr/local/etc/v2ray/7_transport.json'
-    echo 'installed: /usr/local/etc/v2ray/8_stats.json'
-    echo 'installed: /usr/local/etc/v2ray/9_reverse.json'
+    echo 'installed: /usr/local/etc/v2ray/00_log.json'
+    echo 'installed: /usr/local/etc/v2ray/01_api.json'
+    echo 'installed: /usr/local/etc/v2ray/02_dns.json'
+    echo 'installed: /usr/local/etc/v2ray/03_routing.json'
+    echo 'installed: /usr/local/etc/v2ray/04_policy.json'
+    echo 'installed: /usr/local/etc/v2ray/05_inbounds.json'
+    echo 'installed: /usr/local/etc/v2ray/06_outbounds.json'
+    echo 'installed: /usr/local/etc/v2ray/07_transport.json'
+    echo 'installed: /usr/local/etc/v2ray/08_stats.json'
+    echo 'installed: /usr/local/etc/v2ray/09_reverse.json'
     echo 'installed: /var/log/v2ray/'
     echo 'installed: /etc/systemd/system/v2ray.service'
     echo 'installed: /etc/systemd/system/v2ray@.service'
