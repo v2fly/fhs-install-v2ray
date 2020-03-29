@@ -515,10 +515,6 @@ main() {
     echo 'installed: /var/log/v2ray/'
     echo 'installed: /etc/systemd/system/v2ray.service'
     echo 'installed: /etc/systemd/system/v2ray@.service'
-    if [[ -n "$PORT" ]] && [[ -n "$UUID" ]]; then
-        echo "PORT: $PORT"
-        echo "UUID: $UUID"
-    fi
     if [[ "$V2RAY_RUNNING" -ne '1' ]]; then
         echo 'Please execute the command: systemctl enable v2ray; systemctl start v2ray'
     fi
