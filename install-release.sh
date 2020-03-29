@@ -331,26 +331,10 @@ installV2Ray(){
     # Install V2Ray configuration file to /usr/local/etc/v2ray/
     if [[ ! -d '/usr/local/etc/v2ray/' ]]; then
         install -d /usr/local/etc/v2ray/
-        echo '{' > /usr/local/etc/v2ray/0_log.json
-        echo '}' >> /usr/local/etc/v2ray/0_log.json
-        echo '{' > /usr/local/etc/v2ray/1_api.json
-        echo '}' >> /usr/local/etc/v2ray/1_api.json
-        echo '{' > /usr/local/etc/v2ray/2_dns.json
-        echo '}' >> /usr/local/etc/v2ray/2_dns.json
-        echo '{' > /usr/local/etc/v2ray/3_routing.json
-        echo '}' >> /usr/local/etc/v2ray/3_routing.json
-        echo '{' > /usr/local/etc/v2ray/4_policy.json
-        echo '}' >> /usr/local/etc/v2ray/4_policy.json
-        echo '{' > /usr/local/etc/v2ray/5_inbounds.json
-        echo '}' >> /usr/local/etc/v2ray/5_inbounds.json
-        echo '{' > /usr/local/etc/v2ray/6_outbounds.json
-        echo '}' >> /usr/local/etc/v2ray/6_outbounds.json
-        echo '{' > /usr/local/etc/v2ray/7_transport.json
-        echo '}' >> /usr/local/etc/v2ray/7_transport.json
-        echo '{' > /usr/local/etc/v2ray/8_stats.json
-        echo '}' >> /usr/local/etc/v2ray/8_stats.json
-        echo '{' > /usr/local/etc/v2ray/9_reverse.json
-        echo '}' >> /usr/local/etc/v2ray/9_reverse.json
+        for BASE in 0_log 1_api 2_dns 3_routing 4_policy 5_inbounds 6_outbounds 7_transport 8_stats 9_reverse; do
+            echo '{' > "/usr/local/etc/v2ray/$BASE.json"
+            echo '}' >> "/usr/local/etc/v2ray/$BASE.json"
+        done
     fi
 
     # Used to store V2Ray log files
