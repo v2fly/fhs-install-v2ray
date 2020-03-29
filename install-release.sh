@@ -328,16 +328,24 @@ installV2Ray(){
     installFile geoip.dat
     installFile geosite.dat
 
-    # Install V2Ray server config to /usr/local/etc/v2ray/
+    # Install V2Ray configuration file to /usr/local/etc/v2ray/
     if [[ ! -d '/usr/local/etc/v2ray/' ]]; then
         install -d /usr/local/etc/v2ray/
-        install -m 644 "${TMP_DIRECTORY}vpoint_vmess_freedom.json" /usr/local/etc/v2ray/config.json
-
-        let PORT="$RANDOM+10000"
-        UUID="$(cat /proc/sys/kernel/random/uuid)"
-
-        sed -i "s/10086/$PORT/g" /usr/local/etc/v2ray/config.json
-        sed -i "s/23ad6b10-8d1a-40f7-8ad0-e3e35cd38297/$UUID/g" /usr/local/etc/v2ray/config.json
+        echo '{' > /usr/local/etc/v2ray/00_base.json
+        echo '    "log": {},' >> /usr/local/etc/v2ray/00_base.json
+        echo '    "api": {},' >> /usr/local/etc/v2ray/00_base.json
+        echo '    "dns": {},' >> /usr/local/etc/v2ray/00_base.json
+        echo '    "routing": {},' >> /usr/local/etc/v2ray/00_base.json
+        echo '    "policy": {},' >> /usr/local/etc/v2ray/00_base.json
+        echo '    "inbounds": [],' >> /usr/local/etc/v2ray/00_base.json
+        echo '    "outbounds": [],' >> /usr/local/etc/v2ray/00_base.json
+        echo '    "transport": {},' >> /usr/local/etc/v2ray/00_base.json
+        echo '    "stats": {},' >> /usr/local/etc/v2ray/00_base.json
+        echo '    "reverse": {}' >> /usr/local/etc/v2ray/00_base.json
+        echo '}' >> /usr/local/etc/v2ray/00_base.json
+        for BASE in 01_log 02_api 03_dns 04_routing 05_policy 06_inbounds 07_outbounds 08_transport 09_stats 10_reverse; do
+            touch "/usr/local/etc/v2ray/$BASE.json"
+        done
     fi
 
     # Used to store V2Ray log files
