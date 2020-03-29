@@ -332,34 +332,24 @@ installV2Ray(){
     if [[ ! -d '/usr/local/etc/v2ray/' ]]; then
         install -d /usr/local/etc/v2ray/
         echo '{' > /usr/local/etc/v2ray/0_log.json
-        echo '    "log": {}' >> /usr/local/etc/v2ray/0_log.json
         echo '}' >> /usr/local/etc/v2ray/0_log.json
         echo '{' > /usr/local/etc/v2ray/1_api.json
-        echo '    "api": {}' >> /usr/local/etc/v2ray/1_api.json
         echo '}' >> /usr/local/etc/v2ray/1_api.json
         echo '{' > /usr/local/etc/v2ray/2_dns.json
-        echo '    "dns": {}' >> /usr/local/etc/v2ray/2_dns.json
         echo '}' >> /usr/local/etc/v2ray/2_dns.json
         echo '{' > /usr/local/etc/v2ray/3_routing.json
-        echo '    "routing": {}' >> /usr/local/etc/v2ray/3_routing.json
         echo '}' >> /usr/local/etc/v2ray/3_routing.json
         echo '{' > /usr/local/etc/v2ray/4_policy.json
-        echo '    "policy": {}' >> /usr/local/etc/v2ray/4_policy.json
         echo '}' >> /usr/local/etc/v2ray/4_policy.json
         echo '{' > /usr/local/etc/v2ray/5_inbounds.json
-        echo '    "inbounds": []' >> /usr/local/etc/v2ray/5_inbounds.json
         echo '}' >> /usr/local/etc/v2ray/5_inbounds.json
         echo '{' > /usr/local/etc/v2ray/6_outbounds.json
-        echo '    "outbounds": []' >> /usr/local/etc/v2ray/6_outbounds.json
         echo '}' >> /usr/local/etc/v2ray/6_outbounds.json
         echo '{' > /usr/local/etc/v2ray/7_transport.json
-        echo '    "transport": {}' >> /usr/local/etc/v2ray/7_transport.json
         echo '}' >> /usr/local/etc/v2ray/7_transport.json
         echo '{' > /usr/local/etc/v2ray/8_stats.json
-        echo '    "stats": {}' >> /usr/local/etc/v2ray/8_stats.json
         echo '}' >> /usr/local/etc/v2ray/8_stats.json
         echo '{' > /usr/local/etc/v2ray/9_reverse.json
-        echo '    "reverse": {}' >> /usr/local/etc/v2ray/9_reverse.json
         echo '}' >> /usr/local/etc/v2ray/9_reverse.json
     fi
 
