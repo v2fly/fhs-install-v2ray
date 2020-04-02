@@ -1,6 +1,6 @@
 [Unit]
 Description=V2Ray Service
-After=network.target network-online.target nss-lookup.target
+After=network-online.target nss-lookup.target
 
 [Service]
 Type=simple
