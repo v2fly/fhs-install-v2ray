@@ -78,6 +78,10 @@ if [[ "$(uname)" == 'Linux' ]]; then
         PACKAGE_MANAGEMENT_UPDATE='zypper refresh'
         PACKAGE_MANAGEMENT_INSTALL='zypper install'
         PACKAGE_MANAGEMENT_REMOVE='zypper remove'
+    elif [[ "$(command -v apk)" ]]; then
+        PACKAGE_MANAGEMENT_UPDATE='apk update'
+        PACKAGE_MANAGEMENT_INSTALL='apk add'
+        PACKAGE_MANAGEMENT_REMOVE='apk del'
     else
         echo "error: The script does not support the package manager in this operating system."
         exit 1
