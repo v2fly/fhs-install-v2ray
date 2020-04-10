@@ -154,33 +154,35 @@ if [[ "$#" -gt '0' ]]; then
             esac
             PROXY="-x $2"
             # Parameters available through a proxy server
-            case "$3" in
-                '--version')
-                    if [[ "$#" -gt '4' ]] || [[ -z "$4" ]]; then
-                        echo 'error: Please specify the correct version.'
+            if [[ "$#" -gt '2' ]]; then
+                case "$3" in
+                    '--version')
+                        if [[ "$#" -gt '4' ]] || [[ -z "$4" ]]; then
+                            echo 'error: Please specify the correct version.'
+                            exit 1
+                        fi
+                        VERSION="$2"
+                        ;;
+                    '-c' | '--check')
+                        if [[ "$#" -gt '3' ]]; then
+                            echo 'error: Please enter the correct command.'
+                            exit 1
+                        fi
+                        CHECK='1'
+                        ;;
+                    '-f' | '--force')
+                        if [[ "$#" -gt '3' ]]; then
+                            echo 'error: Please enter the correct command.'
+                            exit 1
+                        fi
+                        FORCE='1'
+                        ;;
+                    *)
+                        echo "$0: unknown option -- -"
                         exit 1
-                    fi
-                    VERSION="$2"
-                    ;;
-                '-c' | '--check')
-                    if [[ "$#" -gt '3' ]]; then
-                        echo 'error: Please enter the correct command.'
-                        exit 1
-                    fi
-                    CHECK='1'
-                    ;;
-                '-f' | '--force')
-                    if [[ "$#" -gt '3' ]]; then
-                        echo 'error: Please enter the correct command.'
-                        exit 1
-                    fi
-                    FORCE='1'
-                    ;;
-                *)
-                    echo "$0: unknown option -- -"
-                    exit 1
-                    ;;
-            esac
+                        ;;
+                esac
+            fi
             ;;
         *)
             echo "$0: unknown option -- -"
