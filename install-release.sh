@@ -56,10 +56,10 @@ if [[ "$(uname)" == 'Linux' ]]; then
     if [[ ! -f '/etc/os-release' ]]; then
         echo "error: Don't use outdated Linux distributions."
         exit 1
-        if [[ -z "$(ls -l /sbin/init | grep systemd)" ]]; then
-            echo "error: Only Linux distributions using systemd are supported."
-            exit 1
-        fi
+    fi
+    if [[ -z "$(ls -l /sbin/init | grep systemd)" ]]; then
+        echo "error: Only Linux distributions using systemd are supported."
+        exit 1
     fi
     if [[ "$(command -v apt)" ]]; then
         PACKAGE_MANAGEMENT_UPDATE='apt update'
@@ -78,10 +78,6 @@ if [[ "$(uname)" == 'Linux' ]]; then
         PACKAGE_MANAGEMENT_UPDATE='zypper refresh'
         PACKAGE_MANAGEMENT_INSTALL='zypper install'
         PACKAGE_MANAGEMENT_REMOVE='zypper remove'
-    elif [[ "$(command -v apk)" ]]; then
-        PACKAGE_MANAGEMENT_UPDATE='apk update'
-        PACKAGE_MANAGEMENT_INSTALL='apk add'
-        PACKAGE_MANAGEMENT_REMOVE='apk del'
     else
         echo "error: The script does not support the package manager in this operating system."
         exit 1
