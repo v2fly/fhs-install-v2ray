@@ -314,17 +314,16 @@ decompression(){
 installFile() {
     NAME="$1"
     if [[ "$NAME" == 'v2ray' ]] || [[ "$NAME" == 'v2ctl' ]]; then
-        ln -s "../lib/v2ray/$NAME" "/usr/local/bin/$NAME"
-        install -m 755 "${TMP_DIRECTORY}$NAME" "/usr/local/lib/v2ray/$NAME"
+        install -m 755 "${TMP_DIRECTORY}$NAME" "/usr/local/bin/$NAME"
     elif [[ "$NAME" == 'geoip.dat' ]] || [[ "$NAME" == 'geosite.dat' ]]; then
         install -m 755 "${TMP_DIRECTORY}$NAME" "/usr/local/lib/v2ray/$NAME"
     fi
 }
 installV2Ray(){
     # Install V2Ray binary to /usr/local/bin/ and /usr/local/lib/v2ray/
-    install -d /usr/local/lib/v2ray/
     installFile v2ray
     installFile v2ctl
+    install -d /usr/local/lib/v2ray/
     installFile geoip.dat
     installFile geosite.dat
 
@@ -406,8 +405,8 @@ removeV2Ray() {
             stopV2Ray
         fi
         NAME="$1"
-        unlink /usr/local/bin/v2ray
-        unlink /usr/local/bin/v2ctl
+        rm /usr/local/bin/v2ray
+        rm /usr/local/bin/v2ctl
         rm -r /usr/local/lib/v2ray/
         rm /etc/systemd/system/v2ray.service
         rm /etc/systemd/system/v2ray@.service
@@ -415,8 +414,8 @@ removeV2Ray() {
             echo 'error: Failed to remove V2Ray.'
             exit 1
         else
-            echo 'removed: /usr/local/bin/v2ray -> ../lib/v2ray/v2ray'
-            echo 'removed: /usr/local/bin/v2ctl -> ../lib/v2ray/v2ctl'
+            echo 'removed: /usr/local/bin/v2ray'
+            echo 'removed: /usr/local/bin/v2ctl'
             echo 'removed: /usr/local/lib/v2ray/'
             echo 'removed: /etc/systemd/system/v2ray.service'
             echo 'removed: /etc/systemd/system/v2ray@.service'
@@ -494,10 +493,8 @@ main() {
     fi
     installV2Ray
     installStartupServiceFile
-    echo 'installed: /usr/local/bin/v2ray -> ../lib/v2ray/v2ray'
-    echo 'installed: /usr/local/bin/v2ctl -> ../lib/v2ray/v2ctl'
-    echo 'installed: /usr/local/lib/v2ray/v2ray'
-    echo 'installed: /usr/local/lib/v2ray/v2ctl'
+    echo 'installed: /usr/local/bin/v2ray'
+    echo 'installed: /usr/local/bin/v2ctl'
     echo 'installed: /usr/local/lib/v2ray/geoip.dat'
     echo 'installed: /usr/local/lib/v2ray/geosite.dat'
     echo 'installed: /usr/local/etc/v2ray/00_log.json'
