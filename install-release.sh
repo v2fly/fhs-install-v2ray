@@ -335,7 +335,7 @@ installV2Ray() {
         for BASE in 00_log 01_api 02_dns 03_routing 04_policy 05_inbounds 06_outbounds 07_transport 08_stats 09_reverse; do
             echo '{}' > "/usr/local/etc/v2ray/$BASE.json"
         done
-        CONFDIR=yes
+        CONFDIR='1'
     fi
 
     # Used to store V2Ray log files
@@ -345,7 +345,7 @@ installV2Ray() {
         else
             install -d -o nobody -g nobody /var/log/v2ray/
         fi
-        LOG=yes
+        LOG='1'
     fi
 }
 installStartupServiceFile() {
@@ -364,7 +364,7 @@ installStartupServiceFile() {
         fi
         install -m 755 "${TMP_DIRECTORY}systemd/system/v2ray.service" /etc/systemd/system/v2ray.service
         install -m 755 "${TMP_DIRECTORY}systemd/system/v2ray@.service" /etc/systemd/system/v2ray@.service
-        SYSTEMD=yes
+        SYSTEMD='1'
     fi
 }
 
