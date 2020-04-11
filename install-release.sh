@@ -298,7 +298,7 @@ downloadV2Ray() {
         SUM="$(${LISTSUM}sum $ZIP_FILE | sed 's/ .*//')"
         CHECKSUM="$(grep ${LISTSUM^^} $ZIP_FILE.dgst | sed 's/.* //')"
         if [[ "$SUM" != "$CHECKSUM" ]]; then
-            colorEcho "$RED" 'Check failed! Please check your network or try again.'
+            echo 'error: Check failed! Please check your network or try again.'
             return 1
         fi
     done
