@@ -493,8 +493,8 @@ main() {
 
     # Determine if V2Ray is running
     if [[ -n "$(pgrep v2ray)" ]]; then
-        V2RAY_RUNNING='1'
         stopV2Ray
+        V2RAY_RUNNING='1'
     fi
     installV2Ray
     installStartupServiceFile
@@ -502,7 +502,7 @@ main() {
     echo 'installed: /usr/local/bin/v2ctl'
     echo 'installed: /usr/local/lib/v2ray/geoip.dat'
     echo 'installed: /usr/local/lib/v2ray/geosite.dat'
-    if [[ -n "$CONFDIR" ]]; then
+    if [[ "$CONFDIR" -eq '1' ]]; then
         echo 'installed: /usr/local/etc/v2ray/00_log.json'
         echo 'installed: /usr/local/etc/v2ray/01_api.json'
         echo 'installed: /usr/local/etc/v2ray/02_dns.json'
@@ -514,19 +514,18 @@ main() {
         echo 'installed: /usr/local/etc/v2ray/08_stats.json'
         echo 'installed: /usr/local/etc/v2ray/09_reverse.json'
     fi
-    if [[ -n "$LOG" ]]; then
+    if [[ "$LOG" -eq '1' ]]; then
         echo 'installed: /var/log/v2ray/'
     fi
-    if [[ -n "$SYSTEMD" ]]; then
+    if [[ "$SYSTEMD" -eq '1' ]]; then
         echo 'installed: /etc/systemd/system/v2ray.service'
         echo 'installed: /etc/systemd/system/v2ray@.service'
-    fi
-    if [[ "$V2RAY_RUNNING" -ne '1' ]]; then
-        echo 'Please execute the command: systemctl enable v2ray; systemctl start v2ray'
     fi
     echo "You may need to execute a command to remove dependent software: $PACKAGE_MANAGEMENT_REMOVE curl unzip"
     if [[ "$V2RAY_RUNNING" -eq '1' ]]; then
         startV2Ray
+    else
+        echo 'Please execute the command: systemctl enable v2ray; systemctl start v2ray'
     fi
     if [[ "$LOCAL_INSTALL" -eq '1' ]]; then
         getVersion
