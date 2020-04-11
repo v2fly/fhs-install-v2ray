@@ -303,7 +303,7 @@ downloadV2Ray() {
         fi
     done
 }
-decompression(){
+decompression() {
     unzip -q "$1" -d "$TMP_DIRECTORY"
     if [[ "$?" -ne '0' ]]; then
         echo 'error: V2Ray decompression failed.'
@@ -321,7 +321,7 @@ installFile() {
         install -m 755 "${TMP_DIRECTORY}$NAME" "/usr/local/lib/v2ray/$NAME"
     fi
 }
-installV2Ray(){
+installV2Ray() {
     # Install V2Ray binary to /usr/local/bin/ and /usr/local/lib/v2ray/
     installFile v2ray
     installFile v2ctl
@@ -335,6 +335,7 @@ installV2Ray(){
         for BASE in 00_log 01_api 02_dns 03_routing 04_policy 05_inbounds 06_outbounds 07_transport 08_stats 09_reverse; do
             echo '{}' > "/usr/local/etc/v2ray/$BASE.json"
         done
+        CONFDIR=yes
     fi
 
     # Used to store V2Ray log files
@@ -344,6 +345,7 @@ installV2Ray(){
         else
             install -d -o nobody -g nobody /var/log/v2ray/
         fi
+        LOG=yes
     fi
 }
 installStartupServiceFile() {
@@ -362,6 +364,7 @@ installStartupServiceFile() {
         fi
         install -m 755 "${TMP_DIRECTORY}systemd/system/v2ray.service" /etc/systemd/system/v2ray.service
         install -m 755 "${TMP_DIRECTORY}systemd/system/v2ray@.service" /etc/systemd/system/v2ray@.service
+        SYSTEMD=yes
     fi
 }
 
@@ -499,19 +502,25 @@ main() {
     echo 'installed: /usr/local/bin/v2ctl'
     echo 'installed: /usr/local/lib/v2ray/geoip.dat'
     echo 'installed: /usr/local/lib/v2ray/geosite.dat'
-    echo 'installed: /usr/local/etc/v2ray/00_log.json'
-    echo 'installed: /usr/local/etc/v2ray/01_api.json'
-    echo 'installed: /usr/local/etc/v2ray/02_dns.json'
-    echo 'installed: /usr/local/etc/v2ray/03_routing.json'
-    echo 'installed: /usr/local/etc/v2ray/04_policy.json'
-    echo 'installed: /usr/local/etc/v2ray/05_inbounds.json'
-    echo 'installed: /usr/local/etc/v2ray/06_outbounds.json'
-    echo 'installed: /usr/local/etc/v2ray/07_transport.json'
-    echo 'installed: /usr/local/etc/v2ray/08_stats.json'
-    echo 'installed: /usr/local/etc/v2ray/09_reverse.json'
-    echo 'installed: /var/log/v2ray/'
-    echo 'installed: /etc/systemd/system/v2ray.service'
-    echo 'installed: /etc/systemd/system/v2ray@.service'
+    if [[ -n "$CONFDIR" ]]; then
+        echo 'installed: /usr/local/etc/v2ray/00_log.json'
+        echo 'installed: /usr/local/etc/v2ray/01_api.json'
+        echo 'installed: /usr/local/etc/v2ray/02_dns.json'
+        echo 'installed: /usr/local/etc/v2ray/03_routing.json'
+        echo 'installed: /usr/local/etc/v2ray/04_policy.json'
+        echo 'installed: /usr/local/etc/v2ray/05_inbounds.json'
+        echo 'installed: /usr/local/etc/v2ray/06_outbounds.json'
+        echo 'installed: /usr/local/etc/v2ray/07_transport.json'
+        echo 'installed: /usr/local/etc/v2ray/08_stats.json'
+        echo 'installed: /usr/local/etc/v2ray/09_reverse.json'
+    fi
+    if [[ -n "$LOG" ]]; then
+        echo 'installed: /var/log/v2ray/'
+    fi
+    if [[ -n "$SYSTEMD" ]]; then
+        echo 'installed: /etc/systemd/system/v2ray.service'
+        echo 'installed: /etc/systemd/system/v2ray@.service'
+    fi
     if [[ "$V2RAY_RUNNING" -ne '1' ]]; then
         echo 'Please execute the command: systemctl enable v2ray; systemctl start v2ray'
     fi
