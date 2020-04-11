@@ -521,6 +521,8 @@ main() {
         echo 'installed: /etc/systemd/system/v2ray.service'
         echo 'installed: /etc/systemd/system/v2ray@.service'
     fi
+    rm -r "$TMP_DIRECTORY"
+    echo "removed: $TMP_DIRECTORY"
     echo "You may need to execute a command to remove dependent software: $PACKAGE_MANAGEMENT_REMOVE curl unzip"
     if [[ "$V2RAY_RUNNING" -eq '1' ]]; then
         startV2Ray
@@ -530,8 +532,6 @@ main() {
     if [[ "$LOCAL_INSTALL" -eq '1' ]]; then
         getVersion
     fi
-    rm -r "$TMP_DIRECTORY"
-    echo "removed: $TMP_DIRECTORY"
     echo "info: V2Ray $RELEASE_VERSION is installed."
 }
 
