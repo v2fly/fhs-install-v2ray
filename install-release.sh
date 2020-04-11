@@ -15,13 +15,13 @@
 # Judge computer systems and architecture
 if [[ "$(uname)" == 'Linux' ]]; then
     case "$(uname -m)" in
-        'i686' | 'i386')
+        'i386' | 'i686')
             MACHINE='32'
             ;;
-        'x86_64' | 'amd64')
+        'amd64' | 'x86_64')
             MACHINE='64'
             ;;
-        'armv7' | 'armv6l')
+        'armv6l' | 'armv7')
             MACHINE='arm'
             ;;
         'armv8' | 'aarch64')
