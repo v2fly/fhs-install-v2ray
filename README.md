@@ -43,6 +43,12 @@ or
 or
 
 ```
+# dnf install curl
+```
+
+or
+
+```
 # zypper install curl
 ```
 
