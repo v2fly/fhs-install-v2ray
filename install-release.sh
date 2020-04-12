@@ -12,148 +12,147 @@
 # If the script executes incorrectly, go to:
 # https://github.com/v2fly/fhs-install-v2ray/issues
 
-identify_the_operating_system_and_architecture() {
-    if [[ "$(uname)" == 'Linux' ]]; then
-        case "$(uname -m)" in
-            'i386' | 'i686')
-                MACHINE='32'
-                ;;
-            'amd64' | 'x86_64')
-                MACHINE='64'
-                ;;
-            'armv6l' | 'armv7')
-                MACHINE='arm'
-                ;;
-            'armv8' | 'aarch64')
-                MACHINE='arm64'
-                ;;
-            'mips')
-                MACHINE='mips'
-                ;;
-            'mips64')
-                MACHINE='mips64'
-                ;;
-            'mips64le')
-                MACHINE='mips64le'
-                ;;
-            'mipsle')
-                MACHINE='mipsle'
-                ;;
-            's390x')
-                MACHINE='s390x'
-                ;;
-            'ppc64')
-                MACHINE='ppc64'
-                ;;
-            'ppc64le')
-                MACHINE='ppc64le'
-                ;;
-            *)
-                echo "error: The architecture is not supported."
-                exit 1
-                ;;
-        esac
-        if [[ ! -f '/etc/os-release' ]]; then
-            echo "error: Don't use outdated Linux distributions."
+# Identify the operating system and architecture
+if [[ "$(uname)" == 'Linux' ]]; then
+    case "$(uname -m)" in
+        'i386' | 'i686')
+            MACHINE='32'
+            ;;
+        'amd64' | 'x86_64')
+            MACHINE='64'
+            ;;
+        'armv6l' | 'armv7')
+            MACHINE='arm'
+            ;;
+        'armv8' | 'aarch64')
+            MACHINE='arm64'
+            ;;
+        'mips')
+            MACHINE='mips'
+            ;;
+        'mips64')
+            MACHINE='mips64'
+            ;;
+        'mips64le')
+            MACHINE='mips64le'
+            ;;
+        'mipsle')
+            MACHINE='mipsle'
+            ;;
+        's390x')
+            MACHINE='s390x'
+            ;;
+        'ppc64')
+            MACHINE='ppc64'
+            ;;
+        'ppc64le')
+            MACHINE='ppc64le'
+            ;;
+        *)
+            echo "error: The architecture is not supported."
             exit 1
-        fi
-        if [[ -z "$(ls -l /sbin/init | grep systemd)" ]]; then
-            echo "error: Only Linux distributions using systemd are supported."
-            exit 1
-        fi
-        if [[ "$(command -v apt)" ]]; then
-            PACKAGE_MANAGEMENT_UPDATE='apt update'
-            PACKAGE_MANAGEMENT_INSTALL='apt install'
-            PACKAGE_MANAGEMENT_REMOVE='apt remove'
-        elif [[ "$(command -v yum)" ]]; then
-            PACKAGE_MANAGEMENT_UPDATE='yum makecache'
-            PACKAGE_MANAGEMENT_INSTALL='yum install'
-            PACKAGE_MANAGEMENT_REMOVE='yum remove'
-            if [[ "$(command -v dnf)" ]]; then
-                PACKAGE_MANAGEMENT_UPDATE='dnf makecache'
-                PACKAGE_MANAGEMENT_INSTALL='dnf install'
-                PACKAGE_MANAGEMENT_REMOVE='dnf remove'
-            fi
-        elif [[ "$(command -v zypper)" ]]; then
-            PACKAGE_MANAGEMENT_UPDATE='zypper refresh'
-            PACKAGE_MANAGEMENT_INSTALL='zypper install'
-            PACKAGE_MANAGEMENT_REMOVE='zypper remove'
-        else
-            echo "error: The script does not support the package manager in this operating system."
-            exit 1
-        fi
-    else
-        echo "error: This operating system is not supported."
+            ;;
+    esac
+    if [[ ! -f '/etc/os-release' ]]; then
+        echo "error: Don't use outdated Linux distributions."
         exit 1
     fi
-}
+    if [[ -z "$(ls -l /sbin/init | grep systemd)" ]]; then
+        echo "error: Only Linux distributions using systemd are supported."
+        exit 1
+    fi
+    if [[ "$(command -v apt)" ]]; then
+        PACKAGE_MANAGEMENT_UPDATE='apt update'
+        PACKAGE_MANAGEMENT_INSTALL='apt install'
+        PACKAGE_MANAGEMENT_REMOVE='apt remove'
+    elif [[ "$(command -v yum)" ]]; then
+        PACKAGE_MANAGEMENT_UPDATE='yum makecache'
+        PACKAGE_MANAGEMENT_INSTALL='yum install'
+        PACKAGE_MANAGEMENT_REMOVE='yum remove'
+        if [[ "$(command -v dnf)" ]]; then
+            PACKAGE_MANAGEMENT_UPDATE='dnf makecache'
+            PACKAGE_MANAGEMENT_INSTALL='dnf install'
+            PACKAGE_MANAGEMENT_REMOVE='dnf remove'
+        fi
+    elif [[ "$(command -v zypper)" ]]; then
+        PACKAGE_MANAGEMENT_UPDATE='zypper refresh'
+        PACKAGE_MANAGEMENT_INSTALL='zypper install'
+        PACKAGE_MANAGEMENT_REMOVE='zypper remove'
+    else
+        echo "error: The script does not support the package manager in this operating system."
+        exit 1
+    fi
+else
+    echo "error: This operating system is not supported."
+    exit 1
+fi
 
-judgment_parameters() {
-    if [[ "$#" -gt '0' ]]; then
-        case "$1" in
-            '--remove')
-                if [[ "$#" -gt '1' ]]; then
-                    echo 'error: Please enter the correct command.'
+# Judgment parameters
+if [[ "$#" -gt '0' ]]; then
+    case "$1" in
+        '--remove')
+            if [[ "$#" -gt '1' ]]; then
+                echo 'error: Please enter the correct command.'
+                exit 1
+            fi
+            REMOVE='1'
+            ;;
+        '--version')
+            if [[ "$#" -gt '2' ]] || [[ -z "$2" ]]; then
+                echo 'error: Please specify the correct version.'
+                exit 1
+            fi
+            VERSION="$2"
+            ;;
+        '-c' | '--check')
+            if [[ "$#" -gt '1' ]]; then
+                echo 'error: Please enter the correct command.'
+                exit 1
+            fi
+            CHECK='1'
+            ;;
+        '-f' | '--force')
+            if [[ "$#" -gt '1' ]]; then
+                echo 'error: Please enter the correct command.'
+                exit 1
+            fi
+            FORCE='1'
+            ;;
+        '-h' | '--help')
+            if [[ "$#" -gt '1' ]]; then
+                echo 'error: Please enter the correct command.'
+                exit 1
+            fi
+            HELP='1'
+            ;;
+        '-l' | '--local')
+            if [[ "$#" -gt '2' ]] || [[ -z "$2" ]]; then
+                echo 'error: Please specify the correct local file.'
+                exit 1
+            fi
+            LOCAL_FILE="$2"
+            LOCAL_INSTALL='1'
+            ;;
+        '-p' | '--proxy')
+            case "$2" in
+                'http://'*)
+                    ;;
+                'https://'*)
+                    ;;
+                'socks4://'*)
+                    ;;
+                'socks4a://'*)
+                    ;;
+                'socks5://'*)
+                    ;;
+                'socks5h://'*)
+                    ;;
+                *)
+                    echo 'error: Please specify the correct proxy server address.'
                     exit 1
-                fi
-                REMOVE='1'
-                ;;
-            '--version')
-                if [[ "$#" -gt '2' ]] || [[ -z "$2" ]]; then
-                    echo 'error: Please specify the correct version.'
-                    exit 1
-                fi
-                VERSION="$2"
-                ;;
-            '-c' | '--check')
-                if [[ "$#" -gt '1' ]]; then
-                    echo 'error: Please enter the correct command.'
-                    exit 1
-                fi
-                CHECK='1'
-                ;;
-            '-f' | '--force')
-                if [[ "$#" -gt '1' ]]; then
-                    echo 'error: Please enter the correct command.'
-                    exit 1
-                fi
-                FORCE='1'
-                ;;
-            '-h' | '--help')
-                if [[ "$#" -gt '1' ]]; then
-                    echo 'error: Please enter the correct command.'
-                    exit 1
-                fi
-                HELP='1'
-                ;;
-            '-l' | '--local')
-                if [[ "$#" -gt '2' ]] || [[ -z "$2" ]]; then
-                    echo 'error: Please specify the correct local file.'
-                    exit 1
-                fi
-                LOCAL_FILE="$2"
-                LOCAL_INSTALL='1'
-                ;;
-            '-p' | '--proxy')
-                case "$2" in
-                    'http://'*)
-                        ;;
-                    'https://'*)
-                        ;;
-                    'socks4://'*)
-                        ;;
-                    'socks4a://'*)
-                        ;;
-                    'socks5://'*)
-                        ;;
-                    'socks5h://'*)
-                        ;;
-                    *)
-                        echo 'error: Please specify the correct proxy server address.'
-                        exit 1
-                        ;;
-                esac
-                PROXY="-x $2"
+                    ;;
+            esac
+            PROXY="-x $2"
 
                 # Parameters available through a proxy server
                 if [[ "$#" -gt '2' ]]; then
@@ -191,8 +190,7 @@ judgment_parameters() {
                 exit 1
                 ;;
         esac
-    fi
-}
+fi
 
 install_software() {
     COMPONENT="$1"
@@ -466,10 +464,7 @@ show_help() {
 }
 
 main() {
-    identify_the_operating_system_and_architecture
-    judgment_parameters
-
-    # helping information
+    # Parameter information
     [[ "$HELP" -eq '1' ]] && show_help
     [[ "$CHECK" -eq '1' ]] && check_update
     [[ "$REMOVE" -eq '1' ]] && remove_v2ray
