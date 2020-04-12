@@ -62,20 +62,16 @@ if [[ "$(uname)" == 'Linux' ]]; then
         exit 1
     fi
     if [[ "$(command -v apt)" ]]; then
-        PACKAGE_MANAGEMENT_UPDATE='apt update'
         PACKAGE_MANAGEMENT_INSTALL='apt install'
         PACKAGE_MANAGEMENT_REMOVE='apt remove'
     elif [[ "$(command -v yum)" ]]; then
-        PACKAGE_MANAGEMENT_UPDATE='yum makecache'
         PACKAGE_MANAGEMENT_INSTALL='yum install'
         PACKAGE_MANAGEMENT_REMOVE='yum remove'
         if [[ "$(command -v dnf)" ]]; then
-            PACKAGE_MANAGEMENT_UPDATE='dnf makecache'
             PACKAGE_MANAGEMENT_INSTALL='dnf install'
             PACKAGE_MANAGEMENT_REMOVE='dnf remove'
         fi
     elif [[ "$(command -v zypper)" ]]; then
-        PACKAGE_MANAGEMENT_UPDATE='zypper refresh'
         PACKAGE_MANAGEMENT_INSTALL='zypper install'
         PACKAGE_MANAGEMENT_REMOVE='zypper remove'
     else
@@ -478,13 +474,11 @@ main() {
         echo 'warn: Install V2Ray from a local file, but still need to make sure the network is available.'
         echo -n 'warn: Please make sure the file is valid because we cannot confirm it. (Press any key) ...'
         read
-        ${PACKAGE_MANAGEMENT_UPDATE}
         install_software unzip
         mkdir "$TMP_DIRECTORY"
         decompression "$LOCAL_FILE"
     else
         # Normal way
-        ${PACKAGE_MANAGEMENT_UPDATE}
         get_version
         NUMBER="$?"
         if [[ "$NUMBER" -eq '0' ]] || [[ "$FORCE" -eq '1' ]] || [[ "$NUMBER" -eq 2 ]]; then
