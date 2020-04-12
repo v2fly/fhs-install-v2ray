@@ -88,7 +88,7 @@ if [[ "$#" -gt '0' ]]; then
     case "$1" in
         '--remove')
             if [[ "$#" -gt '1' ]]; then
-                echo 'error: Please enter the correct command.'
+                echo 'error: Please enter the correct parameters.'
                 exit 1
             fi
             REMOVE='1'
@@ -102,21 +102,21 @@ if [[ "$#" -gt '0' ]]; then
             ;;
         '-c' | '--check')
             if [[ "$#" -gt '1' ]]; then
-                echo 'error: Please enter the correct command.'
+                echo 'error: Please enter the correct parameters.'
                 exit 1
             fi
             CHECK='1'
             ;;
         '-f' | '--force')
             if [[ "$#" -gt '1' ]]; then
-                echo 'error: Please enter the correct command.'
+                echo 'error: Please enter the correct parameters.'
                 exit 1
             fi
             FORCE='1'
             ;;
         '-h' | '--help')
             if [[ "$#" -gt '1' ]]; then
-                echo 'error: Please enter the correct command.'
+                echo 'error: Please enter the correct parameters.'
                 exit 1
             fi
             HELP='1'
@@ -149,43 +149,42 @@ if [[ "$#" -gt '0' ]]; then
                     ;;
             esac
             PROXY="-x $2"
-
-                # Parameters available through a proxy server
-                if [[ "$#" -gt '2' ]]; then
-                    case "$3" in
-                        '--version')
-                            if [[ "$#" -gt '4' ]] || [[ -z "$4" ]]; then
-                                echo 'error: Please specify the correct version.'
-                                exit 1
-                            fi
-                            VERSION="$2"
-                            ;;
-                        '-c' | '--check')
-                            if [[ "$#" -gt '3' ]]; then
-                                echo 'error: Please enter the correct command.'
-                                exit 1
-                            fi
-                            CHECK='1'
-                            ;;
-                        '-f' | '--force')
-                            if [[ "$#" -gt '3' ]]; then
-                                echo 'error: Please enter the correct command.'
-                                exit 1
-                            fi
-                            FORCE='1'
-                            ;;
-                        *)
-                            echo "$0: unknown option -- -"
+            # Parameters available through a proxy server
+            if [[ "$#" -gt '2' ]]; then
+                case "$3" in
+                    '--version')
+                        if [[ "$#" -gt '4' ]] || [[ -z "$4" ]]; then
+                            echo 'error: Please specify the correct version.'
                             exit 1
-                            ;;
-                    esac
-                fi
-                ;;
-            *)
-                echo "$0: unknown option -- -"
-                exit 1
-                ;;
-        esac
+                        fi
+                        VERSION="$2"
+                        ;;
+                    '-c' | '--check')
+                        if [[ "$#" -gt '3' ]]; then
+                            echo 'error: Please enter the correct parameters.'
+                            exit 1
+                        fi
+                        CHECK='1'
+                        ;;
+                    '-f' | '--force')
+                        if [[ "$#" -gt '3' ]]; then
+                            echo 'error: Please enter the correct parameters.'
+                            exit 1
+                        fi
+                        FORCE='1'
+                        ;;
+                    *)
+                        echo "$0: unknown option -- -"
+                        exit 1
+                        ;;
+                esac
+            fi
+            ;;
+        *)
+            echo "$0: unknown option -- -"
+            exit 1
+            ;;
+    esac
 fi
 
 install_software() {
@@ -226,7 +225,6 @@ get_version() {
                 return
             fi
         fi
-
         # Get V2Ray release version number
         TMP_FILE="$(mktemp)"
         install_software curl
@@ -239,7 +237,6 @@ get_version() {
         RELEASE_LATEST="$(cat $TMP_FILE | sed 'y/,/\n/' | grep 'tag_name' | awk -F '"' '{print $4}')"
         rm "$TMP_FILE"
         RELEASE_VERSION="$(version_number $RELEASE_LATEST)"
-
         # Compare V2Ray version numbers
         if [[ "$RELEASE_VERSION" != "$CURRENT_VERSION" ]]; then
             RELEASE_VERSIONSION_NUMBER="${RELEASE_VERSION#v}"
