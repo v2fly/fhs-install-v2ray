@@ -12,186 +12,189 @@
 # If the script executes incorrectly, go to:
 # https://github.com/v2fly/fhs-install-v2ray/issues
 
-# Judge computer systems and architecture
-if [[ "$(uname)" == 'Linux' ]]; then
-    case "$(uname -m)" in
-        'i386' | 'i686')
-            MACHINE='32'
-            ;;
-        'amd64' | 'x86_64')
-            MACHINE='64'
-            ;;
-        'armv6l' | 'armv7')
-            MACHINE='arm'
-            ;;
-        'armv8' | 'aarch64')
-            MACHINE='arm64'
-            ;;
-        'mips')
-            MACHINE='mips'
-            ;;
-        'mips64')
-            MACHINE='mips64'
-            ;;
-        'mips64le')
-            MACHINE='mips64le'
-            ;;
-        'mipsle')
-            MACHINE='mipsle'
-            ;;
-        's390x')
-            MACHINE='s390x'
-            ;;
-        'ppc64')
-            MACHINE='ppc64'
-            ;;
-        'ppc64le')
-            MACHINE='ppc64le'
-            ;;
-        *)
-            echo "error: The architecture is not supported."
+identify_the_operating_system_and_architecture() {
+    if [[ "$(uname)" == 'Linux' ]]; then
+        case "$(uname -m)" in
+            'i386' | 'i686')
+                MACHINE='32'
+                ;;
+            'amd64' | 'x86_64')
+                MACHINE='64'
+                ;;
+            'armv6l' | 'armv7')
+                MACHINE='arm'
+                ;;
+            'armv8' | 'aarch64')
+                MACHINE='arm64'
+                ;;
+            'mips')
+                MACHINE='mips'
+                ;;
+            'mips64')
+                MACHINE='mips64'
+                ;;
+            'mips64le')
+                MACHINE='mips64le'
+                ;;
+            'mipsle')
+                MACHINE='mipsle'
+                ;;
+            's390x')
+                MACHINE='s390x'
+                ;;
+            'ppc64')
+                MACHINE='ppc64'
+                ;;
+            'ppc64le')
+                MACHINE='ppc64le'
+                ;;
+            *)
+                echo "error: The architecture is not supported."
+                exit 1
+                ;;
+        esac
+        if [[ ! -f '/etc/os-release' ]]; then
+            echo "error: Don't use outdated Linux distributions."
             exit 1
-            ;;
-    esac
-    if [[ ! -f '/etc/os-release' ]]; then
-        echo "error: Don't use outdated Linux distributions."
-        exit 1
-    fi
-    if [[ -z "$(ls -l /sbin/init | grep systemd)" ]]; then
-        echo "error: Only Linux distributions using systemd are supported."
-        exit 1
-    fi
-    if [[ "$(command -v apt)" ]]; then
-        PACKAGE_MANAGEMENT_UPDATE='apt update'
-        PACKAGE_MANAGEMENT_INSTALL='apt install'
-        PACKAGE_MANAGEMENT_REMOVE='apt remove'
-    elif [[ "$(command -v yum)" ]]; then
-        PACKAGE_MANAGEMENT_UPDATE='yum makecache'
-        PACKAGE_MANAGEMENT_INSTALL='yum install'
-        PACKAGE_MANAGEMENT_REMOVE='yum remove'
-        if [[ "$(command -v dnf)" ]]; then
-            PACKAGE_MANAGEMENT_UPDATE='dnf makecache'
-            PACKAGE_MANAGEMENT_INSTALL='dnf install'
-            PACKAGE_MANAGEMENT_REMOVE='dnf remove'
         fi
-    elif [[ "$(command -v zypper)" ]]; then
-        PACKAGE_MANAGEMENT_UPDATE='zypper refresh'
-        PACKAGE_MANAGEMENT_INSTALL='zypper install'
-        PACKAGE_MANAGEMENT_REMOVE='zypper remove'
+        if [[ -z "$(ls -l /sbin/init | grep systemd)" ]]; then
+            echo "error: Only Linux distributions using systemd are supported."
+            exit 1
+        fi
+        if [[ "$(command -v apt)" ]]; then
+            PACKAGE_MANAGEMENT_UPDATE='apt update'
+            PACKAGE_MANAGEMENT_INSTALL='apt install'
+            PACKAGE_MANAGEMENT_REMOVE='apt remove'
+        elif [[ "$(command -v yum)" ]]; then
+            PACKAGE_MANAGEMENT_UPDATE='yum makecache'
+            PACKAGE_MANAGEMENT_INSTALL='yum install'
+            PACKAGE_MANAGEMENT_REMOVE='yum remove'
+            if [[ "$(command -v dnf)" ]]; then
+                PACKAGE_MANAGEMENT_UPDATE='dnf makecache'
+                PACKAGE_MANAGEMENT_INSTALL='dnf install'
+                PACKAGE_MANAGEMENT_REMOVE='dnf remove'
+            fi
+        elif [[ "$(command -v zypper)" ]]; then
+            PACKAGE_MANAGEMENT_UPDATE='zypper refresh'
+            PACKAGE_MANAGEMENT_INSTALL='zypper install'
+            PACKAGE_MANAGEMENT_REMOVE='zypper remove'
+        else
+            echo "error: The script does not support the package manager in this operating system."
+            exit 1
+        fi
     else
-        echo "error: The script does not support the package manager in this operating system."
+        echo "error: This operating system is not supported."
         exit 1
     fi
-else
-    echo "error: This operating system is not supported."
-    exit 1
-fi
+}
 
-# Judgment parameters
-if [[ "$#" -gt '0' ]]; then
-    case "$1" in
-        '--remove')
-            if [[ "$#" -gt '1' ]]; then
-                echo 'error: Please enter the correct command.'
-                exit 1
-            fi
-            REMOVE='1'
-            ;;
-        '--version')
-            if [[ "$#" -gt '2' ]] || [[ -z "$2" ]]; then
-                echo 'error: Please specify the correct version.'
-                exit 1
-            fi
-            VERSION="$2"
-            ;;
-        '-c' | '--check')
-            if [[ "$#" -gt '1' ]]; then
-                echo 'error: Please enter the correct command.'
-                exit 1
-            fi
-            CHECK='1'
-            ;;
-        '-f' | '--force')
-            if [[ "$#" -gt '1' ]]; then
-                echo 'error: Please enter the correct command.'
-                exit 1
-            fi
-            FORCE='1'
-            ;;
-        '-h' | '--help')
-            if [[ "$#" -gt '1' ]]; then
-                echo 'error: Please enter the correct command.'
-                exit 1
-            fi
-            HELP='1'
-            ;;
-        '-l' | '--local')
-            if [[ "$#" -gt '2' ]] || [[ -z "$2" ]]; then
-                echo 'error: Please specify the correct local file.'
-                exit 1
-            fi
-            LOCAL_FILE="$2"
-            LOCAL_INSTALL='1'
-            ;;
-        '-p' | '--proxy')
-            case "$2" in
-                'http://'*)
-                    ;;
-                'https://'*)
-                    ;;
-                'socks4://'*)
-                    ;;
-                'socks4a://'*)
-                    ;;
-                'socks5://'*)
-                    ;;
-                'socks5h://'*)
-                    ;;
-                *)
-                    echo 'error: Please specify the correct proxy server address.'
+judgment_parameters() {
+    if [[ "$#" -gt '0' ]]; then
+        case "$1" in
+            '--remove')
+                if [[ "$#" -gt '1' ]]; then
+                    echo 'error: Please enter the correct command.'
                     exit 1
-                    ;;
-            esac
-            PROXY="-x $2"
-            # Parameters available through a proxy server
-            if [[ "$#" -gt '2' ]]; then
-                case "$3" in
-                    '--version')
-                        if [[ "$#" -gt '4' ]] || [[ -z "$4" ]]; then
-                            echo 'error: Please specify the correct version.'
-                            exit 1
-                        fi
-                        VERSION="$2"
+                fi
+                REMOVE='1'
+                ;;
+            '--version')
+                if [[ "$#" -gt '2' ]] || [[ -z "$2" ]]; then
+                    echo 'error: Please specify the correct version.'
+                    exit 1
+                fi
+                VERSION="$2"
+                ;;
+            '-c' | '--check')
+                if [[ "$#" -gt '1' ]]; then
+                    echo 'error: Please enter the correct command.'
+                    exit 1
+                fi
+                CHECK='1'
+                ;;
+            '-f' | '--force')
+                if [[ "$#" -gt '1' ]]; then
+                    echo 'error: Please enter the correct command.'
+                    exit 1
+                fi
+                FORCE='1'
+                ;;
+            '-h' | '--help')
+                if [[ "$#" -gt '1' ]]; then
+                    echo 'error: Please enter the correct command.'
+                    exit 1
+                fi
+                HELP='1'
+                ;;
+            '-l' | '--local')
+                if [[ "$#" -gt '2' ]] || [[ -z "$2" ]]; then
+                    echo 'error: Please specify the correct local file.'
+                    exit 1
+                fi
+                LOCAL_FILE="$2"
+                LOCAL_INSTALL='1'
+                ;;
+            '-p' | '--proxy')
+                case "$2" in
+                    'http://'*)
                         ;;
-                    '-c' | '--check')
-                        if [[ "$#" -gt '3' ]]; then
-                            echo 'error: Please enter the correct command.'
-                            exit 1
-                        fi
-                        CHECK='1'
+                    'https://'*)
                         ;;
-                    '-f' | '--force')
-                        if [[ "$#" -gt '3' ]]; then
-                            echo 'error: Please enter the correct command.'
-                            exit 1
-                        fi
-                        FORCE='1'
+                    'socks4://'*)
+                        ;;
+                    'socks4a://'*)
+                        ;;
+                    'socks5://'*)
+                        ;;
+                    'socks5h://'*)
                         ;;
                     *)
-                        echo "$0: unknown option -- -"
+                        echo 'error: Please specify the correct proxy server address.'
                         exit 1
                         ;;
                 esac
-            fi
-            ;;
-        *)
-            echo "$0: unknown option -- -"
-            exit 1
-            ;;
-    esac
-fi
+                PROXY="-x $2"
 
-installSoftware() {
+                # Parameters available through a proxy server
+                if [[ "$#" -gt '2' ]]; then
+                    case "$3" in
+                        '--version')
+                            if [[ "$#" -gt '4' ]] || [[ -z "$4" ]]; then
+                                echo 'error: Please specify the correct version.'
+                                exit 1
+                            fi
+                            VERSION="$2"
+                            ;;
+                        '-c' | '--check')
+                            if [[ "$#" -gt '3' ]]; then
+                                echo 'error: Please enter the correct command.'
+                                exit 1
+                            fi
+                            CHECK='1'
+                            ;;
+                        '-f' | '--force')
+                            if [[ "$#" -gt '3' ]]; then
+                                echo 'error: Please enter the correct command.'
+                                exit 1
+                            fi
+                            FORCE='1'
+                            ;;
+                        *)
+                            echo "$0: unknown option -- -"
+                            exit 1
+                            ;;
+                    esac
+                fi
+                ;;
+            *)
+                echo "$0: unknown option -- -"
+                exit 1
+                ;;
+        esac
+    fi
+}
+
+install_software() {
     COMPONENT="$1"
     if [[ -n "$(command -v $COMPONENT)" ]]; then
         return
@@ -203,7 +206,8 @@ installSoftware() {
     fi
     echo "info: $COMPONENT is installed."
 }
-versionNumber() {
+
+version_number() {
     case "$1" in
         'v'*)
             echo "$1"
@@ -213,7 +217,8 @@ versionNumber() {
             ;;
     esac
 }
-getVersion() {
+
+get_version() {
     # 0: Install or update V2Ray.
     # 1: Installed or no new version of V2Ray.
     # 2: Install the specified version of V2Ray.
@@ -221,15 +226,16 @@ getVersion() {
         # Determine the version number for V2Ray installed from a local file
         if [[ -f '/usr/local/bin/v2ray' ]]; then
             VERSION="$(/usr/local/bin/v2ray -version)"
-            CURRENT_VERSION="$(versionNumber $(echo $VERSION | head -n 1 | awk -F ' ' '{print $2}'))"
+            CURRENT_VERSION="$(version_number $(echo $VERSION | head -n 1 | awk -F ' ' '{print $2}'))"
             if [[ "$LOCAL_INSTALL" -eq '1' ]]; then
                 RELEASE_VERSION="$CURRENT_VERSION"
                 return
             fi
         fi
+
         # Get V2Ray release version number
         TMP_FILE="$(mktemp)"
-        installSoftware curl
+        install_software curl
         curl ${PROXY} -o "$TMP_FILE" https://api.github.com/repos/v2ray/v2ray-core/releases/latest -s
         if [[ "$?" -ne '0' ]]; then
             rm "$TMP_FILE"
@@ -238,7 +244,8 @@ getVersion() {
         fi
         RELEASE_LATEST="$(cat $TMP_FILE | sed 'y/,/\n/' | grep 'tag_name' | awk -F '"' '{print $4}')"
         rm "$TMP_FILE"
-        RELEASE_VERSION="$(versionNumber $RELEASE_LATEST)"
+        RELEASE_VERSION="$(version_number $RELEASE_LATEST)"
+
         # Compare V2Ray version numbers
         if [[ "$RELEASE_VERSION" != "$CURRENT_VERSION" ]]; then
             RELEASE_VERSIONSION_NUMBER="${RELEASE_VERSION#v}"
@@ -270,11 +277,12 @@ getVersion() {
             return 1
         fi
     else
-        RELEASE_VERSION="$(versionNumber $VERSION)"
+        RELEASE_VERSION="$(version_number $VERSION)"
         return 2
     fi
 }
-downloadV2Ray() {
+
+download_v2ray() {
     mkdir "$TMP_DIRECTORY"
     DOWNLOAD_LINK="https://github.com/v2ray/v2ray-core/releases/download/$RELEASE_VERSION/v2ray-linux-$MACHINE.zip"
     echo "Downloading V2Ray archive: $DOWNLOAD_LINK"
@@ -293,6 +301,7 @@ downloadV2Ray() {
         echo 'error: This version does not support verification. Please replace with another version.'
         return 1
     fi
+
     # Verification of V2Ray archive
     for LISTSUM in 'md5' 'sha1' 'sha256' 'sha512'; do
         SUM="$(${LISTSUM}sum $ZIP_FILE | sed 's/ .*//')"
@@ -303,6 +312,7 @@ downloadV2Ray() {
         fi
     done
 }
+
 decompression() {
     unzip -q "$1" -d "$TMP_DIRECTORY"
     if [[ "$?" -ne '0' ]]; then
@@ -313,7 +323,8 @@ decompression() {
     fi
     echo "info: Extract the V2Ray package to $TMP_DIRECTORY and prepare it for installation."
 }
-installFile() {
+
+install_file() {
     NAME="$1"
     if [[ "$NAME" == 'v2ray' ]] || [[ "$NAME" == 'v2ctl' ]]; then
         install -m 755 "${TMP_DIRECTORY}$NAME" "/usr/local/bin/$NAME"
@@ -321,13 +332,14 @@ installFile() {
         install -m 755 "${TMP_DIRECTORY}$NAME" "/usr/local/lib/v2ray/$NAME"
     fi
 }
-installV2Ray() {
+
+install_v2ray() {
     # Install V2Ray binary to /usr/local/bin/ and /usr/local/lib/v2ray/
-    installFile v2ray
-    installFile v2ctl
+    install_file v2ray
+    install_file v2ctl
     install -d /usr/local/lib/v2ray/
-    installFile geoip.dat
-    installFile geosite.dat
+    install_file geoip.dat
+    install_file geosite.dat
 
     # Install V2Ray configuration file to /usr/local/etc/v2ray/
     if [[ ! -d '/usr/local/etc/v2ray/' ]]; then
@@ -348,10 +360,11 @@ installV2Ray() {
         LOG='1'
     fi
 }
-installStartupServiceFile() {
+
+install_startup_service_file() {
     if [[ ! -f '/etc/systemd/system/v2ray.service' ]]; then
         mkdir "${TMP_DIRECTORY}systemd/system/"
-        installSoftware curl
+        install_software curl
         curl ${PROXY} -o "${TMP_DIRECTORY}systemd/system/v2ray.service" https://raw.githubusercontent.workers.dev/v2fly/fhs-install-v2ray/master/systemd/system/v2ray.service -s
         if [[ "$?" -ne '0' ]]; then
             echo 'error: Failed to start service file download! Please check your network or try again.'
@@ -368,7 +381,7 @@ installStartupServiceFile() {
     fi
 }
 
-startV2Ray() {
+start_v2ray() {
     if [[ -f '/etc/systemd/system/v2ray.service' ]]; then
         systemctl start v2ray
     fi
@@ -378,7 +391,8 @@ startV2Ray() {
     fi
     echo 'info: Start the V2Ray service.'
 }
-stopV2Ray() {
+
+stop_v2ray() {
     if [[ -f '/etc/systemd/system/v2ray.service' ]]; then
         systemctl stop v2ray
     fi
@@ -389,9 +403,9 @@ stopV2Ray() {
     echo 'info: Stop the V2Ray service.'
 }
 
-checkUpdate() {
+check_update() {
     if [[ -f '/etc/systemd/system/v2ray.service' ]]; then
-        getVersion
+        get_version
         if [[ "$?" -eq '0' ]]; then
             echo "info: Found the latest release of V2Ray $RELEASE_VERSION . (Current release: $CURRENT_VERSION)"
         elif [[ "$?" -eq '1' ]]; then
@@ -404,10 +418,10 @@ checkUpdate() {
     fi
 }
 
-removeV2Ray() {
+remove_v2ray() {
     if [[ -f '/etc/systemd/system/v2ray.service' ]]; then
         if [[ -n "$(pgrep v2ray)" ]]; then
-            stopV2Ray
+            stop_v2ray
         fi
         NAME="$1"
         rm /usr/local/bin/v2ray
@@ -438,7 +452,7 @@ removeV2Ray() {
 }
 
 # Explanation of parameters in the script
-showHelp() {
+show_help() {
     echo "usage: $0 [--remove | --version number | -c | -f | -h | -l | -p]"
     echo '  [-p address] [--version number | -c | -f]'
     echo '  --remove        Remove V2Ray'
@@ -452,10 +466,13 @@ showHelp() {
 }
 
 main() {
+    identify_the_operating_system_and_architecture
+    judgment_parameters
+
     # helping information
-    [[ "$HELP" -eq '1' ]] && showHelp
-    [[ "$CHECK" -eq '1' ]] && checkUpdate
-    [[ "$REMOVE" -eq '1' ]] && removeV2Ray
+    [[ "$HELP" -eq '1' ]] && show_help
+    [[ "$CHECK" -eq '1' ]] && check_update
+    [[ "$REMOVE" -eq '1' ]] && remove_v2ray
 
     # Two very important variables
     TMP_DIRECTORY="$(mktemp -du)/"
@@ -467,23 +484,23 @@ main() {
         echo -n 'warn: Please make sure the file is valid because we cannot confirm it. (Press any key) ...'
         read
         ${PACKAGE_MANAGEMENT_UPDATE}
-        installSoftware unzip
+        install_software unzip
         mkdir "$TMP_DIRECTORY"
         decompression "$LOCAL_FILE"
     else
         # Normal way
         ${PACKAGE_MANAGEMENT_UPDATE}
-        getVersion
+        get_version
         NUMBER="$?"
         if [[ "$NUMBER" -eq '0' ]] || [[ "$FORCE" -eq '1' ]] || [[ "$NUMBER" -eq 2 ]]; then
             echo "info: Installing V2Ray $RELEASE_VERSION for $(uname -m)"
-            downloadV2Ray
+            download_v2ray
             if [[ "$?" -eq '1' ]]; then
                 rm -r "$TMP_DIRECTORY"
                 echo "removed: $TMP_DIRECTORY"
                 exit 0
             fi
-            installSoftware unzip
+            install_software unzip
             decompression "$ZIP_FILE"
         elif [[ "$NUMBER" -eq '1' ]]; then
             echo "info: No new version. The current version of V2Ray is $CURRENT_VERSION ."
@@ -493,11 +510,11 @@ main() {
 
     # Determine if V2Ray is running
     if [[ -n "$(pgrep v2ray)" ]]; then
-        stopV2Ray
+        stop_v2ray
         V2RAY_RUNNING='1'
     fi
-    installV2Ray
-    installStartupServiceFile
+    install_v2ray
+    install_startup_service_file
     echo 'installed: /usr/local/bin/v2ray'
     echo 'installed: /usr/local/bin/v2ctl'
     echo 'installed: /usr/local/lib/v2ray/geoip.dat'
@@ -525,12 +542,12 @@ main() {
     echo "removed: $TMP_DIRECTORY"
     echo "You may need to execute a command to remove dependent software: $PACKAGE_MANAGEMENT_REMOVE curl unzip"
     if [[ "$V2RAY_RUNNING" -eq '1' ]]; then
-        startV2Ray
+        start_v2ray
     else
         echo 'Please execute the command: systemctl enable v2ray; systemctl start v2ray'
     fi
     if [[ "$LOCAL_INSTALL" -eq '1' ]]; then
-        getVersion
+        get_version
     fi
     echo "info: V2Ray $RELEASE_VERSION is installed."
 }
