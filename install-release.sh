@@ -21,7 +21,7 @@ identify_the_operating_system_and_architecture() {
             'amd64' | 'x86_64')
                 MACHINE='64'
                 ;;
-            'armv6l' | 'armv7')
+            'armv6l' | 'armv7' | 'armv7l' )
                 MACHINE='arm'
                 ;;
             'armv8' | 'aarch64')
