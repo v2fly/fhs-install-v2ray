@@ -5,7 +5,13 @@
 # https://github.com/v2ray/geoip
 # https://github.com/v2ray/domain-list-community
 
-# Need cURL, please solve it by yourself
+# Depends on cURL, please solve it yourself
+
+# You may plan to execute this Bash script regularly:
+
+# install -m 755 install-dat-release.sh /usr/local/bin/install-dat-release
+
+# 0 0 * * * /usr/local/bin/install-dat-release > /dev/null 2>&1
 
 V2RAY="/usr/local/lib/v2ray/"
 DOWNLOAD_LINK_GEOIP="https://github.com/v2ray/geoip/releases/latest/download/geoip.dat"
