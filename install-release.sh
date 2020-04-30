@@ -279,13 +279,13 @@ download_v2ray() {
     mkdir "$TMP_DIRECTORY"
     DOWNLOAD_LINK="https://github.com/v2ray/v2ray-core/releases/download/$RELEASE_VERSION/v2ray-linux-$MACHINE.zip"
     echo "Downloading V2Ray archive: $DOWNLOAD_LINK"
-    curl ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE" "$DOWNLOAD_LINK" -#
+    curl ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE" "$DOWNLOAD_LINK"
     if [[ "$?" -ne '0' ]]; then
         echo 'error: Download failed! Please check your network or try again.'
         return 1
     fi
     echo "Downloading verification file for V2Ray archive: $DOWNLOAD_LINK.dgst"
-    curl ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE.dgst" "$DOWNLOAD_LINK.dgst" -#
+    curl ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE.dgst" "$DOWNLOAD_LINK.dgst"
     if [[ "$?" -ne '0' ]]; then
         echo 'error: Download failed! Please check your network or try again.'
         return 1
