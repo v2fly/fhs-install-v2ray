@@ -13,6 +13,7 @@
 # https://github.com/v2fly/fhs-install-v2ray/issues
 
 check_if_running_as_root() {
+    # If you want to run as another user, please modify $UID to be owned by this user
     if [ $UID != "0" ]; then
         echo "error: You must run this script as root!"
         exit 1
