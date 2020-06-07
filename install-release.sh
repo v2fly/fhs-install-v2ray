@@ -12,6 +12,13 @@
 # If the script executes incorrectly, go to:
 # https://github.com/v2fly/fhs-install-v2ray/issues
 
+check_if_running_as_root() {
+    if [ $UID != "0" ]; then
+        echo "error: You must run this script as root!"
+        exit 1
+    fi
+}
+
 identify_the_operating_system_and_architecture() {
     if [[ "$(uname)" == 'Linux' ]]; then
         case "$(uname -m)" in
@@ -459,6 +466,7 @@ show_help() {
 }
 
 main() {
+    check_if_running_as_root
     identify_the_operating_system_and_architecture
     judgment_parameters "$@"
 
