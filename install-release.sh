@@ -230,7 +230,7 @@ get_version() {
         # Get V2Ray release version number
         TMP_FILE="$(mktemp)"
         install_software curl
-        curl ${PROXY} -o "$TMP_FILE" https://api.github.com/repos/v2ray/v2ray-core/releases/latest -s
+        curl ${PROXY} -o "$TMP_FILE" https://api.github.com/repos/v2fly/v2ray-core/releases/latest -s
         if [[ "$?" -ne '0' ]]; then
             rm "$TMP_FILE"
             echo 'error: Failed to get release list, please check your network.'
@@ -277,7 +277,7 @@ get_version() {
 
 download_v2ray() {
     mkdir "$TMP_DIRECTORY"
-    DOWNLOAD_LINK="https://github.com/v2ray/v2ray-core/releases/download/$RELEASE_VERSION/v2ray-linux-$MACHINE.zip"
+    DOWNLOAD_LINK="https://github.com/v2fly/v2ray-core/releases/download/$RELEASE_VERSION/v2ray-linux-$MACHINE.zip"
     echo "Downloading V2Ray archive: $DOWNLOAD_LINK"
     curl ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE" "$DOWNLOAD_LINK"
     if [[ "$?" -ne '0' ]]; then
