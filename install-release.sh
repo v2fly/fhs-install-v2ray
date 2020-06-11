@@ -330,7 +330,7 @@ install_file() {
     if [[ "$NAME" == 'v2ray' ]] || [[ "$NAME" == 'v2ctl' ]]; then
         install -m 755 "${TMP_DIRECTORY}$NAME" "/usr/local/bin/$NAME"
     elif [[ "$NAME" == 'geoip.dat' ]] || [[ "$NAME" == 'geosite.dat' ]]; then
-        install "${TMP_DIRECTORY}$NAME" "/usr/local/lib/v2ray/$NAME"
+        install -m 644 "${TMP_DIRECTORY}$NAME" "/usr/local/lib/v2ray/$NAME"
     fi
 }
 
@@ -376,8 +376,8 @@ install_startup_service_file() {
             echo 'error: Failed to start service file download! Please check your network or try again.'
             exit 1
         fi
-        install "${TMP_DIRECTORY}systemd/system/v2ray.service" /etc/systemd/system/v2ray.service
-        install "${TMP_DIRECTORY}systemd/system/v2ray@.service" /etc/systemd/system/v2ray@.service
+        install -m 644 "${TMP_DIRECTORY}systemd/system/v2ray.service" /etc/systemd/system/v2ray.service
+        install -m 644 "${TMP_DIRECTORY}systemd/system/v2ray@.service" /etc/systemd/system/v2ray@.service
         SYSTEMD='1'
     fi
 }

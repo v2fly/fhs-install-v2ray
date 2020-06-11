@@ -65,7 +65,7 @@ download_geosite() {
 
 rename_new() {
     for DAT in 'geoip' 'geosite'; do
-        install "${V2RAY}$DAT.dat.new" "${V2RAY}$DAT.dat"
+        install -m 644 "${V2RAY}$DAT.dat.new" "${V2RAY}$DAT.dat"
         rm "${V2RAY}$DAT.dat.new"
         rm "${V2RAY}$DAT.dat.sha256sum.new"
     done
