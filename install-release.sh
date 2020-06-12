@@ -191,7 +191,7 @@ judgment_parameters() {
 
 install_software() {
     COMPONENT="$1"
-    if [[ -n "$(command -v $COMPONENT)" ]]; then
+    if [[ -n "$(command -v "$COMPONENT")" ]]; then
         return
     fi
     ${PACKAGE_MANAGEMENT_INSTALL} "$COMPONENT"
@@ -221,7 +221,7 @@ get_version() {
         # Determine the version number for V2Ray installed from a local file
         if [[ -f '/usr/local/bin/v2ray' ]]; then
             VERSION="$(/usr/local/bin/v2ray -version)"
-            CURRENT_VERSION="$(version_number $(echo $VERSION | head -n 1 | awk -F ' ' '{print $2}'))"
+            CURRENT_VERSION="$(version_number $(echo "$VERSION" | head -n 1 | awk -F ' ' '{print $2}'))"
             if [[ "$LOCAL_INSTALL" -eq '1' ]]; then
                 RELEASE_VERSION="$CURRENT_VERSION"
                 return
@@ -230,24 +230,23 @@ get_version() {
         # Get V2Ray release version number
         TMP_FILE="$(mktemp)"
         install_software curl
-        curl ${PROXY} -o "$TMP_FILE" https://api.github.com/repos/v2fly/v2ray-core/releases/latest -s
-        if [[ "$?" -ne '0' ]]; then
+        if ! curl -s "${PROXY}" -o "$TMP_FILE" https://api.github.com/repos/v2fly/v2ray-core/releases/latest; then
             rm "$TMP_FILE"
             echo 'error: Failed to get release list, please check your network.'
             exit 1
         fi
-        RELEASE_LATEST="$(cat $TMP_FILE | sed 'y/,/\n/' | grep 'tag_name' | awk -F '"' '{print $4}')"
+        RELEASE_LATEST="$(sed 'y/,/\n/' "$TMP_FILE" | grep 'tag_name' | awk -F '"' '{print $4}')"
         rm "$TMP_FILE"
-        RELEASE_VERSION="$(version_number $RELEASE_LATEST)"
+        RELEASE_VERSION="$(version_number "$RELEASE_LATEST")"
         # Compare V2Ray version numbers
         if [[ "$RELEASE_VERSION" != "$CURRENT_VERSION" ]]; then
             RELEASE_VERSIONSION_NUMBER="${RELEASE_VERSION#v}"
             RELEASE_MAJOR_VERSION_NUMBER="${RELEASE_VERSIONSION_NUMBER%%.*}"
-            RELEASE_MINOR_VERSION_NUMBER="$(echo $RELEASE_VERSIONSION_NUMBER | awk -F '.' '{print $2}')"
+            RELEASE_MINOR_VERSION_NUMBER="$(echo "$RELEASE_VERSIONSION_NUMBER" | awk -F '.' '{print $2}')"
             RELEASE_MINIMUM_VERSION_NUMBER="${RELEASE_VERSIONSION_NUMBER##*.}"
-            CURRENT_VERSIONSION_NUMBER="$(echo ${CURRENT_VERSION#v} | sed 's/-.*//')"
+            CURRENT_VERSIONSION_NUMBER="$(echo "${CURRENT_VERSION#v}" | sed 's/-.*//')"
             CURRENT_MAJOR_VERSION_NUMBER="${CURRENT_VERSIONSION_NUMBER%%.*}"
-            CURRENT_MINOR_VERSION_NUMBER="$(echo $CURRENT_VERSIONSION_NUMBER | awk -F '.' '{print $2}')"
+            CURRENT_MINOR_VERSION_NUMBER="$(echo "$CURRENT_VERSIONSION_NUMBER" | awk -F '.' '{print $2}')"
             CURRENT_MINIMUM_VERSION_NUMBER="${CURRENT_VERSIONSION_NUMBER##*.}"
             if [[ "$RELEASE_MAJOR_VERSION_NUMBER" -gt "$CURRENT_MAJOR_VERSION_NUMBER" ]]; then
                 return 0
@@ -270,7 +269,7 @@ get_version() {
             return 1
         fi
     else
-        RELEASE_VERSION="$(version_number $VERSION)"
+        RELEASE_VERSION="$(version_number "$VERSION")"
         return 2
     fi
 }
@@ -279,26 +278,24 @@ download_v2ray() {
     mkdir "$TMP_DIRECTORY"
     DOWNLOAD_LINK="https://github.com/v2fly/v2ray-core/releases/download/$RELEASE_VERSION/v2ray-linux-$MACHINE.zip"
     echo "Downloading V2Ray archive: $DOWNLOAD_LINK"
-    curl ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE" "$DOWNLOAD_LINK"
-    if [[ "$?" -ne '0' ]]; then
+    if ! curl "${PROXY}" -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE" "$DOWNLOAD_LINK"; then
         echo 'error: Download failed! Please check your network or try again.'
         return 1
     fi
     echo "Downloading verification file for V2Ray archive: $DOWNLOAD_LINK.dgst"
-    curl ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE.dgst" "$DOWNLOAD_LINK.dgst"
-    if [[ "$?" -ne '0' ]]; then
+    if ! curl "${PROXY}" -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE.dgst" "$DOWNLOAD_LINK.dgst"; then
         echo 'error: Download failed! Please check your network or try again.'
         return 1
     fi
-    if [[ "$(cat $ZIP_FILE.dgst)" == 'Not Found' ]]; then
+    if [[ "$(cat "$ZIP_FILE".dgst)" == 'Not Found' ]]; then
         echo 'error: This version does not support verification. Please replace with another version.'
         return 1
     fi
 
     # Verification of V2Ray archive
     for LISTSUM in 'md5' 'sha1' 'sha256' 'sha512'; do
-        SUM="$(${LISTSUM}sum $ZIP_FILE | sed 's/ .*//')"
-        CHECKSUM="$(grep ${LISTSUM^^} $ZIP_FILE.dgst | grep $SUM -o -a | uniq)"
+        SUM="$(${LISTSUM}sum "$ZIP_FILE" | sed 's/ .*//')"
+        CHECKSUM="$(grep ${LISTSUM^^} "$ZIP_FILE".dgst | grep "$SUM" -o -a | uniq)"
         if [[ "$SUM" != "$CHECKSUM" ]]; then
             echo 'error: Check failed! Please check your network or try again.'
             return 1
@@ -307,8 +304,7 @@ download_v2ray() {
 }
 
 decompression() {
-    unzip -q "$1" -d "$TMP_DIRECTORY"
-    if [[ "$?" -ne '0' ]]; then
+    if ! unzip -q "$1" -d "$TMP_DIRECTORY"; then
         echo 'error: V2Ray decompression failed.'
         rm -r "$TMP_DIRECTORY"
         echo "removed: $TMP_DIRECTORY"
@@ -358,13 +354,11 @@ install_startup_service_file() {
     if [[ ! -f '/etc/systemd/system/v2ray.service' ]]; then
         mkdir "${TMP_DIRECTORY}systemd/system/"
         install_software curl
-        curl ${PROXY} -o "${TMP_DIRECTORY}systemd/system/v2ray.service" https://raw.githubusercontent.workers.dev/v2fly/fhs-install-v2ray/master/systemd/system/v2ray.service -s
-        if [[ "$?" -ne '0' ]]; then
+        if ! curl -s "${PROXY}" -o "${TMP_DIRECTORY}systemd/system/v2ray.service" https://raw.githubusercontent.workers.dev/v2fly/fhs-install-v2ray/master/systemd/system/v2ray.service; then
             echo 'error: Failed to start service file download! Please check your network or try again.'
             exit 1
         fi
-        curl ${PROXY} -o "${TMP_DIRECTORY}systemd/system/v2ray@.service" https://raw.githubusercontent.workers.dev/v2fly/fhs-install-v2ray/master/systemd/system/v2ray@.service -s
-        if [[ "$?" -ne '0' ]]; then
+        if ! curl -s "${PROXY}" -o "${TMP_DIRECTORY}systemd/system/v2ray@.service" https://raw.githubusercontent.workers.dev/v2fly/fhs-install-v2ray/master/systemd/system/v2ray@.service; then
             echo 'error: Failed to start service file download! Please check your network or try again.'
             exit 1
         fi
