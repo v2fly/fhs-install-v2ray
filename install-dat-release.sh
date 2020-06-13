@@ -17,6 +17,14 @@ V2RAY="/usr/local/lib/v2ray/"
 DOWNLOAD_LINK_GEOIP="https://github.com/v2ray/geoip/releases/latest/download/geoip.dat"
 DOWNLOAD_LINK_GEOSITE="https://github.com/v2ray/domain-list-community/releases/latest/download/dlc.dat"
 
+check_if_running_as_root() {
+    # If you want to run as another user, please modify $UID to be owned by this user
+    if [[ "$UID" -ne '0' ]]; then
+        echo "error: You must run this script as root!"
+        exit 1
+    fi
+}
+
 download_geoip() {
     if ! curl -L -H 'Cache-Control: no-cache' -o "${V2RAY}geoip.dat.new" "$DOWNLOAD_LINK_GEOIP"; then
         echo 'error: Download failed! Please check your network or try again.'
@@ -53,13 +61,14 @@ download_geosite() {
 
 rename_new() {
     for DAT in 'geoip' 'geosite'; do
-        install -m 755 "${V2RAY}$DAT.dat.new" "${V2RAY}$DAT.dat"
+        install -m 644 "${V2RAY}$DAT.dat.new" "${V2RAY}$DAT.dat"
         rm "${V2RAY}$DAT.dat.new"
         rm "${V2RAY}$DAT.dat.sha256sum.new"
     done
 }
 
 main() {
+    check_if_running_as_root
     download_geoip
     download_geosite
     rename_new

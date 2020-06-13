@@ -31,24 +31,28 @@ installed: /etc/systemd/system/v2ray@.service
 ### 安裝 cURL
 
 ```
+# apt update
 # apt install curl
 ```
 
 or
 
 ```
+# yum makecache
 # yum install curl
 ```
 
 or
 
 ```
+# dnf makecache
 # dnf install curl
 ```
 
 or
 
 ```
+# zypper refresh
 # zypper install curl
 ```
 
@@ -94,3 +98,9 @@ usage: install-release.sh [--remove | --version number | -c | -f | -h | -l | -p]
   -l, --local     Install V2Ray from a local file
   -p, --proxy     Download through a proxy server, e.g., -p http://127.0.0.1:8118 or -p socks5://127.0.0.1:1080
 ```
+
+## 維護
+
+請於 [develop](https://github.com/v2fly/fhs-install-v2ray/tree/develop) 分支進行，以避免對主分支造成破壞。
+
+待確定無誤後，兩分支將進行合併。
