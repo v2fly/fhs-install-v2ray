@@ -12,6 +12,14 @@
 # If the script executes incorrectly, go to:
 # https://github.com/v2fly/fhs-install-v2ray/issues
 
+check_if_running_as_root() {
+    # If you want to run as another user, please modify $UID to be owned by this user
+    if [ $UID != "0" ]; then
+        echo "error: You must run this script as root!"
+        exit 1
+    fi
+}
+
 identify_the_operating_system_and_architecture() {
     if [[ "$(uname)" == 'Linux' ]]; then
         case "$(uname -m)" in
@@ -318,7 +326,7 @@ install_file() {
     if [[ "$NAME" == 'v2ray' ]] || [[ "$NAME" == 'v2ctl' ]]; then
         install -m 755 "${TMP_DIRECTORY}$NAME" "/usr/local/bin/$NAME"
     elif [[ "$NAME" == 'geoip.dat' ]] || [[ "$NAME" == 'geosite.dat' ]]; then
-        install -m 755 "${TMP_DIRECTORY}$NAME" "/usr/local/lib/v2ray/$NAME"
+        install -m 644 "${TMP_DIRECTORY}$NAME" "/usr/local/lib/v2ray/$NAME"
     fi
 }
 
@@ -362,8 +370,8 @@ install_startup_service_file() {
             echo 'error: Failed to start service file download! Please check your network or try again.'
             exit 1
         fi
-        install -m 755 "${TMP_DIRECTORY}systemd/system/v2ray.service" /etc/systemd/system/v2ray.service
-        install -m 755 "${TMP_DIRECTORY}systemd/system/v2ray@.service" /etc/systemd/system/v2ray@.service
+        install -m 644 "${TMP_DIRECTORY}systemd/system/v2ray.service" /etc/systemd/system/v2ray.service
+        install -m 644 "${TMP_DIRECTORY}systemd/system/v2ray@.service" /etc/systemd/system/v2ray@.service
         SYSTEMD='1'
     fi
 }
@@ -453,6 +461,7 @@ show_help() {
 }
 
 main() {
+    check_if_running_as_root
     identify_the_operating_system_and_architecture
     judgment_parameters "$@"
 
