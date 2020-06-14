@@ -87,7 +87,7 @@ or
 
 ### 解決問題
 
-*   [使用證書時權限不足](https://github.com/v2fly/fhs-install-v2ray/wiki/Insufficient-permissions-when-using-certificates)。
+* 「[使用證書時權限不足](https://github.com/v2fly/fhs-install-v2ray/wiki/Insufficient-permissions-when-using-certificates)」。
 
 ## 參數
 
