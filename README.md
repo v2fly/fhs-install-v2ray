@@ -93,9 +93,9 @@ or
 
 方案一：
 
-`/srv/http/` 的默認權限一般為 755；
-`/srv/http/example.com.key` 的默認權限一般為 600；
-`/srv/http/example.com.pem` 的默認權限一般為 644。
+1. `/srv/http/` 的默認權限一般為 755；
+2. `/srv/http/example.com.key` 的默認權限一般為 600；
+3. `/srv/http/example.com.pem` 的默認權限一般為 644。
 
 將 `/srv/http/example.com.key` 修改為 644 即可：
 
