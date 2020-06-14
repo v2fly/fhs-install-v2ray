@@ -131,7 +131,7 @@ uid=65534(nobody) gid=65534(nobody) groups=65534(nobody)
 
 ```
 # chown -R nobody:nobody /srv/http/
-    ```
+```
 
 ## 參數
 
