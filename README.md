@@ -85,6 +85,50 @@ or
 # bash install-release.sh --remove
 ```
 
+### 證書權限問題
+
+假设，证书文件的所在路径为 `/srv/http/`，文件分别为 `/srv/http/example.com.key` 和 `/srv/http/example.com.pem`。
+
+方案一：
+
+`/srv/http/` 的默认权限一般为 755，`/srv/http/example.com.key` 的默认权限一般为 600，`/srv/http/example.com.pem` 的默认权限一般为 644。
+
+将 `/srv/http/example.com.key` 修改为 644 即可：
+
+```
+# chmod 644 /srv/http/example.com.key
+```
+
+方案二：
+
+```
+# id nobody
+```
+
+显示出来的结果可能是：
+
+```
+uid=65534(nobody) gid=65534(nogroup) groups=65534(nogroup)
+```
+
+也可能是：
+
+```
+uid=65534(nobody) gid=65534(nobody) groups=65534(nobody)
+```
+
+相应的，只需要执行：
+
+```
+# chown -R nobody:nogroup /srv/http/
+```
+
+或是：
+
+```
+# chown -R nobody:nobody /srv/http/
+```
+
 ## 參數
 
 ```
