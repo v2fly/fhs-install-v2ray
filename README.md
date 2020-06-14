@@ -109,29 +109,29 @@ or
 # id nobody
 ```
 
-執行後，显示出来的结果可能是：
+1. 显示出来的结果可能是：
 
-```
-uid=65534(nobody) gid=65534(nogroup) groups=65534(nogroup)
-```
+    ```
+    uid=65534(nobody) gid=65534(nogroup) groups=65534(nogroup)
+    ```
 
-相应的，只需要执行：
+    相应的，只需要执行：
 
-```
-# chown -R nobody:nogroup /srv/http/
-```
+    ```
+    # chown -R nobody:nogroup /srv/http/
+    ```
 
-不過，显示出来的结果也可能是：
+2. 显示出来的结果也可能是：
 
-```
-uid=65534(nobody) gid=65534(nobody) groups=65534(nobody)
-```
+    ```
+    uid=65534(nobody) gid=65534(nobody) groups=65534(nobody)
+    ```
 
-相应的，只需要执行：
+    相应的，只需要执行：
 
-```
-# chown -R nobody:nobody /srv/http/
-```
+    ```
+    # chown -R nobody:nobody /srv/http/
+    ```
 
 ## 參數
 
