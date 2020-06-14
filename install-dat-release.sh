@@ -26,11 +26,11 @@ check_if_running_as_root() {
 }
 
 download_geoip() {
-    if ! curl -L -H 'Cache-Control: no-cache' -o "${V2RAY}geoip.dat.new" "$DOWNLOAD_LINK_GEOIP"; then
+    if ! curl -s -L -H 'Cache-Control: no-cache' -o "${V2RAY}geoip.dat.new" "$DOWNLOAD_LINK_GEOIP"; then
         echo 'error: Download failed! Please check your network or try again.'
         exit 1
     fi
-    if ! curl -L -H 'Cache-Control: no-cache' -o "${V2RAY}geoip.dat.sha256sum.new" "$DOWNLOAD_LINK_GEOIP.sha256sum"; then
+    if ! curl -s -L -H 'Cache-Control: no-cache' -o "${V2RAY}geoip.dat.sha256sum.new" "$DOWNLOAD_LINK_GEOIP.sha256sum"; then
         echo 'error: Download failed! Please check your network or try again.'
         exit 1
     fi
@@ -43,11 +43,11 @@ download_geoip() {
 }
 
 download_geosite() {
-    if ! curl -L -H 'Cache-Control: no-cache' -o "${V2RAY}geosite.dat.new" "$DOWNLOAD_LINK_GEOSITE"; then
+    if ! curl -s -L -H 'Cache-Control: no-cache' -o "${V2RAY}geosite.dat.new" "$DOWNLOAD_LINK_GEOSITE"; then
         echo 'error: Download failed! Please check your network or try again.'
         exit 1
     fi
-    if ! curl -L -H 'Cache-Control: no-cache' -o "${V2RAY}geosite.dat.sha256sum.new" "$DOWNLOAD_LINK_GEOSITE.sha256sum"; then
+    if ! curl -s -L -H 'Cache-Control: no-cache' -o "${V2RAY}geosite.dat.sha256sum.new" "$DOWNLOAD_LINK_GEOSITE.sha256sum"; then
         echo 'error: Download failed! Please check your network or try again.'
         exit 1
     fi
