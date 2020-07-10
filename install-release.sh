@@ -378,7 +378,11 @@ install_startup_service_file() {
 
 start_v2ray() {
     if [[ -f '/etc/systemd/system/v2ray.service' ]]; then
-        systemctl start v2ray
+        if [[ -z "$V2RAY_CUSTOMIZE" ]]; then
+            systemctl start v2ray
+        else
+            systemctl start "$V2RAY_CUSTOMIZE"
+        fi
     fi
     if [[ "$?" -ne 0 ]]; then
         echo 'error: Failed to start V2Ray service.'
@@ -388,8 +392,11 @@ start_v2ray() {
 }
 
 stop_v2ray() {
-    if [[ -f '/etc/systemd/system/v2ray.service' ]]; then
+    V2RAY_CUSTOMIZE="$(systemctl list-units | grep 'v2ray@' | awk -F ' ' '{print $1}')"
+    if [[ -z "$V2RAY_CUSTOMIZE" ]]; then
         systemctl stop v2ray
+    else
+        systemctl stop "$V2RAY_CUSTOMIZE"
     fi
     if [[ "$?" -ne '0' ]]; then
         echo 'error: Stopping the V2Ray service failed.'
