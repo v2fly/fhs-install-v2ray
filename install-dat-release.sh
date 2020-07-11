@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -euxo pipefail
 
 # This Bash script to install the latest release of geoip.dat and geosite.dat:
 
