@@ -335,8 +335,11 @@ install_v2ray() {
     install_file v2ray
     install_file v2ctl
     install -d /usr/local/lib/v2ray/
-    install_file geoip.dat
-    install_file geosite.dat
+    # If the file exists, geoip.dat and geosite.dat will not be installed or updated
+    if [[ ! -f "/usr/local/lib/v2ray/.undat" ]]; then
+        install_file geoip.dat
+        install_file geosite.dat
+    fi
 
     # Install V2Ray configuration file to /usr/local/etc/v2ray/
     if [[ ! -d '/usr/local/etc/v2ray/' ]]; then
@@ -518,8 +521,11 @@ main() {
     install_startup_service_file
     echo 'installed: /usr/local/bin/v2ray'
     echo 'installed: /usr/local/bin/v2ctl'
-    echo 'installed: /usr/local/lib/v2ray/geoip.dat'
-    echo 'installed: /usr/local/lib/v2ray/geosite.dat'
+    # If the file exists, the content output of installing or updating geoip.dat and geosite.dat will not be displayed
+    if [[ ! -f "/usr/local/lib/v2ray/.undat" ]]; then
+        echo 'installed: /usr/local/lib/v2ray/geoip.dat'
+        echo 'installed: /usr/local/lib/v2ray/geosite.dat'
+    fi
     if [[ "$CONFDIR" -eq '1' ]]; then
         echo 'installed: /usr/local/etc/v2ray/00_log.json'
         echo 'installed: /usr/local/etc/v2ray/01_api.json'
