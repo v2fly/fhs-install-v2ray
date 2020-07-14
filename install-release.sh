@@ -336,7 +336,7 @@ install_v2ray() {
     install_file v2ctl
     install -d /usr/local/lib/v2ray/
     # If the file exists, geoip.dat and geosite.dat will not be installed or updated
-    if [[ ! -f "/usr/local/lib/v2ray/.undat" ]]; then
+    if [[ ! -f '/usr/local/lib/v2ray/.undat' ]]; then
         install_file geoip.dat
         install_file geosite.dat
     fi
@@ -522,7 +522,7 @@ main() {
     echo 'installed: /usr/local/bin/v2ray'
     echo 'installed: /usr/local/bin/v2ctl'
     # If the file exists, the content output of installing or updating geoip.dat and geosite.dat will not be displayed
-    if [[ ! -f "/usr/local/lib/v2ray/.undat" ]]; then
+    if [[ ! -f '/usr/local/lib/v2ray/.undat' ]]; then
         echo 'installed: /usr/local/lib/v2ray/geoip.dat'
         echo 'installed: /usr/local/lib/v2ray/geosite.dat'
     fi
