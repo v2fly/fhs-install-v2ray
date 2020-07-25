@@ -353,9 +353,9 @@ install_v2ray() {
     # Used to store V2Ray log files
     if [[ ! -d '/var/log/v2ray/' ]]; then
         if [[ -n "$(id nobody | grep nogroup)" ]]; then
-            install -d -o nobody -g nogroup /var/log/v2ray/
+            install -d -m 700 -o nobody -g nogroup /var/log/v2ray/
         else
-            install -d -o nobody -g nobody /var/log/v2ray/
+            install -d -m 700 -o nobody -g nobody /var/log/v2ray/
         fi
         LOG='1'
     fi
