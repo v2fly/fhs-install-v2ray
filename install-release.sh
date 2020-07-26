@@ -513,9 +513,11 @@ main() {
     fi
 
     # Determine if V2Ray is running
-    if [[ -n "$(pgrep v2ray)" ]]; then
-        stop_v2ray
-        V2RAY_RUNNING='1'
+    if [[ -n "$(systemctl list-unit-files | grep 'v2ray')" ]]; then
+        if [[ -n "$(pgrep v2ray)" ]]; then
+            stop_v2ray
+            V2RAY_RUNNING='1'
+        fi
     fi
     install_v2ray
     install_startup_service_file
