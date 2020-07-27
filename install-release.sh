@@ -424,8 +424,8 @@ check_update() {
 }
 
 remove_v2ray() {
-    if [[ -f '/etc/systemd/system/v2ray.service' ]]; then
-        if [[ -n "$(pgrep v2ray)" ]]; then
+    if [[ -n "$(systemctl list-unit-files | grep 'v2ray')" ]]; then
+        if [[ -n "$(pidof v2ray)" ]]; then
             stop_v2ray
         fi
         NAME="$1"
@@ -514,7 +514,7 @@ main() {
 
     # Determine if V2Ray is running
     if [[ -n "$(systemctl list-unit-files | grep 'v2ray')" ]]; then
-        if [[ -n "$(pgrep v2ray)" ]]; then
+        if [[ -n "$(pidof v2ray)" ]]; then
             stop_v2ray
             V2RAY_RUNNING='1'
         fi
