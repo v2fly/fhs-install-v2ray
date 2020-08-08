@@ -29,14 +29,20 @@ identify_the_operating_system_and_architecture() {
             'amd64' | 'x86_64')
                 MACHINE='64'
                 ;;
-            'armv6l' | 'armv7' | 'armv7l' )
-                MACHINE='arm'
+            'armv5tel')
+                MACHINE='arm32-v5'
+                ;;
+            'armv6l')
+                MACHINE='arm32-v6'
+                ;;
+            'armv7' | 'armv7l' )
+                MACHINE='arm32-v7a'
                 ;;
             'armv8' | 'aarch64')
-                MACHINE='arm64'
+                MACHINE='arm64-v8a'
                 ;;
             'mips')
-                MACHINE='mips'
+                MACHINE='mips32'
                 ;;
             'mips64')
                 MACHINE='mips64'
@@ -45,7 +51,7 @@ identify_the_operating_system_and_architecture() {
                 MACHINE='mips64le'
                 ;;
             'mipsle')
-                MACHINE='mipsle'
+                MACHINE='mips32le'
                 ;;
             's390x')
                 MACHINE='s390x'
