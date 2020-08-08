@@ -29,14 +29,23 @@ identify_the_operating_system_and_architecture() {
             'amd64' | 'x86_64')
                 MACHINE='64'
                 ;;
-            'armv6l' | 'armv7' | 'armv7l' )
-                MACHINE='arm'
+            'armv5tel')
+                MACHINE='arm32-v5'
+                ;;
+            'armv6l')
+                MACHINE='arm32-v6'
+                ;;
+            'armv7' | 'armv7l' )
+                MACHINE='arm32-v7a'
                 ;;
             'armv8' | 'aarch64')
-                MACHINE='arm64'
+                MACHINE='arm64-v8a'
                 ;;
             'mips')
-                MACHINE='mips'
+                MACHINE='mips32'
+                ;;
+            'mipsle')
+                MACHINE='mips32le'
                 ;;
             'mips64')
                 MACHINE='mips64'
@@ -44,17 +53,17 @@ identify_the_operating_system_and_architecture() {
             'mips64le')
                 MACHINE='mips64le'
                 ;;
-            'mipsle')
-                MACHINE='mipsle'
-                ;;
-            's390x')
-                MACHINE='s390x'
-                ;;
             'ppc64')
                 MACHINE='ppc64'
                 ;;
             'ppc64le')
                 MACHINE='ppc64le'
+                ;;
+            'riscv64')
+                MACHINE='riscv64'
+                ;;
+            's390x')
+                MACHINE='s390x'
                 ;;
             *)
                 echo "error: The architecture is not supported."
@@ -238,6 +247,7 @@ get_version() {
         # Get V2Ray release version number
         TMP_FILE="$(mktemp)"
         install_software curl
+        # DO NOT QUOTE THESE `${PROXY}` VARIABLES!
         if ! curl ${PROXY} -s -o "$TMP_FILE" 'https://api.github.com/repos/v2fly/v2ray-core/releases/latest'; then
             rm "$TMP_FILE"
             echo 'error: Failed to get release list, please check your network.'
