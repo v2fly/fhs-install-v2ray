@@ -44,23 +44,26 @@ identify_the_operating_system_and_architecture() {
             'mips')
                 MACHINE='mips32'
                 ;;
+            'mipsle')
+                MACHINE='mips32le'
+                ;;
             'mips64')
                 MACHINE='mips64'
                 ;;
             'mips64le')
                 MACHINE='mips64le'
                 ;;
-            'mipsle')
-                MACHINE='mips32le'
-                ;;
-            's390x')
-                MACHINE='s390x'
-                ;;
             'ppc64')
                 MACHINE='ppc64'
                 ;;
             'ppc64le')
                 MACHINE='ppc64le'
+                ;;
+            'riscv64')
+                MACHINE='riscv64'
+                ;;
+            's390x')
+                MACHINE='s390x'
                 ;;
             *)
                 echo "error: The architecture is not supported."
