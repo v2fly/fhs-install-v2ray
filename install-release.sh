@@ -244,7 +244,7 @@ get_version() {
         # Get V2Ray release version number
         TMP_FILE="$(mktemp)"
         install_software curl
-        if ! curl ${PROXY} -s -o "$TMP_FILE" 'https://api.github.com/repos/v2fly/v2ray-core/releases/latest'; then
+        if ! curl "${PROXY}" -s -o "$TMP_FILE" 'https://api.github.com/repos/v2fly/v2ray-core/releases/latest'; then
             rm "$TMP_FILE"
             echo 'error: Failed to get release list, please check your network.'
             exit 1
@@ -292,12 +292,12 @@ download_v2ray() {
     mkdir "$TMP_DIRECTORY"
     DOWNLOAD_LINK="https://github.com/v2fly/v2ray-core/releases/download/$RELEASE_VERSION/v2ray-linux-$MACHINE.zip"
     echo "Downloading V2Ray archive: $DOWNLOAD_LINK"
-    if ! curl ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE" "$DOWNLOAD_LINK"; then
+    if ! curl "${PROXY}" -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE" "$DOWNLOAD_LINK"; then
         echo 'error: Download failed! Please check your network or try again.'
         return 1
     fi
     echo "Downloading verification file for V2Ray archive: $DOWNLOAD_LINK.dgst"
-    if ! curl ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE.dgst" "$DOWNLOAD_LINK.dgst"; then
+    if ! curl "${PROXY}" -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE.dgst" "$DOWNLOAD_LINK.dgst"; then
         echo 'error: Download failed! Please check your network or try again.'
         return 1
     fi
@@ -371,11 +371,11 @@ install_startup_service_file() {
     if [[ ! -f '/etc/systemd/system/v2ray.service' ]]; then
         mkdir "${TMP_DIRECTORY}systemd/system/"
         install_software curl
-        if ! curl ${PROXY} -s -o "${TMP_DIRECTORY}systemd/system/v2ray.service" 'https://raw.githubusercontent.workers.dev/v2fly/fhs-install-v2ray/master/systemd/system/v2ray.service'; then
+        if ! curl "${PROXY}" -s -o "${TMP_DIRECTORY}systemd/system/v2ray.service" 'https://raw.githubusercontent.workers.dev/v2fly/fhs-install-v2ray/master/systemd/system/v2ray.service'; then
             echo 'error: Failed to start service file download! Please check your network or try again.'
             exit 1
         fi
-        if ! curl ${PROXY} -s -o "${TMP_DIRECTORY}systemd/system/v2ray@.service" 'https://raw.githubusercontent.workers.dev/v2fly/fhs-install-v2ray/master/systemd/system/v2ray@.service'; then
+        if ! curl "${PROXY}" -s -o "${TMP_DIRECTORY}systemd/system/v2ray@.service" 'https://raw.githubusercontent.workers.dev/v2fly/fhs-install-v2ray/master/systemd/system/v2ray@.service'; then
             echo 'error: Failed to start service file download! Please check your network or try again.'
             exit 1
         fi
