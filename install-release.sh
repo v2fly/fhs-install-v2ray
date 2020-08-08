@@ -247,6 +247,7 @@ get_version() {
         # Get V2Ray release version number
         TMP_FILE="$(mktemp)"
         install_software curl
+        # DO NOT QUOTE THESE `${PROXY}` VARIABLES!
         if ! curl ${PROXY} -s -o "$TMP_FILE" 'https://api.github.com/repos/v2fly/v2ray-core/releases/latest'; then
             rm "$TMP_FILE"
             echo 'error: Failed to get release list, please check your network.'
