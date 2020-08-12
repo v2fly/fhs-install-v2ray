@@ -12,6 +12,12 @@
 # If the script executes incorrectly, go to:
 # https://github.com/v2fly/fhs-install-v2ray/issues
 
+# If you modify the following variables, you also need to modify the unit file yourself:
+# You can modify it to /usr/local/share/v2ray/
+DAT_PATH='/usr/local/lib/v2ray/'
+# You can modify it to /etc/v2ray/
+JSON_PATH='/usr/local/etc/v2ray/'
+
 check_if_running_as_root() {
     # If you want to run as another user, please modify $UID to be owned by this user
     if [[ "$UID" -ne '0' ]]; then
@@ -336,26 +342,26 @@ install_file() {
     if [[ "$NAME" == 'v2ray' ]] || [[ "$NAME" == 'v2ctl' ]]; then
         install -m 755 "${TMP_DIRECTORY}$NAME" "/usr/local/bin/$NAME"
     elif [[ "$NAME" == 'geoip.dat' ]] || [[ "$NAME" == 'geosite.dat' ]]; then
-        install -m 644 "${TMP_DIRECTORY}$NAME" "/usr/local/lib/v2ray/$NAME"
+        install -m 644 "${TMP_DIRECTORY}$NAME" "${DAT_PATH}$NAME"
     fi
 }
 
 install_v2ray() {
-    # Install V2Ray binary to /usr/local/bin/ and /usr/local/lib/v2ray/
+    # Install V2Ray binary to /usr/local/bin/ and $DAT_PATH
     install_file v2ray
     install_file v2ctl
-    install -d /usr/local/lib/v2ray/
+    install -d "$DAT_PATH"
     # If the file exists, geoip.dat and geosite.dat will not be installed or updated
-    if [[ ! -f '/usr/local/lib/v2ray/.undat' ]]; then
+    if [[ ! -f "${DAT_PATH}.undat" ]]; then
         install_file geoip.dat
         install_file geosite.dat
     fi
 
-    # Install V2Ray configuration file to /usr/local/etc/v2ray/
-    if [[ ! -d '/usr/local/etc/v2ray/' ]]; then
-        install -d /usr/local/etc/v2ray/
+    # Install V2Ray configuration file to $JSON_PATH
+    if [[ ! -d "$JSON_PATH" ]]; then
+        install -d "$JSON_PATH"
         for BASE in 00_log 01_api 02_dns 03_routing 04_policy 05_inbounds 06_outbounds 07_transport 08_stats 09_reverse; do
-            echo '{}' > "/usr/local/etc/v2ray/$BASE.json"
+            echo '{}' > "${JSON_PATH}$BASE.json"
         done
         CONFDIR='1'
     fi
@@ -441,7 +447,7 @@ remove_v2ray() {
         NAME="$1"
         rm /usr/local/bin/v2ray
         rm /usr/local/bin/v2ctl
-        rm -r /usr/local/lib/v2ray/
+        rm -r "$DAT_PATH"
         rm /etc/systemd/system/v2ray.service
         rm /etc/systemd/system/v2ray@.service
         if [[ "$?" -ne '0' ]]; then
@@ -450,14 +456,14 @@ remove_v2ray() {
         else
             echo 'removed: /usr/local/bin/v2ray'
             echo 'removed: /usr/local/bin/v2ctl'
-            echo 'removed: /usr/local/lib/v2ray/'
+            echo "removed: $DAT_PATH"
             echo 'removed: /etc/systemd/system/v2ray.service'
             echo 'removed: /etc/systemd/system/v2ray@.service'
             echo 'Please execute the command: systemctl disable v2ray'
             echo "You may need to execute a command to remove dependent software: $PACKAGE_MANAGEMENT_REMOVE curl unzip"
             echo 'info: V2Ray has been removed.'
             echo 'info: If necessary, manually delete the configuration and log files.'
-            echo 'info: e.g., /usr/local/etc/v2ray/ and /var/log/v2ray/ ...'
+            echo "info: e.g., $JSON_PATH and /var/log/v2ray/ ..."
             exit 0
         fi
     else
@@ -534,21 +540,21 @@ main() {
     echo 'installed: /usr/local/bin/v2ray'
     echo 'installed: /usr/local/bin/v2ctl'
     # If the file exists, the content output of installing or updating geoip.dat and geosite.dat will not be displayed
-    if [[ ! -f '/usr/local/lib/v2ray/.undat' ]]; then
-        echo 'installed: /usr/local/lib/v2ray/geoip.dat'
-        echo 'installed: /usr/local/lib/v2ray/geosite.dat'
+    if [[ ! -f "${DAT_PATH}.undat" ]]; then
+        echo "installed: ${DAT_PATH}geoip.dat"
+        echo "installed: ${DAT_PATH}geosite.dat"
     fi
     if [[ "$CONFDIR" -eq '1' ]]; then
-        echo 'installed: /usr/local/etc/v2ray/00_log.json'
-        echo 'installed: /usr/local/etc/v2ray/01_api.json'
-        echo 'installed: /usr/local/etc/v2ray/02_dns.json'
-        echo 'installed: /usr/local/etc/v2ray/03_routing.json'
-        echo 'installed: /usr/local/etc/v2ray/04_policy.json'
-        echo 'installed: /usr/local/etc/v2ray/05_inbounds.json'
-        echo 'installed: /usr/local/etc/v2ray/06_outbounds.json'
-        echo 'installed: /usr/local/etc/v2ray/07_transport.json'
-        echo 'installed: /usr/local/etc/v2ray/08_stats.json'
-        echo 'installed: /usr/local/etc/v2ray/09_reverse.json'
+        echo "installed: ${JSON_PATH}00_log.json"
+        echo "installed: ${JSON_PATH}01_api.json"
+        echo "installed: ${JSON_PATH}02_dns.json"
+        echo "installed: ${JSON_PATH}03_routing.json"
+        echo "installed: ${JSON_PATH}04_policy.json"
+        echo "installed: ${JSON_PATH}05_inbounds.json"
+        echo "installed: ${JSON_PATH}06_outbounds.json"
+        echo "installed: ${JSON_PATH}07_transport.json"
+        echo "installed: ${JSON_PATH}08_stats.json"
+        echo "installed: ${JSON_PATH}09_reverse.json"
     fi
     if [[ "$LOG" -eq '1' ]]; then
         echo 'installed: /var/log/v2ray/'
