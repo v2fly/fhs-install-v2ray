@@ -370,8 +370,12 @@ install_v2ray() {
     if [[ ! -d '/var/log/v2ray/' ]]; then
         if [[ -n "$(id nobody | grep nogroup)" ]]; then
             install -d -m 700 -o nobody -g nogroup /var/log/v2ray/
+            install -m 600 -o nobody -g nogroup /var/log/v2ray/access.log
+            install -m 600 -o nobody -g nogroup /var/log/v2ray/error.log
         else
             install -d -m 700 -o nobody -g nobody /var/log/v2ray/
+            install -m 600 -o nobody -g nobody /var/log/v2ray/access.log
+            install -m 600 -o nobody -g nobody /var/log/v2ray/error.log
         fi
         LOG='1'
     fi
