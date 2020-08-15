@@ -13,8 +13,8 @@
 # https://github.com/v2fly/fhs-install-v2ray/issues
 
 # If you modify the following variables, you also need to modify the unit file yourself:
-# You can modify it to /usr/local/share/v2ray/
-DAT_PATH='/usr/local/lib/v2ray/'
+# You can modify it to /usr/local/lib/v2ray/
+DAT_PATH='/usr/local/share/v2ray/'
 # You can modify it to /etc/v2ray/
 JSON_PATH='/usr/local/etc/v2ray/'
 

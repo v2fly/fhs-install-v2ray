@@ -9,8 +9,8 @@ https://wiki.linuxfoundation.org/lsb/fhs
 ```
 installed: /usr/local/bin/v2ray
 installed: /usr/local/bin/v2ctl
-installed: /usr/local/lib/v2ray/geoip.dat
-installed: /usr/local/lib/v2ray/geosite.dat
+installed: /usr/local/share/v2ray/geoip.dat
+installed: /usr/local/share/v2ray/geosite.dat
 installed: /usr/local/etc/v2ray/00_log.json
 installed: /usr/local/etc/v2ray/01_api.json
 installed: /usr/local/etc/v2ray/02_dns.json
