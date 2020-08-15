@@ -13,8 +13,8 @@
 
 # 0 0 * * * /usr/local/bin/install-dat-release > /dev/null 2>&1
 
-# You can modify it to /usr/local/share/v2ray/
-V2RAY="/usr/local/lib/v2ray/"
+# You can modify it to /usr/local/lib/v2ray/
+V2RAY="/usr/local/share/v2ray/"
 DOWNLOAD_LINK_GEOIP="https://github.com/v2ray/geoip/releases/latest/download/geoip.dat"
 DOWNLOAD_LINK_GEOSITE="https://github.com/v2ray/domain-list-community/releases/latest/download/dlc.dat"
 
