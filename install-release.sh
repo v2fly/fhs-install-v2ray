@@ -370,12 +370,12 @@ install_v2ray() {
     if [[ ! -d '/var/log/v2ray/' ]]; then
         if [[ -n "$(id nobody | grep nogroup)" ]]; then
             install -d -m 700 -o nobody -g nogroup /var/log/v2ray/
-            install -m 600 -o nobody -g nogroup /var/log/v2ray/access.log
-            install -m 600 -o nobody -g nogroup /var/log/v2ray/error.log
+            install -m 600 -o nobody -g nogroup /dev/null /var/log/v2ray/access.log
+            install -m 600 -o nobody -g nogroup /dev/null /var/log/v2ray/error.log
         else
             install -d -m 700 -o nobody -g nobody /var/log/v2ray/
-            install -m 600 -o nobody -g nobody /var/log/v2ray/access.log
-            install -m 600 -o nobody -g nobody /var/log/v2ray/error.log
+            install -m 600 -o nobody -g nobody /dev/null /var/log/v2ray/access.log
+            install -m 600 -o nobody -g nobody /dev/null /var/log/v2ray/error.log
         fi
         LOG='1'
     fi
@@ -562,6 +562,8 @@ main() {
     fi
     if [[ "$LOG" -eq '1' ]]; then
         echo 'installed: /var/log/v2ray/'
+        echo 'installed: /var/log/v2ray/access.log'
+        echo 'installed: /var/log/v2ray/error.log'
     fi
     if [[ "$SYSTEMD" -eq '1' ]]; then
         echo 'installed: /etc/systemd/system/v2ray.service'

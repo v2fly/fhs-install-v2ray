@@ -22,6 +22,8 @@ installed: /usr/local/etc/v2ray/07_transport.json
 installed: /usr/local/etc/v2ray/08_stats.json
 installed: /usr/local/etc/v2ray/09_reverse.json
 installed: /var/log/v2ray/
+installed: /var/log/v2ray/access.log
+installed: /var/log/v2ray/error.log
 installed: /etc/systemd/system/v2ray.service
 installed: /etc/systemd/system/v2ray@.service
 ```
