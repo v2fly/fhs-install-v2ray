@@ -1,10 +1,10 @@
 # fhs-install-v2ray
 
-> 欲查阅以简体中文撰写的介绍，请访问：[README.zh-sc.md](README.zh-sc.md)
+> 欲查閱以繁體中文撰寫的介紹，請訪問：[README.md](README.md)
 
 > Bash script for installing V2Ray in operating systems such as Debian / CentOS / Fedora / openSUSE that support systemd
 
-該腳本安裝的文件符合 Filesystem Hierarchy Standard（FHS）：
+该脚本安装的文档符合 Filesystem Hierarchy Standard（FHS）：
 
 https://wiki.linuxfoundation.org/lsb/fhs
 
@@ -30,9 +30,9 @@ installed: /etc/systemd/system/v2ray.service
 installed: /etc/systemd/system/v2ray@.service
 ```
 
-## 依賴軟體
+## 依赖软件
 
-### 安裝 cURL
+### 安装 cURL
 
 ```
 # apt update
@@ -60,7 +60,7 @@ or
 # zypper install curl
 ```
 
-## 下載
+## 下载
 
 ```
 # curl -O https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh
@@ -69,15 +69,15 @@ or
 
 ## 使用
 
-* 該腳本在執行時會提供 `info` 和 `error` 等信息，請仔細閱讀。
+* 该脚本在运行时会提供 `info` 和 `error` 等信息，请仔细阅读。
 
-### 安裝和更新 V2Ray
+### 安装和更新 V2Ray
 
 ```
 # bash install-release.sh
 ```
 
-### 安裝最新發行的 geoip.dat 和 geosite.dat
+### 安装最新发行的 geoip.dat 和 geosite.dat
 
 ```
 # bash install-dat-release.sh
@@ -89,15 +89,15 @@ or
 # bash install-release.sh --remove
 ```
 
-### 解決問題
+### 解决问题
 
-* 「[不安裝或更新 geoip.dat 和 geosite.dat](https://github.com/v2fly/fhs-install-v2ray/wiki/Do-not-install-or-update-geoip.dat-and-geosite.dat)」。
-* 「[使用證書時權限不足](https://github.com/v2fly/fhs-install-v2ray/wiki/Insufficient-permissions-when-using-certificates)」。
-* 「[從舊腳本遷移至此](https://github.com/v2fly/fhs-install-v2ray/wiki/Migrate-from-the-old-script-to-this)」。
-* 「[將 .dat 文檔由 lib 目錄移動到 share 目錄](https://github.com/v2fly/fhs-install-v2ray/wiki/Move-.dat-files-from-lib-directory-to-share-directory)」。
-* 「[使用 VLESS 協議](https://github.com/v2fly/fhs-install-v2ray/wiki/To-use-the-VLESS-protocol)」。
+* 「[不安装或更新 geoip.dat 和 geosite.dat](https://github.com/v2fly/fhs-install-v2ray/wiki/Do-not-install-or-update-geoip.dat-and-geosite.dat)」。
+* 「[使用证书时权限不足](https://github.com/v2fly/fhs-install-v2ray/wiki/Insufficient-permissions-when-using-certificates)」。
+* 「[从旧脚本迁移至此](https://github.com/v2fly/fhs-install-v2ray/wiki/Migrate-from-the-old-script-to-this)」。
+* 「[将 .dat 文档由 lib 目录移动到 share 目录](https://github.com/v2fly/fhs-install-v2ray/wiki/Move-.dat-files-from-lib-directory-to-share-directory)」。
+* 「[使用 VLESS 协议](https://github.com/v2fly/fhs-install-v2ray/wiki/To-use-the-VLESS-protocol)」。
 
-## 參數
+## 参数
 
 ```
 usage: install-release.sh [--remove | --version number | -c | -f | -h | -l | -p]
@@ -111,8 +111,8 @@ usage: install-release.sh [--remove | --version number | -c | -f | -h | -l | -p]
   -p, --proxy     Download through a proxy server, e.g., -p http://127.0.0.1:8118 or -p socks5://127.0.0.1:1080
 ```
 
-## 維護
+## 维护
 
-請於 [develop](https://github.com/v2fly/fhs-install-v2ray/tree/develop) 分支進行，以避免對主分支造成破壞。
+请于 [develop](https://github.com/v2fly/fhs-install-v2ray/tree/develop) 分支进行，以避免对主分支造成破坏。
 
-待確定無誤後，兩分支將進行合併。
+待确定无误后，两分支将进行合并。
