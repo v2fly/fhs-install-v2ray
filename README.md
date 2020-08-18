@@ -28,6 +28,7 @@ installed: /var/log/v2ray/access.log
 installed: /var/log/v2ray/error.log
 installed: /etc/systemd/system/v2ray.service
 installed: /etc/systemd/system/v2ray@.service
+config: /usr/local/etc/v2ray/config.json
 ```
 
 ## 依賴軟體
