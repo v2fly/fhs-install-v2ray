@@ -13,16 +13,17 @@ installed: /usr/local/bin/v2ray
 installed: /usr/local/bin/v2ctl
 installed: /usr/local/share/v2ray/geoip.dat
 installed: /usr/local/share/v2ray/geosite.dat
-installed: /usr/local/etc/v2ray/00_log.json
-installed: /usr/local/etc/v2ray/01_api.json
-installed: /usr/local/etc/v2ray/02_dns.json
-installed: /usr/local/etc/v2ray/03_routing.json
-installed: /usr/local/etc/v2ray/04_policy.json
-installed: /usr/local/etc/v2ray/05_inbounds.json
-installed: /usr/local/etc/v2ray/06_outbounds.json
-installed: /usr/local/etc/v2ray/07_transport.json
-installed: /usr/local/etc/v2ray/08_stats.json
-installed: /usr/local/etc/v2ray/09_reverse.json
+installed: /usr/local/etc/v2ray/config.json
+# installed: /usr/local/etc/v2ray/00_log.json
+# installed: /usr/local/etc/v2ray/01_api.json
+# installed: /usr/local/etc/v2ray/02_dns.json
+# installed: /usr/local/etc/v2ray/03_routing.json
+# installed: /usr/local/etc/v2ray/04_policy.json
+# installed: /usr/local/etc/v2ray/05_inbounds.json
+# installed: /usr/local/etc/v2ray/06_outbounds.json
+# installed: /usr/local/etc/v2ray/07_transport.json
+# installed: /usr/local/etc/v2ray/08_stats.json
+# installed: /usr/local/etc/v2ray/09_reverse.json
 installed: /var/log/v2ray/
 installed: /var/log/v2ray/access.log
 installed: /var/log/v2ray/error.log
