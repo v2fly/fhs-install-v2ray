@@ -360,10 +360,8 @@ install_v2ray() {
     # Install V2Ray configuration file to $JSON_PATH
     if [[ ! -d "$JSON_PATH" ]]; then
         install -d "$JSON_PATH"
-        for BASE in 00_log 01_api 02_dns 03_routing 04_policy 05_inbounds 06_outbounds 07_transport 08_stats 09_reverse; do
-            echo '{}' > "${JSON_PATH}$BASE.json"
-        done
-        CONFDIR='1'
+        echo "{}" > "${JSON_PATH}config.json"
+        CONFIG_NEW='1'
     fi
 
     # Used to store V2Ray log files
@@ -385,14 +383,40 @@ install_startup_service_file() {
     if [[ ! -f '/etc/systemd/system/v2ray.service' ]]; then
         mkdir "${TMP_DIRECTORY}systemd/system/"
         install_software curl
-        if ! curl ${PROXY} -o "${TMP_DIRECTORY}systemd/system/v2ray.service" 'https://raw.githubusercontent.workers.dev/v2fly/fhs-install-v2ray/master/systemd/system/v2ray.service'; then
-            echo 'error: Failed to start service file download! Please check your network or try again.'
-            exit 1
-        fi
-        if ! curl ${PROXY} -o "${TMP_DIRECTORY}systemd/system/v2ray@.service" 'https://raw.githubusercontent.workers.dev/v2fly/fhs-install-v2ray/master/systemd/system/v2ray@.service'; then
-            echo 'error: Failed to start service file download! Please check your network or try again.'
-            exit 1
-        fi
+        cat > "${TMP_DIRECTORY}systemd/system/v2ray.service" <<-EOF
+[Unit]
+Description=V2Ray Service
+After=network.target nss-lookup.target
+
+[Service]
+User=nobody
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+Environment=V2RAY_LOCATION_ASSET=/usr/local/share/v2ray/
+ExecStart=/usr/local/bin/v2ray -config /usr/local/etc/v2ray/config.json
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+EOF
+        cat > "${TMP_DIRECTORY}systemd/system/v2ray@.service" <<-EOF
+[Unit]
+Description=V2Ray Service
+After=network.target nss-lookup.target
+
+[Service]
+User=nobody
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+Environment=V2RAY_LOCATION_ASSET=/usr/local/share/v2ray/
+ExecStart=/usr/local/bin/v2ray -config /usr/local/etc/v2ray/%i.json
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+EOF
         install -m 644 "${TMP_DIRECTORY}systemd/system/v2ray.service" /etc/systemd/system/v2ray.service
         install -m 644 "${TMP_DIRECTORY}systemd/system/v2ray@.service" /etc/systemd/system/v2ray@.service
         SYSTEMD='1'
@@ -547,6 +571,9 @@ main() {
     if [[ ! -f "${DAT_PATH}.undat" ]]; then
         echo "installed: ${DAT_PATH}geoip.dat"
         echo "installed: ${DAT_PATH}geosite.dat"
+    fi
+    if [[ "$CONFIG_NEW" -eq '1' ]]; then
+        echo "installed: ${JSON_PATH}config.json"
     fi
     if [[ "$CONFDIR" -eq '1' ]]; then
         echo "installed: ${JSON_PATH}00_log.json"
