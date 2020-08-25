@@ -54,7 +54,9 @@ or
 ## 下載
 
 ```
+// 安装本体和数据文件
 # curl -O https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh
+// 只更新数据文件
 # curl -O https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-dat-release.sh
 ```
 
