@@ -619,10 +619,10 @@ main() {
     echo "info: V2Ray $RELEASE_VERSION is installed."
     echo "You may need to execute a command to remove dependent software: $PACKAGE_MANAGEMENT_REMOVE curl unzip"
     if [[ "$V2RAY_RUNNING" -eq '1' ]]; then
-        enable_v2ray
         start_v2ray
     else
         echo 'Please execute the command: systemctl enable v2ray; systemctl start v2ray'
+        enable_v2ray
     fi
 }
 
