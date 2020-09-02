@@ -423,6 +423,21 @@ EOF
     fi
 }
 
+enable_v2ray() {
+    if [[ -f '/etc/systemd/system/v2ray.service' ]]; then
+        if [[ -z "$V2RAY_CUSTOMIZE" ]]; then
+            systemctl enable v2ray
+        else
+            systemctl enable "$V2RAY_CUSTOMIZE"
+        fi
+    fi
+    if [[ "$?" -ne 0 ]]; then
+        echo 'error: Failed to enable V2Ray service.'
+        exit 1
+    fi
+    echo 'info: Enable the V2Ray service.'
+}
+
 start_v2ray() {
     if [[ -f '/etc/systemd/system/v2ray.service' ]]; then
         if [[ -z "$V2RAY_CUSTOMIZE" ]]; then
@@ -604,6 +619,7 @@ main() {
     echo "info: V2Ray $RELEASE_VERSION is installed."
     echo "You may need to execute a command to remove dependent software: $PACKAGE_MANAGEMENT_REMOVE curl unzip"
     if [[ "$V2RAY_RUNNING" -eq '1' ]]; then
+        enable_v2ray
         start_v2ray
     else
         echo 'Please execute the command: systemctl enable v2ray; systemctl start v2ray'
