@@ -21,6 +21,12 @@ installed: /etc/systemd/system/v2ray.service
 installed: /etc/systemd/system/v2ray@.service
 ```
 
+## 重要提示
+
+本项目不会为您自动生成配置文件，只能解决用户安装阶段遇到的问题。其他问题在这里是无法得到帮助的。  
+请在安装完成后参阅 [文档](https://www.v2fly.org/) 了解配置文件语法，并自己完成适合自己的配置文件。过程中可参阅社区贡献的 [配置文件模板](https://github.com/v2fly/v2ray-examples)  
+（**提请您注意这些模板复制下来以后是需要您自己修改调整的，不能直接使用**）
+
 ## 依赖软件
 
 ### 安装 cURL
