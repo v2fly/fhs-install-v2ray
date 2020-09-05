@@ -340,9 +340,9 @@ decompression() {
 install_file() {
     NAME="$1"
     if [[ "$NAME" == 'v2ray' ]] || [[ "$NAME" == 'v2ctl' ]]; then
-        install -m 755 "${TMP_DIRECTORY}$NAME" "/usr/local/bin/$NAME"
+        install -m 755 "${TMP_DIRECTORY}/$NAME" "/usr/local/bin/$NAME"
     elif [[ "$NAME" == 'geoip.dat' ]] || [[ "$NAME" == 'geosite.dat' ]]; then
-        install -m 644 "${TMP_DIRECTORY}$NAME" "${DAT_PATH}$NAME"
+        install -m 644 "${TMP_DIRECTORY}/$NAME" "${DAT_PATH}$NAME"
     fi
 }
 
@@ -381,9 +381,9 @@ install_v2ray() {
 
 install_startup_service_file() {
     if [[ ! -f '/etc/systemd/system/v2ray.service' ]]; then
-        mkdir "${TMP_DIRECTORY}systemd/system/"
+        mkdir "${TMP_DIRECTORY}/systemd/system/"
         install_software curl
-        cat > "${TMP_DIRECTORY}systemd/system/v2ray.service" <<-EOF
+        cat > "${TMP_DIRECTORY}/systemd/system/v2ray.service" <<-EOF
 [Unit]
 Description=V2Ray Service
 After=network.target nss-lookup.target
@@ -400,7 +400,7 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user.target
 EOF
-        cat > "${TMP_DIRECTORY}systemd/system/v2ray@.service" <<-EOF
+        cat > "${TMP_DIRECTORY}/systemd/system/v2ray@.service" <<-EOF
 [Unit]
 Description=V2Ray Service
 After=network.target nss-lookup.target
@@ -417,8 +417,8 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user.target
 EOF
-        install -m 644 "${TMP_DIRECTORY}systemd/system/v2ray.service" /etc/systemd/system/v2ray.service
-        install -m 644 "${TMP_DIRECTORY}systemd/system/v2ray@.service" /etc/systemd/system/v2ray@.service
+        install -m 644 "${TMP_DIRECTORY}/systemd/system/v2ray.service" /etc/systemd/system/v2ray.service
+        install -m 644 "${TMP_DIRECTORY}/systemd/system/v2ray@.service" /etc/systemd/system/v2ray@.service
         SYSTEMD='1'
     fi
 }
@@ -525,8 +525,8 @@ main() {
     [[ "$REMOVE" -eq '1' ]] && remove_v2ray
 
     # Two very important variables
-    TMP_DIRECTORY="$(mktemp -du)/"
-    ZIP_FILE="${TMP_DIRECTORY}v2ray-linux-$MACHINE.zip"
+    TMP_DIRECTORY="$(mktemp -du)"
+    ZIP_FILE="${TMP_DIRECTORY}/v2ray-linux-$MACHINE.zip"
 
     # Install V2Ray from a local file, but still need to make sure the network is available
     if [[ "$LOCAL_INSTALL" -eq '1' ]]; then
