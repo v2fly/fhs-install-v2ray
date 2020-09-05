@@ -254,13 +254,13 @@ get_version() {
         TMP_FILE="$(mktemp)"
         install_software curl
         # DO NOT QUOTE THESE `${PROXY}` VARIABLES!
-        if ! curl ${PROXY} -o "$TMP_FILE" 'https://api.github.com/repos/v2fly/v2ray-core/releases/latest'; then
-            rm "$TMP_FILE"
+        if ! "curl" ${PROXY} -o "$TMP_FILE" 'https://api.github.com/repos/v2fly/v2ray-core/releases/latest'; then
+            "rm" "$TMP_FILE"
             echo 'error: Failed to get release list, please check your network.'
             exit 1
         fi
         RELEASE_LATEST="$(sed 'y/,/\n/' "$TMP_FILE" | grep 'tag_name' | awk -F '"' '{print $4}')"
-        rm "$TMP_FILE"
+        "rm" "$TMP_FILE"
         RELEASE_VERSION="$(version_number "$RELEASE_LATEST")"
         # Compare V2Ray version numbers
         if [[ "$RELEASE_VERSION" != "$CURRENT_VERSION" ]]; then
@@ -299,15 +299,15 @@ get_version() {
 }
 
 download_v2ray() {
-    mkdir "$TMP_DIRECTORY"
+    "mkdir" -p "$TMP_DIRECTORY"
     DOWNLOAD_LINK="https://github.com/v2fly/v2ray-core/releases/download/$RELEASE_VERSION/v2ray-linux-$MACHINE.zip"
     echo "Downloading V2Ray archive: $DOWNLOAD_LINK"
-    if ! curl ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE" "$DOWNLOAD_LINK"; then
+    if ! "curl" ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE" "$DOWNLOAD_LINK"; then
         echo 'error: Download failed! Please check your network or try again.'
         return 1
     fi
     echo "Downloading verification file for V2Ray archive: $DOWNLOAD_LINK.dgst"
-    if ! curl ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE.dgst" "$DOWNLOAD_LINK.dgst"; then
+    if ! "curl" ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE.dgst" "$DOWNLOAD_LINK.dgst"; then
         echo 'error: Download failed! Please check your network or try again.'
         return 1
     fi
@@ -330,7 +330,7 @@ download_v2ray() {
 decompression() {
     if ! unzip -q "$1" -d "$TMP_DIRECTORY"; then
         echo 'error: V2Ray decompression failed.'
-        rm -r "$TMP_DIRECTORY"
+        "rm" -r "$TMP_DIRECTORY"
         echo "removed: $TMP_DIRECTORY"
         exit 1
     fi
@@ -381,7 +381,7 @@ install_v2ray() {
 
 install_startup_service_file() {
     if [[ ! -f '/etc/systemd/system/v2ray.service' ]]; then
-        mkdir "${TMP_DIRECTORY}/systemd/system/"
+        "mkdir" -p "${TMP_DIRECTORY}/systemd/system/"
         install_software curl
         cat > "${TMP_DIRECTORY}/systemd/system/v2ray.service" <<-EOF
 [Unit]
@@ -473,11 +473,11 @@ remove_v2ray() {
             stop_v2ray
         fi
         NAME="$1"
-        rm /usr/local/bin/v2ray
-        rm /usr/local/bin/v2ctl
-        rm -r "$DAT_PATH"
-        rm /etc/systemd/system/v2ray.service
-        rm /etc/systemd/system/v2ray@.service
+        "rm" /usr/local/bin/v2ray
+        "rm" /usr/local/bin/v2ctl
+        "rm" -r "$DAT_PATH"
+        "rm" /etc/systemd/system/v2ray.service
+        "rm" /etc/systemd/system/v2ray@.service
         if [[ "$?" -ne '0' ]]; then
             echo 'error: Failed to remove V2Ray.'
             exit 1
@@ -534,7 +534,7 @@ main() {
         echo -n 'warn: Please make sure the file is valid because we cannot confirm it. (Press any key) ...'
         read
         install_software unzip
-        mkdir "$TMP_DIRECTORY"
+        "mkdir" -p "$TMP_DIRECTORY"
         decompression "$LOCAL_FILE"
     else
         # Normal way
@@ -544,7 +544,7 @@ main() {
             echo "info: Installing V2Ray $RELEASE_VERSION for $(uname -m)"
             download_v2ray
             if [[ "$?" -eq '1' ]]; then
-                rm -r "$TMP_DIRECTORY"
+                "rm" -r "$TMP_DIRECTORY"
                 echo "removed: $TMP_DIRECTORY"
                 exit 0
             fi
@@ -596,7 +596,7 @@ main() {
         echo 'installed: /etc/systemd/system/v2ray.service'
         echo 'installed: /etc/systemd/system/v2ray@.service'
     fi
-    rm -r "$TMP_DIRECTORY"
+    "rm" -r "$TMP_DIRECTORY"
     echo "removed: $TMP_DIRECTORY"
     if [[ "$LOCAL_INSTALL" -eq '1' ]]; then
         get_version
