@@ -417,6 +417,7 @@ WantedBy=multi-user.target
 EOF
     install -m 644 "${TMP_DIRECTORY}/systemd/system/v2ray.service" /etc/systemd/system/v2ray.service
     install -m 644 "${TMP_DIRECTORY}/systemd/system/v2ray@.service" /etc/systemd/system/v2ray@.service
+    systemctl daemon-reload
     SYSTEMD='1'
 }
 
