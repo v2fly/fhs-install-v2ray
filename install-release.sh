@@ -380,10 +380,8 @@ install_v2ray() {
 }
 
 install_startup_service_file() {
-    if [[ ! -f '/etc/systemd/system/v2ray.service' ]]; then
-        "mkdir" -p "${TMP_DIRECTORY}/systemd/system/"
-        install_software curl
-        cat > "${TMP_DIRECTORY}/systemd/system/v2ray.service" <<-EOF
+    "mkdir" -p "${TMP_DIRECTORY}/systemd/system/"
+    cat > "${TMP_DIRECTORY}/systemd/system/v2ray.service" <<-EOF
 [Unit]
 Description=V2Ray Service
 After=network.target nss-lookup.target
@@ -417,10 +415,9 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user.target
 EOF
-        install -m 644 "${TMP_DIRECTORY}/systemd/system/v2ray.service" /etc/systemd/system/v2ray.service
-        install -m 644 "${TMP_DIRECTORY}/systemd/system/v2ray@.service" /etc/systemd/system/v2ray@.service
-        SYSTEMD='1'
-    fi
+    install -m 644 "${TMP_DIRECTORY}/systemd/system/v2ray.service" /etc/systemd/system/v2ray.service
+    install -m 644 "${TMP_DIRECTORY}/systemd/system/v2ray@.service" /etc/systemd/system/v2ray@.service
+    SYSTEMD='1'
 }
 
 start_v2ray() {
