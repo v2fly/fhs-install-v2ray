@@ -99,7 +99,16 @@ identify_the_operating_system_and_architecture() {
             PACKAGE_MANAGEMENT_REMOVE='zypper remove'
         else
             echo "error: The script does not support the package manager in this operating system."
-            exit 1
+            echo 
+            echo -e -n "\033[1;31mDo you want to continue?(y/n)\033[0m"
+            read s
+            case $s in
+            	n|N|No|NO) exit 1
+            	;;
+                y|Y|Yes|YES) echo "Manual install starting now"
+                ;;
+                *) exit 1
+            esac      
         fi
     else
         echo "error: This operating system is not supported."
