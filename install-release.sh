@@ -244,7 +244,7 @@ get_version() {
         # Determine the version number for V2Ray installed from a local file
         if [[ -f '/usr/local/bin/v2ray' ]]; then
             VERSION="$(/usr/local/bin/v2ray -version)"
-            CURRENT_VERSION="$(version_number $(echo "$VERSION" | head -n 1 | awk -F ' ' '{print $2}'))"
+            CURRENT_VERSION="$(version_number "$(echo "$VERSION" | awk -F ' ' 'NR==1 {print $2}')")"
             if [[ "$LOCAL_INSTALL" -eq '1' ]]; then
                 RELEASE_VERSION="$CURRENT_VERSION"
                 return
@@ -254,7 +254,7 @@ get_version() {
         TMP_FILE="$(mktemp)"
         install_software curl
         # DO NOT QUOTE THESE `${PROXY}` VARIABLES!
-        if ! "curl" ${PROXY} -o "$TMP_FILE" 'https://api.github.com/repos/v2fly/v2ray-core/releases/latest'; then
+        if ! "curl" "${PROXY}" -o "$TMP_FILE" 'https://api.github.com/repos/v2fly/v2ray-core/releases/latest'; then
             "rm" "$TMP_FILE"
             echo 'error: Failed to get release list, please check your network.'
             exit 1
@@ -302,12 +302,12 @@ download_v2ray() {
     "mkdir" -p "$TMP_DIRECTORY"
     DOWNLOAD_LINK="https://github.com/v2fly/v2ray-core/releases/download/$RELEASE_VERSION/v2ray-linux-$MACHINE.zip"
     echo "Downloading V2Ray archive: $DOWNLOAD_LINK"
-    if ! "curl" ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE" "$DOWNLOAD_LINK"; then
+    if ! "curl" "${PROXY}" -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE" "$DOWNLOAD_LINK"; then
         echo 'error: Download failed! Please check your network or try again.'
         return 1
     fi
     echo "Downloading verification file for V2Ray archive: $DOWNLOAD_LINK.dgst"
-    if ! "curl" ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE.dgst" "$DOWNLOAD_LINK.dgst"; then
+    if ! "curl" "${PROXY}" -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE.dgst" "$DOWNLOAD_LINK.dgst"; then
         echo 'error: Download failed! Please check your network or try again.'
         return 1
     fi
@@ -423,17 +423,13 @@ EOF
 
 start_v2ray() {
     if [[ -f '/etc/systemd/system/v2ray.service' ]]; then
-        if [[ -z "$V2RAY_CUSTOMIZE" ]]; then
-            systemctl start v2ray
+        if systemctl start "${V2RAY_CUSTOMIZE:-v2ray}"; then
+            echo 'info: Start the V2Ray service.'
         else
-            systemctl start "$V2RAY_CUSTOMIZE"
+            echo 'error: Failed to start V2Ray service.'
+            exit 1
         fi
     fi
-    if [[ "$?" -ne 0 ]]; then
-        echo 'error: Failed to start V2Ray service.'
-        exit 1
-    fi
-    echo 'info: Start the V2Ray service.'
 }
 
 stop_v2ray() {
@@ -520,7 +516,7 @@ main() {
     # Parameter information
     [[ "$HELP" -eq '1' ]] && show_help
     [[ "$CHECK" -eq '1' ]] && check_update
-    [[ "$REMOVE" -eq '1' ]] && remove_v2ray
+    [[ "$REMOVE" -eq '1' ]] && remove_v2ray "$REMOVE"
 
     # Two very important variables
     TMP_DIRECTORY="$(mktemp -du)"
@@ -530,7 +526,7 @@ main() {
     if [[ "$LOCAL_INSTALL" -eq '1' ]]; then
         echo 'warn: Install V2Ray from a local file, but still need to make sure the network is available.'
         echo -n 'warn: Please make sure the file is valid because we cannot confirm it. (Press any key) ...'
-        read
+        read -r
         install_software unzip
         "mkdir" -p "$TMP_DIRECTORY"
         decompression "$LOCAL_FILE"
