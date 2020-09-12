@@ -13,10 +13,10 @@
 
 # 0 0 * * * /usr/local/bin/install-dat-release > /dev/null 2>&1
 
-# You can modify it to /usr/local/lib/v2ray/
+# You can modify it to /usr/local/lib/v2ray
 V2RAY="/usr/local/share/v2ray"
-DOWNLOAD_LINK_GEOIP="https://github.com/v2ray/geoip/releases/latest/download"
-DOWNLOAD_LINK_GEOSITE="https://github.com/v2ray/domain-list-community/releases/latest/download"
+DOWNLOAD_LINK_GEOIP="https://github.com/v2fly/geoip/releases/latest/download"
+DOWNLOAD_LINK_GEOSITE="https://github.com/v2fly/domain-list-community/releases/latest/download"
 file_ip='geoip.dat'
 file_dlc='dlc.dat'
 file_site='geosite.dat'
@@ -57,7 +57,8 @@ check_sum() {
 install_file() {
     rm -f "${dir_tmp}"/*.sha256sum
     mv "${dir_tmp}"/${file_dlc} "${dir_tmp}"/${file_site}
-    install -m 644 "${dir_tmp}"/* "${V2RAY}"/
+    install -m 644 "${dir_tmp}/${file_ip}" "${V2RAY}"/
+    install -m 644 "${dir_tmp}/${file_site}" "${V2RAY}"/
 }
 
 main() {
