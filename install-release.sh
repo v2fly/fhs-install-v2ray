@@ -380,41 +380,6 @@ install_v2ray() {
 }
 
 install_startup_service_file() {
-    "mkdir" -p "${TMP_DIRECTORY}/systemd/system/"
-    cat > "${TMP_DIRECTORY}/systemd/system/v2ray.service" <<-EOF
-[Unit]
-Description=V2Ray Service
-After=network.target nss-lookup.target
-
-[Service]
-User=nobody
-CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
-AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
-NoNewPrivileges=true
-Environment=V2RAY_LOCATION_ASSET=/usr/local/share/v2ray/
-ExecStart=/usr/local/bin/v2ray -config /usr/local/etc/v2ray/config.json
-Restart=on-failure
-
-[Install]
-WantedBy=multi-user.target
-EOF
-        cat > "${TMP_DIRECTORY}/systemd/system/v2ray@.service" <<-EOF
-[Unit]
-Description=V2Ray Service
-After=network.target nss-lookup.target
-
-[Service]
-User=nobody
-CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
-AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
-NoNewPrivileges=true
-Environment=V2RAY_LOCATION_ASSET=/usr/local/share/v2ray/
-ExecStart=/usr/local/bin/v2ray -config /usr/local/etc/v2ray/%i.json
-Restart=on-failure
-
-[Install]
-WantedBy=multi-user.target
-EOF
     install -m 644 "${TMP_DIRECTORY}/systemd/system/v2ray.service" /etc/systemd/system/v2ray.service
     install -m 644 "${TMP_DIRECTORY}/systemd/system/v2ray@.service" /etc/systemd/system/v2ray@.service
     systemctl daemon-reload
