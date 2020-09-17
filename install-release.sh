@@ -299,7 +299,6 @@ get_version() {
 }
 
 download_v2ray() {
-    "mkdir" -p "$TMP_DIRECTORY"
     DOWNLOAD_LINK="https://github.com/v2fly/v2ray-core/releases/download/$RELEASE_VERSION/v2ray-linux-$MACHINE.zip"
     echo "Downloading V2Ray archive: $DOWNLOAD_LINK"
     if ! "curl" ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE" "$DOWNLOAD_LINK"; then
@@ -488,7 +487,7 @@ main() {
     [[ "$REMOVE" -eq '1' ]] && remove_v2ray
 
     # Two very important variables
-    TMP_DIRECTORY="$(mktemp -du)"
+    TMP_DIRECTORY="$(mktemp -d)"
     ZIP_FILE="${TMP_DIRECTORY}/v2ray-linux-$MACHINE.zip"
 
     # Install V2Ray from a local file, but still need to make sure the network is available
@@ -497,7 +496,6 @@ main() {
         echo -n 'warn: Please make sure the file is valid because we cannot confirm it. (Press any key) ...'
         read
         install_software unzip
-        "mkdir" -p "$TMP_DIRECTORY"
         decompression "$LOCAL_FILE"
     else
         # Normal way
