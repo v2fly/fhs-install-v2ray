@@ -107,109 +107,50 @@ identify_the_operating_system_and_architecture() {
     fi
 }
 
-judgment_parameters() {
-    if [[ "$#" -gt '0' ]]; then
+## Demo function for processing parameters
+judgment_parameters() { 
+    while [[ "$#" -gt '0' ]]; do
         case "$1" in
-            '--remove')
-                if [[ "$#" -gt '1' ]]; then
-                    echo 'error: Please enter the correct parameters.'
-                    exit 1
-                fi
-                REMOVE='1'
-                ;;
-            '--version')
-                if [[ "$#" -gt '2' ]] || [[ -z "$2" ]]; then
-                    echo 'error: Please specify the correct version.'
-                    exit 1
-                fi
-                VERSION="$2"
-                ;;
-            '-c' | '--check')
-                if [[ "$#" -gt '1' ]]; then
-                    echo 'error: Please enter the correct parameters.'
-                    exit 1
-                fi
-                CHECK='1'
-                ;;
-            '-f' | '--force')
-                if [[ "$#" -gt '1' ]]; then
-                    echo 'error: Please enter the correct parameters.'
-                    exit 1
-                fi
-                FORCE='1'
-                ;;
-            '-h' | '--help')
-                if [[ "$#" -gt '1' ]]; then
-                    echo 'error: Please enter the correct parameters.'
-                    exit 1
-                fi
-                HELP='1'
-                ;;
-            '-l' | '--local')
-                if [[ "$#" -gt '2' ]] || [[ -z "$2" ]]; then
-                    echo 'error: Please specify the correct local file.'
-                    exit 1
-                fi
-                LOCAL_FILE="$2"
-                LOCAL_INSTALL='1'
-                ;;
-            '-p' | '--proxy')
-                case "$2" in
-                    'http://'*)
-                        ;;
-                    'https://'*)
-                        ;;
-                    'socks4://'*)
-                        ;;
-                    'socks4a://'*)
-                        ;;
-                    'socks5://'*)
-                        ;;
-                    'socks5h://'*)
-                        ;;
-                    *)
-                        echo 'error: Please specify the correct proxy server address.'
-                        exit 1
-                        ;;
-                esac
-                PROXY="-x$2"
-                # Parameters available through a proxy server
-                if [[ "$#" -gt '2' ]]; then
-                    case "$3" in
-                        '--version')
-                            if [[ "$#" -gt '4' ]] || [[ -z "$4" ]]; then
-                                echo 'error: Please specify the correct version.'
-                                exit 1
-                            fi
-                            VERSION="$2"
-                            ;;
-                        '-c' | '--check')
-                            if [[ "$#" -gt '3' ]]; then
-                                echo 'error: Please enter the correct parameters.'
-                                exit 1
-                            fi
-                            CHECK='1'
-                            ;;
-                        '-f' | '--force')
-                            if [[ "$#" -gt '3' ]]; then
-                                echo 'error: Please enter the correct parameters.'
-                                exit 1
-                            fi
-                            FORCE='1'
-                            ;;
-                        *)
-                            echo "$0: unknown option -- -"
-                            exit 1
-                            ;;
-                    esac
-                fi
-                ;;
-            *)
-                echo "$0: unknown option -- -"
+        '--remove')
+            REMOVE='1'
+            break  ## 跳出while
+            ;;
+        '--version')
+            VERSION="${2:?error: Please specify the correct version.}"
+            break  ##跳出while
+            ;;
+        '-c' | '--check')
+            CHECK='1'
+            break  ##跳出while
+            ;;
+        '-f' | '--force')
+            FORCE='1'
+            break  ##跳出while
+            ;;
+        '-h' | '--help')
+            HELP='1'
+            break  ##跳出while
+            ;;
+        '-l' | '--local')
+            LOCAL_INSTALL='1'
+            LOCAL_FILE="${2:?error: Please specify the correct local file.}"
+            break  ##跳出while
+            ;;
+        '-p' | '--proxy')
+            if echo "${2:?undefine var}" | grep -qEo '^(http|https|socks4|socks4a|socks5|socks5h)://'; then
+                echo 'error: Please specify the correct proxy server address.'
                 exit 1
-                ;;
+            fi
+            PROXY="-x$2"
+            shift  ## 参数左移
+            ;;
+        *)
+            echo "$0: unknown option '$*'"
+            exit 1
+            ;;
         esac
-    fi
+        shift  ## 参数左移
+    done
 }
 
 install_software() {
