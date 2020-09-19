@@ -13,10 +13,10 @@
 # https://github.com/v2fly/fhs-install-v2ray/issues
 
 # If you modify the following variables, you also need to modify the unit file yourself:
-# You can modify it to /usr/local/lib/v2ray/
-DAT_PATH='/usr/local/share/v2ray/'
-# You can modify it to /etc/v2ray/
-JSON_PATH='/usr/local/etc/v2ray/'
+# You can modify it to /usr/local/lib/v2ray
+DAT_PATH='/usr/local/share/v2ray'
+# You can modify it to /etc/v2ray
+JSON_PATH='/usr/local/etc/v2ray'
 
 check_if_running_as_root() {
     # If you want to run as another user, please modify $UID to be owned by this user
@@ -41,7 +41,7 @@ identify_the_operating_system_and_architecture() {
             'armv6l')
                 MACHINE='arm32-v6'
                 ;;
-            'armv7' | 'armv7l' )
+            'armv7' | 'armv7l')
                 MACHINE='arm32-v7a'
                 ;;
             'armv8' | 'aarch64')
@@ -107,8 +107,9 @@ identify_the_operating_system_and_architecture() {
     fi
 }
 
+## Demo function for processing parameters
 judgment_parameters() {
-    if [[ "$#" -gt '0' ]]; then
+    while [[ "$#" -gt '0' ]]; do
         case "$1" in
             '--remove')
                 if [[ "$#" -gt '1' ]]; then
@@ -118,98 +119,41 @@ judgment_parameters() {
                 REMOVE='1'
                 ;;
             '--version')
-                if [[ "$#" -gt '2' ]] || [[ -z "$2" ]]; then
-                    echo 'error: Please specify the correct version.'
-                    exit 1
-                fi
-                VERSION="$2"
+                VERSION="${2:?error: Please specify the correct version.}"
+                break
                 ;;
             '-c' | '--check')
-                if [[ "$#" -gt '1' ]]; then
-                    echo 'error: Please enter the correct parameters.'
-                    exit 1
-                fi
                 CHECK='1'
+                break
                 ;;
             '-f' | '--force')
-                if [[ "$#" -gt '1' ]]; then
-                    echo 'error: Please enter the correct parameters.'
-                    exit 1
-                fi
                 FORCE='1'
-                ;;
+                break
+    	        ;;
             '-h' | '--help')
-                if [[ "$#" -gt '1' ]]; then
-                    echo 'error: Please enter the correct parameters.'
-                    exit 1
-                fi
                 HELP='1'
+                break
                 ;;
             '-l' | '--local')
-                if [[ "$#" -gt '2' ]] || [[ -z "$2" ]]; then
-                    echo 'error: Please specify the correct local file.'
-                    exit 1
-                fi
-                LOCAL_FILE="$2"
                 LOCAL_INSTALL='1'
+                LOCAL_FILE="${2:?error: Please specify the correct local file.}"
+                break
                 ;;
             '-p' | '--proxy')
-                case "$2" in
-                    'http://'*)
-                        ;;
-                    'https://'*)
-                        ;;
-                    'socks4://'*)
-                        ;;
-                    'socks4a://'*)
-                        ;;
-                    'socks5://'*)
-                        ;;
-                    'socks5h://'*)
-                        ;;
-                    *)
-                        echo 'error: Please specify the correct proxy server address.'
-                        exit 1
-                        ;;
-                esac
-                PROXY="-x$2"
-                # Parameters available through a proxy server
-                if [[ "$#" -gt '2' ]]; then
-                    case "$3" in
-                        '--version')
-                            if [[ "$#" -gt '4' ]] || [[ -z "$4" ]]; then
-                                echo 'error: Please specify the correct version.'
-                                exit 1
-                            fi
-                            VERSION="$2"
-                            ;;
-                        '-c' | '--check')
-                            if [[ "$#" -gt '3' ]]; then
-                                echo 'error: Please enter the correct parameters.'
-                                exit 1
-                            fi
-                            CHECK='1'
-                            ;;
-                        '-f' | '--force')
-                            if [[ "$#" -gt '3' ]]; then
-                                echo 'error: Please enter the correct parameters.'
-                                exit 1
-                            fi
-                            FORCE='1'
-                            ;;
-                        *)
-                            echo "$0: unknown option -- -"
-                            exit 1
-                            ;;
-                    esac
+                if echo "${2:?undefine var}" | grep -qEo '^(https?|socks4a?|socks5h?):\/\/'; then
+                    echo 'error: Please specify the correct proxy server address.'
+                    exit 1
                 fi
+                PROXY="-x$2"
+                shift
                 ;;
             *)
                 echo "$0: unknown option -- -"
                 exit 1
                 ;;
         esac
-    fi
+        shift
+    done
 }
 
 install_software() {
@@ -339,7 +283,7 @@ install_file() {
     if [[ "$NAME" == 'v2ray' ]] || [[ "$NAME" == 'v2ctl' ]]; then
         install -m 755 "${TMP_DIRECTORY}/$NAME" "/usr/local/bin/$NAME"
     elif [[ "$NAME" == 'geoip.dat' ]] || [[ "$NAME" == 'geosite.dat' ]]; then
-        install -m 644 "${TMP_DIRECTORY}/$NAME" "${DAT_PATH}$NAME"
+        install -m 644 "${TMP_DIRECTORY}/$NAME" "${DAT_PATH}/$NAME"
     fi
 }
 
@@ -349,7 +293,7 @@ install_v2ray() {
     install_file v2ctl
     install -d "$DAT_PATH"
     # If the file exists, geoip.dat and geosite.dat will not be installed or updated
-    if [[ ! -f "${DAT_PATH}.undat" ]]; then
+    if [[ ! -f "${DAT_PATH}/.undat" ]]; then
         install_file geoip.dat
         install_file geosite.dat
     fi
@@ -357,7 +301,7 @@ install_v2ray() {
     # Install V2Ray configuration file to $JSON_PATH
     if [[ ! -d "$JSON_PATH" ]]; then
         install -d "$JSON_PATH"
-        echo "{}" > "${JSON_PATH}config.json"
+        echo "{}" > "${JSON_PATH}/config.json"
         CONFIG_NEW='1'
     fi
 
@@ -523,9 +467,9 @@ main() {
     echo 'installed: /usr/local/bin/v2ray'
     echo 'installed: /usr/local/bin/v2ctl'
     # If the file exists, the content output of installing or updating geoip.dat and geosite.dat will not be displayed
-    if [[ ! -f "${DAT_PATH}.undat" ]]; then
-        echo "installed: ${DAT_PATH}geoip.dat"
-        echo "installed: ${DAT_PATH}geosite.dat"
+    if [[ ! -f "${DAT_PATH}/.undat" ]]; then
+        echo "installed: ${DAT_PATH}/geoip.dat"
+        echo "installed: ${DAT_PATH}/geosite.dat"
     fi
     if [[ "$CONFIG_NEW" -eq '1' ]]; then
         echo "installed: ${JSON_PATH}config.json"
