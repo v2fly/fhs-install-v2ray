@@ -16,7 +16,7 @@
 # You can modify it to /usr/local/lib/v2ray
 V2RAY="/usr/local/share/v2ray"
 DOWNLOAD_LINK_GEOIP="https://github.com/v2fly/geoip/releases/latest/download/geoip.dat"
-DOWNLOAD_LINK_GEOSITE="https://github.com/v2fly/domain-list-community/releases/latest/download"
+DOWNLOAD_LINK_GEOSITE="https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat"
 file_ip='geoip.dat'
 file_dlc='dlc.dat'
 file_site='geosite.dat'
