@@ -12,11 +12,16 @@
 # If the script executes incorrectly, go to:
 # https://github.com/v2fly/fhs-install-v2ray/issues
 
-# If you modify the following variables, you also need to modify the unit file yourself:
-# You can modify it to /usr/local/lib/v2ray
-DAT_PATH='/usr/local/share/v2ray'
-# You can modify it to /etc/v2ray
-JSON_PATH='/usr/local/etc/v2ray'
+# You can set this variable whatever you want in shell session right before running this script by issuing:
+# export DAT_PATH='/usr/local/share/v2ray'
+${DAT_PATH:=/usr/local/share/v2ray}
+
+# You can set this variable whatever you want in shell session right before running this script by issuing:
+# export JSON_PATH='/usr/local/etc/v2ray'
+${JSON_PATH:=/usr/local/etc/v2ray}
+
+# Set this variable only if you are starting v2ray with multiple configuration files:
+# export JSONS_PATH='/usr/local/etc/v2ray'
 
 check_if_running_as_root() {
     # If you want to run as another user, please modify $UID to be owned by this user
@@ -298,10 +303,19 @@ install_v2ray() {
     fi
 
     # Install V2Ray configuration file to $JSON_PATH
-    if [[ ! -d "$JSON_PATH" ]]; then
+    if [[ -z "$JSONS_PATH" ]] && [[ ! -d "$JSON_PATH" ]]; then
         install -d "$JSON_PATH"
         echo "{}" > "${JSON_PATH}/config.json"
         CONFIG_NEW='1'
+    fi
+
+    # Install V2Ray configuration file to $JSONS_PATH
+    if [[ -n "$JSONS_PATH" ]] && [[ ! -d "$JSONS_PATH" ]]; then
+        install -d "$JSONS_PATH"
+        for BASE in 00_log 01_api 02_dns 03_routing 04_policy 05_inbounds 06_outbounds 07_transport 08_stats 09_reverse; do
+            echo '{}' > "${JSONS_PATH}$BASE.json"
+        done
+        CONFDIR='1'
     fi
 
     # Used to store V2Ray log files
@@ -322,6 +336,30 @@ install_v2ray() {
 install_startup_service_file() {
     install -m 644 "${TMP_DIRECTORY}/systemd/system/v2ray.service" /etc/systemd/system/v2ray.service
     install -m 644 "${TMP_DIRECTORY}/systemd/system/v2ray@.service" /etc/systemd/system/v2ray@.service
+    mkdir -p '/etc/systemd/system/v2ray.service.d'
+    mkdir -p '/etc/systemd/system/v2ray@.service.d/'
+    if [[ -n "$JSONS_PATH" ]]; then
+        echo "# Duplicate this file in the same directory and make your customizes there. Or all changes you made will be lost!
+## Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
+
+ExecStart=
+ExecStart=/usr/local/bin/v2ray -confdir $JSONS_PATH" | \
+tee '/etc/systemd/system/v2ray.service.d/10-donot_touch_multi_conf.conf' > \
+'/etc/systemd/system/v2ray@.service.d/10-donot_touch_multi_conf.conf'
+    else
+        echo "# Duplicate this file in the same directory and make your customizes there. Or all changes you made will be lost!
+## Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
+
+ExecStart=
+ExecStart=/usr/local/bin/v2ray -config ${JSON_PATH}/config.json" | \
+tee '/etc/systemd/system/v2ray.service.d/10-donot_touch_single_conf.conf'
+        echo "# Duplicate this file in the same directory and make your customizes there. Or all changes you made will be lost!
+## Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
+
+ExecStart=
+ExecStart=/usr/local/bin/v2ray -config ${JSON_PATH}/%i.json" | \
+tee '/etc/systemd/system/v2ray@.service.d/10-donot_touch_single_conf.conf'
+    fi
     systemctl daemon-reload
     SYSTEMD='1'
 }
