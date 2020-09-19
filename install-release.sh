@@ -491,7 +491,7 @@ main() {
     # Normal way
     get_version
     NUMBER="$?"
-    if [[ "$NUMBER" -eq '0' ]] || [[ "$FORCE" -eq '1' ]] || [[ "$NUMBER" -eq 2 ]]; then
+    if [[ "$NUMBER" =~ [02] || "$FORCE" -eq '1' ]]; then
       echo "info: Installing V2Ray $RELEASE_VERSION for $(uname -m)"
       download_v2ray
       if [[ "$?" -eq '1' ]]; then
