@@ -23,6 +23,10 @@ JSON_PATH=${JSON_PATH:-/usr/local/etc/v2ray}
 # Set this variable only if you are starting v2ray with multiple configuration files:
 # export JSONS_PATH='/usr/local/etc/v2ray'
 
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+reset=$(tput sgr0)
+
 check_if_running_as_root() {
     # If you want to run as another user, please modify $UID to be owned by this user
     if [[ "$UID" -ne '0' ]]; then
@@ -347,18 +351,29 @@ ExecStart=/usr/local/bin/v2ray -confdir $JSONS_PATH" | \
 tee '/etc/systemd/system/v2ray.service.d/10-donot_touch_multi_conf.conf' > \
 '/etc/systemd/system/v2ray@.service.d/10-donot_touch_multi_conf.conf'
     else
+        echo "${red}~~~~~~~~~~~~~~~~ ${green}/etc/systemd/system/v2ray.service.d/10-donot_touch_single_conf ${red}~~~~~~~~~~~~~~~~${reset}"
+        echo 'info: The following are the actual parameters for the v2ray service startup.'
+        echo 'info: Please make sure the configuration file path is correctly set.'
         echo "# Duplicate this file in the same directory and make your customizes there. Or all changes you made will be lost!
 ## Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
 
 ExecStart=
 ExecStart=/usr/local/bin/v2ray -config ${JSON_PATH}/config.json" | \
 tee '/etc/systemd/system/v2ray.service.d/10-donot_touch_single_conf.conf'
+        echo;
+        echo;
+
+        echo "${red}~~~~~~~~~~~~~~~~ ${green}/etc/systemd/system/v2ray@.service.d/10-donot_touch_single_conf ${red}~~~~~~~~~~~~~~~~${reset}"
+        echo 'info: The following are the actual parameters for the v2ray service startup.'
+        echo 'info: Please make sure the configuration file path is correctly set.'
         echo "# Duplicate this file in the same directory and make your customizes there. Or all changes you made will be lost!
 ## Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
 
 ExecStart=
 ExecStart=/usr/local/bin/v2ray -config ${JSON_PATH}/%i.json" | \
 tee '/etc/systemd/system/v2ray@.service.d/10-donot_touch_single_conf.conf'
+        echo;
+        echo;
     fi
     systemctl daemon-reload
     SYSTEMD='1'
