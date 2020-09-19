@@ -214,15 +214,13 @@ judgment_parameters() {
 
 install_software() {
     COMPONENT="$1"
-    if [[ -n "$(command -v "$COMPONENT")" ]]; then
-        return
-    fi
-    ${PACKAGE_MANAGEMENT_INSTALL} "$COMPONENT"
-    if [[ "$?" -ne '0' ]]; then
+    command -v "$COMPONENT" > /dev/null 2>&1 && return
+    if ${PACKAGE_MANAGEMENT_INSTALL} "$COMPONENT"; then
+        echo "info: $COMPONENT is installed."
+    else
         echo "error: Installation of $COMPONENT failed, please check your network."
         exit 1
     fi
-    echo "info: $COMPONENT is installed."
 }
 
 version_number() {
