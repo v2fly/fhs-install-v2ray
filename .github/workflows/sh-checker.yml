@@ -1,0 +1,15 @@
+name: static analysis for shell scripts using shellcheck and shfmt
+on:
+  - pull_request
+jobs:
+  sh-checker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run the sh-checker
+        uses: luizm/action-sh-checker@v0.1.7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          sh_checker_comment: true
+          sh_checker_exclude: "LICENSE README.md README.zh-Hans-CN.md"
