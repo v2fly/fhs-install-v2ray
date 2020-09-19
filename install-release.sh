@@ -13,10 +13,10 @@
 # https://github.com/v2fly/fhs-install-v2ray/issues
 
 # If you modify the following variables, you also need to modify the unit file yourself:
-# You can modify it to /usr/local/lib/v2ray/
-DAT_PATH='/usr/local/share/v2ray/'
-# You can modify it to /etc/v2ray/
-JSON_PATH='/usr/local/etc/v2ray/'
+# You can modify it to /usr/local/lib/v2ray
+DAT_PATH='/usr/local/share/v2ray'
+# You can modify it to /etc/v2ray
+JSON_PATH='/usr/local/etc/v2ray'
 
 check_if_running_as_root() {
     # If you want to run as another user, please modify $UID to be owned by this user
@@ -148,7 +148,7 @@ judgment_parameters() {
                 shift
                 ;;
             *)
-                show_help
+                echo "$0: unknown option -- -"
                 exit 1
                 ;;
         esac
@@ -286,7 +286,7 @@ install_file() {
     if [[ "$NAME" == 'v2ray' ]] || [[ "$NAME" == 'v2ctl' ]]; then
         install -m 755 "${TMP_DIRECTORY}/$NAME" "/usr/local/bin/$NAME"
     elif [[ "$NAME" == 'geoip.dat' ]] || [[ "$NAME" == 'geosite.dat' ]]; then
-        install -m 644 "${TMP_DIRECTORY}/$NAME" "${DAT_PATH}$NAME"
+        install -m 644 "${TMP_DIRECTORY}/$NAME" "${DAT_PATH}/$NAME"
     fi
 }
 
@@ -296,7 +296,7 @@ install_v2ray() {
     install_file v2ctl
     install -d "$DAT_PATH"
     # If the file exists, geoip.dat and geosite.dat will not be installed or updated
-    if [[ ! -f "${DAT_PATH}.undat" ]]; then
+    if [[ ! -f "${DAT_PATH}/.undat" ]]; then
         install_file geoip.dat
         install_file geosite.dat
     fi
@@ -304,7 +304,7 @@ install_v2ray() {
     # Install V2Ray configuration file to $JSON_PATH
     if [[ ! -d "$JSON_PATH" ]]; then
         install -d "$JSON_PATH"
-        echo "{}" >"${JSON_PATH}config.json"
+        echo "{}" > "${JSON_PATH}/config.json"
         CONFIG_NEW='1'
     fi
 
@@ -475,9 +475,9 @@ main() {
     echo 'installed: /usr/local/bin/v2ray'
     echo 'installed: /usr/local/bin/v2ctl'
     # If the file exists, the content output of installing or updating geoip.dat and geosite.dat will not be displayed
-    if [[ ! -f "${DAT_PATH}.undat" ]]; then
-        echo "installed: ${DAT_PATH}geoip.dat"
-        echo "installed: ${DAT_PATH}geosite.dat"
+    if [[ ! -f "${DAT_PATH}/.undat" ]]; then
+        echo "installed: ${DAT_PATH}/geoip.dat"
+        echo "installed: ${DAT_PATH}/geosite.dat"
     fi
     if [[ "$CONFIG_NEW" -eq '1' ]]; then
         echo "installed: ${JSON_PATH}config.json"
