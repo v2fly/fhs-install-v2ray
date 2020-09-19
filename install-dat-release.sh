@@ -31,11 +31,11 @@ check_if_running_as_root() {
 }
 
 download_files() {
-    if ! curl -L -H 'Cache-Control: no-cache' -o "${dir_tmp}/${2}" "${1}/${2}"; then
+    if ! curl -L -H 'Cache-Control: no-cache' -o "${dir_tmp}/${2}" "${1}"; then
         echo 'error: Download failed! Please check your network or try again.'
         exit 1
     fi
-    if ! curl -L -H 'Cache-Control: no-cache' -o "${dir_tmp}/${2}.sha256sum" "${1}/${2}.sha256sum"; then
+    if ! curl -L -H 'Cache-Control: no-cache' -o "${dir_tmp}/${2}.sha256sum" "${1}.sha256sum"; then
         echo 'error: Download failed! Please check your network or try again.'
         exit 1
     fi
