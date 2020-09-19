@@ -55,9 +55,9 @@ check_sum() {
 }
 
 install_file() {
-    rm -f "${dir_tmp}"/*.sha256sum
-    mv "${dir_tmp}"/${file_dlc} "${dir_tmp}"/${file_site}
-    install -m 644 "${dir_tmp}"/* "${V2RAY}"/
+    install -m 644 "${dir_tmp}"/${file_dlc} "${V2RAY}"/${file_site}
+    install -m 644 "${dir_tmp}"/${file_ip} "${V2RAY}"/${file_ip}
+    rm -r "${dir_tmp}"
 }
 
 main() {
