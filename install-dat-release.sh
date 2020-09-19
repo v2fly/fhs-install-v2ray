@@ -23,49 +23,48 @@ file_site='geosite.dat'
 dir_tmp="$(mktemp -d)"
 
 check_if_running_as_root() {
-    # If you want to run as another user, please modify $UID to be owned by this user
-    if [[ "$UID" -ne '0' ]]; then
-        echo "error: You must run this script as root!"
-        exit 1
-    fi
+  # If you want to run as another user, please modify $UID to be owned by this user
+  if [[ "$UID" -ne '0' ]]; then
+    echo "error: You must run this script as root!"
+    exit 1
+  fi
 }
 
 download_files() {
-    if ! curl -L -H 'Cache-Control: no-cache' -o "${dir_tmp}/${2}" "${1}"; then
-        echo 'error: Download failed! Please check your network or try again.'
-        exit 1
-    fi
-    if ! curl -L -H 'Cache-Control: no-cache' -o "${dir_tmp}/${2}.sha256sum" "${1}.sha256sum"; then
-        echo 'error: Download failed! Please check your network or try again.'
-        exit 1
-    fi
+  if ! curl -L -H 'Cache-Control: no-cache' -o "${dir_tmp}/${2}" "${1}"; then
+    echo 'error: Download failed! Please check your network or try again.'
+    exit 1
+  fi
+  if ! curl -L -H 'Cache-Control: no-cache' -o "${dir_tmp}/${2}.sha256sum" "${1}.sha256sum"; then
+    echo 'error: Download failed! Please check your network or try again.'
+    exit 1
+  fi
 }
 
-
 check_sum() {
-    (
-        cd "${dir_tmp}" || exit
-        for i in "${dir_tmp}"/*.sha256sum; do
-            if ! sha256sum -c "${i}"; then
-                echo 'error: Check failed! Please check your network or try again.'
-                exit 1
-            fi
-        done
-    )
+  (
+    cd "${dir_tmp}" || exit
+    for i in "${dir_tmp}"/*.sha256sum; do
+      if ! sha256sum -c "${i}"; then
+        echo 'error: Check failed! Please check your network or try again.'
+        exit 1
+      fi
+    done
+  )
 }
 
 install_file() {
-    install -m 644 "${dir_tmp}"/${file_dlc} "${V2RAY}"/${file_site}
-    install -m 644 "${dir_tmp}"/${file_ip} "${V2RAY}"/${file_ip}
-    rm -r "${dir_tmp}"
+  install -m 644 "${dir_tmp}"/${file_dlc} "${V2RAY}"/${file_site}
+  install -m 644 "${dir_tmp}"/${file_ip} "${V2RAY}"/${file_ip}
+  rm -r "${dir_tmp}"
 }
 
 main() {
-    check_if_running_as_root
-    download_files $DOWNLOAD_LINK_GEOIP $file_ip
-    download_files $DOWNLOAD_LINK_GEOSITE $file_dlc
-    check_sum
-    install_file
+  check_if_running_as_root
+  download_files $DOWNLOAD_LINK_GEOIP $file_ip
+  download_files $DOWNLOAD_LINK_GEOSITE $file_dlc
+  check_sum
+  install_file
 }
 
 main "$@"
