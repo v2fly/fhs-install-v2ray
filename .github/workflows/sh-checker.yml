@@ -1,6 +1,13 @@
 name: static analysis for shell scripts using shellcheck and shfmt
 on:
-  - pull_request
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+    branches:
+      - master
+      - develop
 jobs:
   sh-checker:
     runs-on: ubuntu-latest
