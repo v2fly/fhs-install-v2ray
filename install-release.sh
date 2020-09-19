@@ -176,29 +176,18 @@ install_software() {
   fi
 }
 
-version_number() {
-  case "$1" in
-    'v'*)
-      echo "$1"
-      ;;
-    *)
-      echo "v$1"
-      ;;
-  esac
-}
-
 get_version() {
   # 0: Install or update V2Ray.
   # 1: Installed or no new version of V2Ray.
   # 2: Install the specified version of V2Ray.
   if [[ -n "$VERSION" ]]; then
-    RELEASE_VERSION="$(version_number "$VERSION")"
+    RELEASE_VERSION="v${VERSION#v}"
     return 2
   fi
   # Determine the version number for V2Ray installed from a local file
   if [[ -f '/usr/local/bin/v2ray' ]]; then
-    VERSION="$(/usr/local/bin/v2ray -version)"
-    CURRENT_VERSION="$(version_number "$(echo "$VERSION" | awk 'NR==1 {print $2}')")"
+    VERSION="$(/usr/local/bin/v2ray -version | awk 'NR==1 {print $2}')"
+    CURRENT_VERSION="v${VERSION#v}"
     if [[ "$LOCAL_INSTALL" -eq '1' ]]; then
       RELEASE_VERSION="$CURRENT_VERSION"
       return
@@ -213,9 +202,9 @@ get_version() {
     echo 'error: Failed to get release list, please check your network.'
     exit 1
   fi
-  RELEASE_LATEST="$(sed 'y/,/\n/' "$TMP_FILE" | grep 'tag_name' | awk -F '"' '{print $4}')"
+  RELEASE_LATEST="$(sed 'y/,/\n/' "$TMP_FILE" | awk -F '"' '/tag_name/ {print $4}')"
   "rm" "$TMP_FILE"
-  RELEASE_VERSION="$(version_number "$RELEASE_LATEST")"
+  RELEASE_VERSION="v${RELEASE_LATEST#v}"
   # Compare V2Ray version numbers
   if [[ "$RELEASE_VERSION" != "$CURRENT_VERSION" ]]; then
     RELEASE_VERSIONSION_NUMBER="${RELEASE_VERSION#v}"
