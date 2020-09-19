@@ -14,11 +14,11 @@
 
 # You can set this variable whatever you want in shell session right before running this script by issuing:
 # export DAT_PATH='/usr/local/share/v2ray'
-${DAT_PATH:=/usr/local/share/v2ray}
+DAT_PATH=${DAT_PATH:-/usr/local/share/v2ray}
 
 # You can set this variable whatever you want in shell session right before running this script by issuing:
 # export JSON_PATH='/usr/local/etc/v2ray'
-${JSON_PATH:=/usr/local/etc/v2ray}
+JSON_PATH=${JSON_PATH:-/usr/local/etc/v2ray}
 
 # Set this variable only if you are starting v2ray with multiple configuration files:
 # export JSONS_PATH='/usr/local/etc/v2ray'
