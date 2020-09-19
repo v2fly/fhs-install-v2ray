@@ -345,7 +345,7 @@ install_startup_service_file() {
   if [[ -n "$JSONS_PATH" ]]; then
     echo "# Duplicate this file in the same directory and make your customizes there. Or all changes you made will be lost!
 ## Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
-
+[Service]
 ExecStart=
 ExecStart=/usr/local/bin/v2ray -confdir $JSONS_PATH" |
       tee '/etc/systemd/system/v2ray.service.d/10-donot_touch_multi_conf.conf' > \
@@ -356,7 +356,7 @@ ExecStart=/usr/local/bin/v2ray -confdir $JSONS_PATH" |
     echo 'info: Please make sure the configuration file path is correctly set.'
     echo "# Duplicate this file in the same directory and make your customizes there. Or all changes you made will be lost!
 ## Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
-
+[Service]
 ExecStart=
 ExecStart=/usr/local/bin/v2ray -config ${JSON_PATH}/config.json" |
       tee '/etc/systemd/system/v2ray.service.d/10-donot_touch_single_conf.conf'
@@ -368,7 +368,7 @@ ExecStart=/usr/local/bin/v2ray -config ${JSON_PATH}/config.json" |
     echo 'info: Please make sure the configuration file path is correctly set.'
     echo "# Duplicate this file in the same directory and make your customizes there. Or all changes you made will be lost!
 ## Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
-
+[Service]
 ExecStart=
 ExecStart=/usr/local/bin/v2ray -config ${JSON_PATH}/%i.json" |
       tee '/etc/systemd/system/v2ray@.service.d/10-donot_touch_single_conf.conf'
