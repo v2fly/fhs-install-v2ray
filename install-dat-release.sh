@@ -13,10 +13,14 @@
 
 # 0 0 * * * /usr/local/bin/install-dat-release > /dev/null 2>&1
 
-# You can modify it to /usr/local/lib/v2ray/
-V2RAY="/usr/local/share/v2ray/"
-DOWNLOAD_LINK_GEOIP="https://github.com/v2ray/geoip/releases/latest/download/geoip.dat"
-DOWNLOAD_LINK_GEOSITE="https://github.com/v2ray/domain-list-community/releases/latest/download/dlc.dat"
+# You can modify it to /usr/local/lib/v2ray
+V2RAY="/usr/local/share/v2ray"
+DOWNLOAD_LINK_GEOIP="https://github.com/v2fly/geoip/releases/latest/download/geoip.dat"
+DOWNLOAD_LINK_GEOSITE="https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat"
+file_ip='geoip.dat'
+file_dlc='dlc.dat'
+file_site='geosite.dat'
+dir_tmp="$(mktemp -d)"
 
 check_if_running_as_root() {
     # If you want to run as another user, please modify $UID to be owned by this user
@@ -26,53 +30,42 @@ check_if_running_as_root() {
     fi
 }
 
-download_geoip() {
-    if ! curl -L -H 'Cache-Control: no-cache' -o "${V2RAY}geoip.dat.new" "$DOWNLOAD_LINK_GEOIP"; then
+download_files() {
+    if ! curl -L -H 'Cache-Control: no-cache' -o "${dir_tmp}/${2}" "${1}"; then
         echo 'error: Download failed! Please check your network or try again.'
         exit 1
     fi
-    if ! curl -L -H 'Cache-Control: no-cache' -o "${V2RAY}geoip.dat.sha256sum.new" "$DOWNLOAD_LINK_GEOIP.sha256sum"; then
+    if ! curl -L -H 'Cache-Control: no-cache' -o "${dir_tmp}/${2}.sha256sum" "${1}.sha256sum"; then
         echo 'error: Download failed! Please check your network or try again.'
-        exit 1
-    fi
-    SUM="$(sha256sum ${V2RAY}geoip.dat.new | sed 's/ .*//')"
-    CHECKSUM="$(sed 's/ .*//' ${V2RAY}geoip.dat.sha256sum.new)"
-    if [[ "$SUM" != "$CHECKSUM" ]]; then
-        echo 'error: Check failed! Please check your network or try again.'
         exit 1
     fi
 }
 
-download_geosite() {
-    if ! curl -L -H 'Cache-Control: no-cache' -o "${V2RAY}geosite.dat.new" "$DOWNLOAD_LINK_GEOSITE"; then
-        echo 'error: Download failed! Please check your network or try again.'
-        exit 1
-    fi
-    if ! curl -L -H 'Cache-Control: no-cache' -o "${V2RAY}geosite.dat.sha256sum.new" "$DOWNLOAD_LINK_GEOSITE.sha256sum"; then
-        echo 'error: Download failed! Please check your network or try again.'
-        exit 1
-    fi
-    SUM="$(sha256sum ${V2RAY}geosite.dat.new | sed 's/ .*//')"
-    CHECKSUM="$(sed 's/ .*//' ${V2RAY}geosite.dat.sha256sum.new)"
-    if [[ "$SUM" != "$CHECKSUM" ]]; then
-        echo 'error: Check failed! Please check your network or try again.'
-        exit 1
-    fi
+
+check_sum() {
+    (
+        cd "${dir_tmp}" || exit
+        for i in "${dir_tmp}"/*.sha256sum; do
+            if ! sha256sum -c "${i}"; then
+                echo 'error: Check failed! Please check your network or try again.'
+                exit 1
+            fi
+        done
+    )
 }
 
-rename_new() {
-    for DAT in 'geoip' 'geosite'; do
-        install -m 644 "${V2RAY}$DAT.dat.new" "${V2RAY}$DAT.dat"
-        rm "${V2RAY}$DAT.dat.new"
-        rm "${V2RAY}$DAT.dat.sha256sum.new"
-    done
+install_file() {
+    install -m 644 "${dir_tmp}"/${file_dlc} "${V2RAY}"/${file_site}
+    install -m 644 "${dir_tmp}"/${file_ip} "${V2RAY}"/${file_ip}
+    rm -r "${dir_tmp}"
 }
 
 main() {
     check_if_running_as_root
-    download_geoip
-    download_geosite
-    rename_new
+    download_files $DOWNLOAD_LINK_GEOIP $file_ip
+    download_files $DOWNLOAD_LINK_GEOSITE $file_dlc
+    check_sum
+    install_file
 }
 
-main
+main "$@"
