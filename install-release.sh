@@ -112,10 +112,13 @@ judgment_parameters() {
     while [[ "$#" -gt '0' ]]; do
         case "$1" in
         '--remove')
+            if [[ "$#" -gt '1' ]]; then
+              echo 'error: Please enter the correct parameters.'
+              exit 1
+            fi
             REMOVE='1'
-            break  ## 跳出while
             ;;
-        '--specific')
+        '--version')
             VERSION="${2:?error: Please specify the correct version.}"
             break  ##跳出while
             ;;
