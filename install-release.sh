@@ -120,35 +120,39 @@ judgment_parameters() {
                 ;;
             '--version')
                 VERSION="${2:?error: Please specify the correct version.}"
-                break ##跳出while
+                break
                 ;;
             '-c' | '--check')
                 CHECK='1'
-                break ##跳出while
+                break
                 ;;
             '-f' | '--force')
                 FORCE='1'
-                break ##跳出while
+                break
+            '-h' | '--help')
+                HELP='1'
+                break
+                ;;
                 ;;
             '-l' | '--local')
                 LOCAL_INSTALL='1'
                 LOCAL_FILE="${2:?error: Please specify the correct local file.}"
-                break ##跳出while
+                break
                 ;;
             '-p' | '--proxy')
-                if echo "${2:?undefine var}" | grep -qEo '^(http|https|socks4|socks4a|socks5|socks5h)://'; then
+                if echo "${2:?undefine var}" | grep -qEo '^(https?|socks4a?|socks5h?):\/\/'; then
                     echo 'error: Please specify the correct proxy server address.'
                     exit 1
                 fi
                 PROXY="-x$2"
-                shift ## 参数左移
+                shift
                 ;;
             *)
                 show_help
                 exit 1
                 ;;
         esac
-        shift ## 参数左移
+        shift
     done
 }
 
@@ -423,7 +427,7 @@ main() {
     judgment_parameters "$@"
 
     # Parameter information
-    # [[ "$HELP" -eq '1' ]] && show_help
+    [[ "$HELP" -eq '1' ]] && show_help
     [[ "$CHECK" -eq '1' ]] && check_update
     [[ "$REMOVE" -eq '1' ]] && remove_v2ray
 
