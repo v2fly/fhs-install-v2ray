@@ -13,10 +13,10 @@
 # https://github.com/v2fly/fhs-install-v2ray/issues
 
 # If you modify the following variables, you also need to modify the unit file yourself:
-# You can modify it to /usr/local/lib/v2ray/
-DAT_PATH='/usr/local/share/v2ray/'
-# You can modify it to /etc/v2ray/
-JSON_PATH='/usr/local/etc/v2ray/'
+# You can modify it to /usr/local/lib/v2ray
+DAT_PATH='/usr/local/share/v2ray'
+# You can modify it to /etc/v2ray
+JSON_PATH='/usr/local/etc/v2ray'
 
 check_if_running_as_root() {
     # If you want to run as another user, please modify $UID to be owned by this user
@@ -41,7 +41,7 @@ identify_the_operating_system_and_architecture() {
             'armv6l')
                 MACHINE='arm32-v6'
                 ;;
-            'armv7' | 'armv7l' )
+            'armv7' | 'armv7l')
                 MACHINE='arm32-v7a'
                 ;;
             'armv8' | 'aarch64')
@@ -107,8 +107,9 @@ identify_the_operating_system_and_architecture() {
     fi
 }
 
+## Demo function for processing parameters
 judgment_parameters() {
-    if [[ "$#" -gt '0' ]]; then
+    while [[ "$#" -gt '0' ]]; do
         case "$1" in
             '--remove')
                 if [[ "$#" -gt '1' ]]; then
@@ -118,111 +119,52 @@ judgment_parameters() {
                 REMOVE='1'
                 ;;
             '--version')
-                if [[ "$#" -gt '2' ]] || [[ -z "$2" ]]; then
-                    echo 'error: Please specify the correct version.'
-                    exit 1
-                fi
-                VERSION="$2"
+                VERSION="${2:?error: Please specify the correct version.}"
+                break
                 ;;
             '-c' | '--check')
-                if [[ "$#" -gt '1' ]]; then
-                    echo 'error: Please enter the correct parameters.'
-                    exit 1
-                fi
                 CHECK='1'
+                break
                 ;;
             '-f' | '--force')
-                if [[ "$#" -gt '1' ]]; then
-                    echo 'error: Please enter the correct parameters.'
-                    exit 1
-                fi
                 FORCE='1'
-                ;;
+                break
+    	        ;;
             '-h' | '--help')
-                if [[ "$#" -gt '1' ]]; then
-                    echo 'error: Please enter the correct parameters.'
-                    exit 1
-                fi
                 HELP='1'
+                break
                 ;;
             '-l' | '--local')
-                if [[ "$#" -gt '2' ]] || [[ -z "$2" ]]; then
-                    echo 'error: Please specify the correct local file.'
-                    exit 1
-                fi
-                LOCAL_FILE="$2"
                 LOCAL_INSTALL='1'
+                LOCAL_FILE="${2:?error: Please specify the correct local file.}"
+                break
                 ;;
             '-p' | '--proxy')
-                case "$2" in
-                    'http://'*)
-                        ;;
-                    'https://'*)
-                        ;;
-                    'socks4://'*)
-                        ;;
-                    'socks4a://'*)
-                        ;;
-                    'socks5://'*)
-                        ;;
-                    'socks5h://'*)
-                        ;;
-                    *)
-                        echo 'error: Please specify the correct proxy server address.'
-                        exit 1
-                        ;;
-                esac
-                PROXY="-x$2"
-                # Parameters available through a proxy server
-                if [[ "$#" -gt '2' ]]; then
-                    case "$3" in
-                        '--version')
-                            if [[ "$#" -gt '4' ]] || [[ -z "$4" ]]; then
-                                echo 'error: Please specify the correct version.'
-                                exit 1
-                            fi
-                            VERSION="$2"
-                            ;;
-                        '-c' | '--check')
-                            if [[ "$#" -gt '3' ]]; then
-                                echo 'error: Please enter the correct parameters.'
-                                exit 1
-                            fi
-                            CHECK='1'
-                            ;;
-                        '-f' | '--force')
-                            if [[ "$#" -gt '3' ]]; then
-                                echo 'error: Please enter the correct parameters.'
-                                exit 1
-                            fi
-                            FORCE='1'
-                            ;;
-                        *)
-                            echo "$0: unknown option -- -"
-                            exit 1
-                            ;;
-                    esac
+                if echo "${2:?undefine var}" | grep -qEo '^(https?|socks4a?|socks5h?):\/\/'; then
+                    echo 'error: Please specify the correct proxy server address.'
+                    exit 1
                 fi
+                PROXY="-x$2"
+                shift
                 ;;
             *)
                 echo "$0: unknown option -- -"
                 exit 1
                 ;;
         esac
-    fi
+        shift
+    done
 }
 
 install_software() {
     COMPONENT="$1"
-    if [[ -n "$(command -v "$COMPONENT")" ]]; then
-        return
-    fi
-    ${PACKAGE_MANAGEMENT_INSTALL} "$COMPONENT"
-    if [[ "$?" -ne '0' ]]; then
+    command -v "$COMPONENT" > /dev/null 2>&1 && return
+    if ${PACKAGE_MANAGEMENT_INSTALL} "$COMPONENT"; then
+        echo "info: $COMPONENT is installed."
+    else
         echo "error: Installation of $COMPONENT failed, please check your network."
         exit 1
     fi
-    echo "info: $COMPONENT is installed."
 }
 
 version_number() {
@@ -240,66 +182,64 @@ get_version() {
     # 0: Install or update V2Ray.
     # 1: Installed or no new version of V2Ray.
     # 2: Install the specified version of V2Ray.
-    if [[ -z "$VERSION" ]]; then
-        # Determine the version number for V2Ray installed from a local file
-        if [[ -f '/usr/local/bin/v2ray' ]]; then
-            VERSION="$(/usr/local/bin/v2ray -version)"
-            CURRENT_VERSION="$(version_number $(echo "$VERSION" | head -n 1 | awk -F ' ' '{print $2}'))"
-            if [[ "$LOCAL_INSTALL" -eq '1' ]]; then
-                RELEASE_VERSION="$CURRENT_VERSION"
-                return
-            fi
+    if [[ -n "$VERSION" ]]; then
+        RELEASE_VERSION="$(version_number "$VERSION")"
+        return 2
+    fi
+    # Determine the version number for V2Ray installed from a local file
+    if [[ -f '/usr/local/bin/v2ray' ]]; then
+        VERSION="$(/usr/local/bin/v2ray -version)"
+        CURRENT_VERSION="$(version_number "$(echo "$VERSION" | awk 'NR==1 {print $2}')")"
+        if [[ "$LOCAL_INSTALL" -eq '1' ]]; then
+            RELEASE_VERSION="$CURRENT_VERSION"
+            return
         fi
-        # Get V2Ray release version number
-        TMP_FILE="$(mktemp)"
-        install_software curl
-        # DO NOT QUOTE THESE `${PROXY}` VARIABLES!
-        if ! "curl" ${PROXY} -o "$TMP_FILE" 'https://api.github.com/repos/v2fly/v2ray-core/releases/latest'; then
-            "rm" "$TMP_FILE"
-            echo 'error: Failed to get release list, please check your network.'
-            exit 1
-        fi
-        RELEASE_LATEST="$(sed 'y/,/\n/' "$TMP_FILE" | grep 'tag_name' | awk -F '"' '{print $4}')"
+    fi
+    # Get V2Ray release version number
+    TMP_FILE="$(mktemp)"
+    install_software curl
+    # DO NOT QUOTE THESE `${PROXY}` VARIABLES!
+    if ! "curl" ${PROXY} -o "$TMP_FILE" 'https://api.github.com/repos/v2fly/v2ray-core/releases/latest'; then
         "rm" "$TMP_FILE"
-        RELEASE_VERSION="$(version_number "$RELEASE_LATEST")"
-        # Compare V2Ray version numbers
-        if [[ "$RELEASE_VERSION" != "$CURRENT_VERSION" ]]; then
-            RELEASE_VERSIONSION_NUMBER="${RELEASE_VERSION#v}"
-            RELEASE_MAJOR_VERSION_NUMBER="${RELEASE_VERSIONSION_NUMBER%%.*}"
-            RELEASE_MINOR_VERSION_NUMBER="$(echo "$RELEASE_VERSIONSION_NUMBER" | awk -F '.' '{print $2}')"
-            RELEASE_MINIMUM_VERSION_NUMBER="${RELEASE_VERSIONSION_NUMBER##*.}"
-            CURRENT_VERSIONSION_NUMBER="$(echo "${CURRENT_VERSION#v}" | sed 's/-.*//')"
-            CURRENT_MAJOR_VERSION_NUMBER="${CURRENT_VERSIONSION_NUMBER%%.*}"
-            CURRENT_MINOR_VERSION_NUMBER="$(echo "$CURRENT_VERSIONSION_NUMBER" | awk -F '.' '{print $2}')"
-            CURRENT_MINIMUM_VERSION_NUMBER="${CURRENT_VERSIONSION_NUMBER##*.}"
-            if [[ "$RELEASE_MAJOR_VERSION_NUMBER" -gt "$CURRENT_MAJOR_VERSION_NUMBER" ]]; then
+        echo 'error: Failed to get release list, please check your network.'
+        exit 1
+    fi
+    RELEASE_LATEST="$(sed 'y/,/\n/' "$TMP_FILE" | grep 'tag_name' | awk -F '"' '{print $4}')"
+    "rm" "$TMP_FILE"
+    RELEASE_VERSION="$(version_number "$RELEASE_LATEST")"
+    # Compare V2Ray version numbers
+    if [[ "$RELEASE_VERSION" != "$CURRENT_VERSION" ]]; then
+        RELEASE_VERSIONSION_NUMBER="${RELEASE_VERSION#v}"
+        RELEASE_MAJOR_VERSION_NUMBER="${RELEASE_VERSIONSION_NUMBER%%.*}"
+        RELEASE_MINOR_VERSION_NUMBER="$(echo "$RELEASE_VERSIONSION_NUMBER" | awk -F '.' '{print $2}')"
+        RELEASE_MINIMUM_VERSION_NUMBER="${RELEASE_VERSIONSION_NUMBER##*.}"
+        CURRENT_VERSIONSION_NUMBER="$(echo "${CURRENT_VERSION#v}" | sed 's/-.*//')"
+        CURRENT_MAJOR_VERSION_NUMBER="${CURRENT_VERSIONSION_NUMBER%%.*}"
+        CURRENT_MINOR_VERSION_NUMBER="$(echo "$CURRENT_VERSIONSION_NUMBER" | awk -F '.' '{print $2}')"
+        CURRENT_MINIMUM_VERSION_NUMBER="${CURRENT_VERSIONSION_NUMBER##*.}"
+        if [[ "$RELEASE_MAJOR_VERSION_NUMBER" -gt "$CURRENT_MAJOR_VERSION_NUMBER" ]]; then
+            return 0
+        elif [[ "$RELEASE_MAJOR_VERSION_NUMBER" -eq "$CURRENT_MAJOR_VERSION_NUMBER" ]]; then
+            if [[ "$RELEASE_MINOR_VERSION_NUMBER" -gt "$CURRENT_MINOR_VERSION_NUMBER" ]]; then
                 return 0
-            elif [[ "$RELEASE_MAJOR_VERSION_NUMBER" -eq "$CURRENT_MAJOR_VERSION_NUMBER" ]]; then
-                if [[ "$RELEASE_MINOR_VERSION_NUMBER" -gt "$CURRENT_MINOR_VERSION_NUMBER" ]]; then
+            elif [[ "$RELEASE_MINOR_VERSION_NUMBER" -eq "$CURRENT_MINOR_VERSION_NUMBER" ]]; then
+                if [[ "$RELEASE_MINIMUM_VERSION_NUMBER" -gt "$CURRENT_MINIMUM_VERSION_NUMBER" ]]; then
                     return 0
-                elif [[ "$RELEASE_MINOR_VERSION_NUMBER" -eq "$CURRENT_MINOR_VERSION_NUMBER" ]]; then
-                    if [[ "$RELEASE_MINIMUM_VERSION_NUMBER" -gt "$CURRENT_MINIMUM_VERSION_NUMBER" ]]; then
-                        return 0
-                    else
-                        return 1
-                    fi
                 else
                     return 1
                 fi
             else
                 return 1
             fi
-        elif [[ "$RELEASE_VERSION" == "$CURRENT_VERSION" ]]; then
+        else
             return 1
         fi
-    else
-        RELEASE_VERSION="$(version_number "$VERSION")"
-        return 2
+    elif [[ "$RELEASE_VERSION" == "$CURRENT_VERSION" ]]; then
+        return 1
     fi
 }
 
 download_v2ray() {
-    "mkdir" -p "$TMP_DIRECTORY"
     DOWNLOAD_LINK="https://github.com/v2fly/v2ray-core/releases/download/$RELEASE_VERSION/v2ray-linux-$MACHINE.zip"
     echo "Downloading V2Ray archive: $DOWNLOAD_LINK"
     if ! "curl" ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE" "$DOWNLOAD_LINK"; then
@@ -342,7 +282,7 @@ install_file() {
     if [[ "$NAME" == 'v2ray' ]] || [[ "$NAME" == 'v2ctl' ]]; then
         install -m 755 "${TMP_DIRECTORY}/$NAME" "/usr/local/bin/$NAME"
     elif [[ "$NAME" == 'geoip.dat' ]] || [[ "$NAME" == 'geosite.dat' ]]; then
-        install -m 644 "${TMP_DIRECTORY}/$NAME" "${DAT_PATH}$NAME"
+        install -m 644 "${TMP_DIRECTORY}/$NAME" "${DAT_PATH}/$NAME"
     fi
 }
 
@@ -352,7 +292,7 @@ install_v2ray() {
     install_file v2ctl
     install -d "$DAT_PATH"
     # If the file exists, geoip.dat and geosite.dat will not be installed or updated
-    if [[ ! -f "${DAT_PATH}.undat" ]]; then
+    if [[ ! -f "${DAT_PATH}/.undat" ]]; then
         install_file geoip.dat
         install_file geosite.dat
     fi
@@ -360,7 +300,7 @@ install_v2ray() {
     # Install V2Ray configuration file to $JSON_PATH
     if [[ ! -d "$JSON_PATH" ]]; then
         install -d "$JSON_PATH"
-        echo "{}" > "${JSON_PATH}config.json"
+        echo "{}" > "${JSON_PATH}/config.json"
         CONFIG_NEW='1'
     fi
 
@@ -388,17 +328,13 @@ install_startup_service_file() {
 
 start_v2ray() {
     if [[ -f '/etc/systemd/system/v2ray.service' ]]; then
-        if [[ -z "$V2RAY_CUSTOMIZE" ]]; then
-            systemctl start v2ray
+        if systemctl start "${V2RAY_CUSTOMIZE:-v2ray}"; then
+            echo 'info: Start the V2Ray service.'
         else
-            systemctl start "$V2RAY_CUSTOMIZE"
+            echo 'error: Failed to start V2Ray service.'
+            exit 1
         fi
     fi
-    if [[ "$?" -ne 0 ]]; then
-        echo 'error: Failed to start V2Ray service.'
-        exit 1
-    fi
-    echo 'info: Start the V2Ray service.'
 }
 
 stop_v2ray() {
@@ -488,7 +424,7 @@ main() {
     [[ "$REMOVE" -eq '1' ]] && remove_v2ray
 
     # Two very important variables
-    TMP_DIRECTORY="$(mktemp -du)"
+    TMP_DIRECTORY="$(mktemp -d)"
     ZIP_FILE="${TMP_DIRECTORY}/v2ray-linux-$MACHINE.zip"
 
     # Install V2Ray from a local file, but still need to make sure the network is available
@@ -497,7 +433,6 @@ main() {
         echo -n 'warn: Please make sure the file is valid because we cannot confirm it. (Press any key) ...'
         read
         install_software unzip
-        "mkdir" -p "$TMP_DIRECTORY"
         decompression "$LOCAL_FILE"
     else
         # Normal way
@@ -531,9 +466,9 @@ main() {
     echo 'installed: /usr/local/bin/v2ray'
     echo 'installed: /usr/local/bin/v2ctl'
     # If the file exists, the content output of installing or updating geoip.dat and geosite.dat will not be displayed
-    if [[ ! -f "${DAT_PATH}.undat" ]]; then
-        echo "installed: ${DAT_PATH}geoip.dat"
-        echo "installed: ${DAT_PATH}geosite.dat"
+    if [[ ! -f "${DAT_PATH}/.undat" ]]; then
+        echo "installed: ${DAT_PATH}/geoip.dat"
+        echo "installed: ${DAT_PATH}/geosite.dat"
     fi
     if [[ "$CONFIG_NEW" -eq '1' ]]; then
         echo "installed: ${JSON_PATH}config.json"
