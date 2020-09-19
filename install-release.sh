@@ -41,7 +41,7 @@ identify_the_operating_system_and_architecture() {
             'armv6l')
                 MACHINE='arm32-v6'
                 ;;
-            'armv7' | 'armv7l' )
+            'armv7' | 'armv7l')
                 MACHINE='arm32-v7a'
                 ;;
             'armv8' | 'aarch64')
@@ -108,47 +108,47 @@ identify_the_operating_system_and_architecture() {
 }
 
 ## Demo function for processing parameters
-judgment_parameters() { 
+judgment_parameters() {
     while [[ "$#" -gt '0' ]]; do
         case "$1" in
-        '--remove')
-            if [[ "$#" -gt '1' ]]; then
-              echo 'error: Please enter the correct parameters.'
-              exit 1
-            fi
-            REMOVE='1'
-            ;;
-        '--version')
-            VERSION="${2:?error: Please specify the correct version.}"
-            break  ##跳出while
-            ;;
-        '-c' | '--check')
-            CHECK='1'
-            break  ##跳出while
-            ;;
-        '-f' | '--force')
-            FORCE='1'
-            break  ##跳出while
-            ;;
-        '-l' | '--local')
-            LOCAL_INSTALL='1'
-            LOCAL_FILE="${2:?error: Please specify the correct local file.}"
-            break  ##跳出while
-            ;;
-        '-p' | '--proxy')
-            if echo "${2:?undefine var}" | grep -qEo '^(http|https|socks4|socks4a|socks5|socks5h)://'; then
-                echo 'error: Please specify the correct proxy server address.'
+            '--remove')
+                if [[ "$#" -gt '1' ]]; then
+                    echo 'error: Please enter the correct parameters.'
+                    exit 1
+                fi
+                REMOVE='1'
+                ;;
+            '--version')
+                VERSION="${2:?error: Please specify the correct version.}"
+                break ##跳出while
+                ;;
+            '-c' | '--check')
+                CHECK='1'
+                break ##跳出while
+                ;;
+            '-f' | '--force')
+                FORCE='1'
+                break ##跳出while
+                ;;
+            '-l' | '--local')
+                LOCAL_INSTALL='1'
+                LOCAL_FILE="${2:?error: Please specify the correct local file.}"
+                break ##跳出while
+                ;;
+            '-p' | '--proxy')
+                if echo "${2:?undefine var}" | grep -qEo '^(http|https|socks4|socks4a|socks5|socks5h)://'; then
+                    echo 'error: Please specify the correct proxy server address.'
+                    exit 1
+                fi
+                PROXY="-x$2"
+                shift ## 参数左移
+                ;;
+            *)
+                show_help
                 exit 1
-            fi
-            PROXY="-x$2"
-            shift  ## 参数左移
-            ;;
-        *)
-            show_help
-            exit 1
-            ;;
+                ;;
         esac
-        shift  ## 参数左移
+        shift ## 参数左移
     done
 }
 
@@ -300,7 +300,7 @@ install_v2ray() {
     # Install V2Ray configuration file to $JSON_PATH
     if [[ ! -d "$JSON_PATH" ]]; then
         install -d "$JSON_PATH"
-        echo "{}" > "${JSON_PATH}config.json"
+        echo "{}" >"${JSON_PATH}config.json"
         CONFIG_NEW='1'
     fi
 
