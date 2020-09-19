@@ -214,7 +214,7 @@ judgment_parameters() {
 
 install_software() {
     COMPONENT="$1"
-    command -v "$COMPONENT" >/dev/null && return
+    command -v "$COMPONENT" > /dev/null 2>&1 && return
     if ${PACKAGE_MANAGEMENT_INSTALL} "$COMPONENT"; then
         echo "info: $COMPONENT is installed."
     else
