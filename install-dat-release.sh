@@ -30,7 +30,7 @@ check_if_running_as_root() {
     fi
 }
 
-download_file() {
+download_files() {
     if ! curl -L -H 'Cache-Control: no-cache' -o "${dir_tmp}/${2}" "${1}/${2}"; then
         echo 'error: Download failed! Please check your network or try again.'
         exit 1
