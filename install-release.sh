@@ -402,10 +402,10 @@ remove_v2ray() {
 
 # Explanation of parameters in the script
 show_help() {
-    echo "usage: $0 [--remove | --specific number | -c | -f | -h | -l | -p]"
-    echo '  [-p address] [--specific number | -c | -f]'
+    echo "usage: $0 [--remove | --version number | -c | -f | -h | -l | -p]"
+    echo '  [-p address] [--version number | -c | -f]'
     echo '  --remove        Remove V2Ray'
-    echo '  --specific       Install the specified version of V2Ray, e.g., --specific v4.18.0'
+    echo '  --version       Install the specified version of V2Ray, e.g., --version v4.18.0'
     echo '  -c, --check     Check if V2Ray can be updated'
     echo '  -f, --force     Force installation of the latest version of V2Ray'
     echo '  -h, --help      Show help'
