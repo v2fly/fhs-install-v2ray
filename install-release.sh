@@ -106,6 +106,9 @@ identify_the_operating_system_and_architecture() {
     elif [[ "$(command -v zypper)" ]]; then
       PACKAGE_MANAGEMENT_INSTALL='zypper install'
       PACKAGE_MANAGEMENT_REMOVE='zypper remove'
+    elif [[ "$(command -v pacman)" ]]; then
+      PACKAGE_MANAGEMENT_INSTALL='pacman -S'
+      PACKAGE_MANAGEMENT_REMOVE='pacman -R'
     else
       echo "error: The script does not support the package manager in this operating system."
       exit 1
