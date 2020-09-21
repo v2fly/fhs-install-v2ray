@@ -149,7 +149,7 @@ judgment_parameters() {
         break
         ;;
       '-p' | '--proxy')
-        if echo "${2:?undefine var}" | grep -qEo '^(https?|socks4a?|socks5h?):\/\/'; then
+        if ! echo "${2:?undefine var}" | grep -qEo '^(https?|socks4a?|socks5h?):\/\/'; then
           echo 'error: Please specify the correct proxy server address.'
           exit 1
         fi
