@@ -4,9 +4,7 @@
 
 > Bash script for installing V2Ray in operating systems such as Debian / CentOS / Fedora / openSUSE that support systemd
 
-該腳本安裝的文件符合 Filesystem Hierarchy Standard（FHS）：
-
-https://wiki.linuxfoundation.org/lsb/fhs
+該腳本安裝的文件符合 [Filesystem Hierarchy Standard (FHS)](https://wiki.linuxfoundation.org/lsb/fhs)：
 
 ```
 installed: /usr/local/bin/v2ray
@@ -27,45 +25,6 @@ installed: /etc/systemd/system/v2ray@.service
 請在安裝完成後參閱 [文件](https://www.v2fly.org/) 瞭解配置檔案語法，並自己完成適合自己的配置檔案。過程中可參閱社群貢獻的 [配置檔案模板](https://github.com/v2fly/v2ray-examples)  
 （**提請您注意這些模板複製下來以後是需要您自己修改調整的，不能直接使用**）
 
-## 依賴軟體
-
-### 安裝 cURL
-
-```
-# apt update
-# apt install curl
-```
-
-or
-
-```
-# yum makecache
-# yum install curl
-```
-
-or
-
-```
-# dnf makecache
-# dnf install curl
-```
-
-or
-
-```
-# zypper refresh
-# zypper install curl
-```
-
-## 下載
-
-```
-// 安裝執行檔和 .dat 資料檔
-# curl -O https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh
-// 只更新 .dat 資料檔
-# curl -O https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-dat-release.sh
-```
-
 ## 使用
 
 * 該腳本在執行時會提供 `info` 和 `error` 等信息，請仔細閱讀。
@@ -73,12 +32,16 @@ or
 ### 安裝和更新 V2Ray
 
 ```
+// 安裝執行檔和 .dat 資料檔
+# curl -LROJ https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh
 # bash install-release.sh
 ```
 
 ### 安裝最新發行的 geoip.dat 和 geosite.dat
 
 ```
+// 只更新 .dat 資料檔
+# curl -LROJ https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-dat-release.sh
 # bash install-dat-release.sh
 ```
 
@@ -100,21 +63,7 @@ or
 
 **提問前請先閱讀 [Issue #63](https://github.com/v2fly/fhs-install-v2ray/issues/63)，否則可能無法得到解答並被鎖定。**
 
-## 參數
-
-```
-usage: install-release.sh [--remove | --version number | -c | -f | -h | -l | -p]
-  [-p address] [--version number | -c | -f]
-  --remove        Remove V2Ray
-  --version       Install the specified version of V2Ray, e.g., --version v4.18.0
-  -c, --check     Check if V2Ray can be updated
-  -f, --force     Force installation of the latest version of V2Ray
-  -h, --help      Show help
-  -l, --local     Install V2Ray from a local file
-  -p, --proxy     Download through a proxy server, e.g., -p http://127.0.0.1:8118 or -p socks5://127.0.0.1:1080
-```
-
-## 維護
+## 貢獻
 
 請於 [develop](https://github.com/v2fly/fhs-install-v2ray/tree/develop) 分支進行，以避免對主分支造成破壞。
 
