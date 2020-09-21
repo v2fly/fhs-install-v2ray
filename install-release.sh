@@ -527,7 +527,7 @@ main() {
     echo "installed: ${DAT_PATH}/geosite.dat"
   fi
   if [[ "$CONFIG_NEW" -eq '1' ]]; then
-    echo "installed: ${JSON_PATH}config.json"
+    echo "installed: ${JSON_PATH}/config.json"
   fi
   if [[ "$CONFDIR" -eq '1' ]]; then
     echo "installed: ${JSON_PATH}00_log.json"
