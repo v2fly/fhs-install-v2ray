@@ -320,7 +320,7 @@ install_v2ray() {
   if [[ -n "$JSONS_PATH" ]] && [[ ! -d "$JSONS_PATH" ]]; then
     install -d "$JSONS_PATH"
     for BASE in 00_log 01_api 02_dns 03_routing 04_policy 05_inbounds 06_outbounds 07_transport 08_stats 09_reverse; do
-      echo '{}' >"${JSONS_PATH}$BASE.json"
+      echo '{}' > "${JSONS_PATH}/${BASE}.json"
     done
     CONFDIR='1'
   fi
@@ -527,19 +527,19 @@ main() {
     echo "installed: ${DAT_PATH}/geosite.dat"
   fi
   if [[ "$CONFIG_NEW" -eq '1' ]]; then
-    echo "installed: ${JSON_PATH}config.json"
+    echo "installed: ${JSON_PATH}/config.json"
   fi
   if [[ "$CONFDIR" -eq '1' ]]; then
-    echo "installed: ${JSON_PATH}00_log.json"
-    echo "installed: ${JSON_PATH}01_api.json"
-    echo "installed: ${JSON_PATH}02_dns.json"
-    echo "installed: ${JSON_PATH}03_routing.json"
-    echo "installed: ${JSON_PATH}04_policy.json"
-    echo "installed: ${JSON_PATH}05_inbounds.json"
-    echo "installed: ${JSON_PATH}06_outbounds.json"
-    echo "installed: ${JSON_PATH}07_transport.json"
-    echo "installed: ${JSON_PATH}08_stats.json"
-    echo "installed: ${JSON_PATH}09_reverse.json"
+    echo "installed: ${JSON_PATH}/00_log.json"
+    echo "installed: ${JSON_PATH}/01_api.json"
+    echo "installed: ${JSON_PATH}/02_dns.json"
+    echo "installed: ${JSON_PATH}/03_routing.json"
+    echo "installed: ${JSON_PATH}/04_policy.json"
+    echo "installed: ${JSON_PATH}/05_inbounds.json"
+    echo "installed: ${JSON_PATH}/06_outbounds.json"
+    echo "installed: ${JSON_PATH}/07_transport.json"
+    echo "installed: ${JSON_PATH}/08_stats.json"
+    echo "installed: ${JSON_PATH}/09_reverse.json"
   fi
   if [[ "$LOG" -eq '1' ]]; then
     echo 'installed: /var/log/v2ray/'
