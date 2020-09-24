@@ -13,8 +13,6 @@
 
 # 0 0 * * * /usr/local/bin/install-dat-release > /dev/null 2>&1
 
-alias curl='"curl" --retry 5 --retry-delay 10 --retry-max-time 60 --false-start --http2 --tlsv1.2 -L'
-
 # You can modify it to /usr/local/lib/v2ray
 V2RAY="/usr/local/share/v2ray"
 DOWNLOAD_LINK_GEOIP="https://github.com/v2fly/geoip/releases/latest/download/geoip.dat"
@@ -33,11 +31,11 @@ check_if_running_as_root() {
 }
 
 download_files() {
-  if ! curl -R -H 'Cache-Control: no-cache' -o "${dir_tmp}/${2}" "${1}"; then
+  if ! curl -L -H 'Cache-Control: no-cache' -o "${dir_tmp}/${2}" "${1}"; then
     echo 'error: Download failed! Please check your network or try again.'
     exit 1
   fi
-  if ! curl -R -H 'Cache-Control: no-cache' -o "${dir_tmp}/${2}.sha256sum" "${1}.sha256sum"; then
+  if ! curl -L -H 'Cache-Control: no-cache' -o "${dir_tmp}/${2}.sha256sum" "${1}.sha256sum"; then
     echo 'error: Download failed! Please check your network or try again.'
     exit 1
   fi
