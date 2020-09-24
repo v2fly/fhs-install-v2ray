@@ -4,6 +4,10 @@ on:
     branches:
       - master
       - develop
+    paths-ignore:
+      - "**/LICENSE"
+      - "**/README.md"
+      - "**/README.zh-Hans-CN.md"
   pull_request:
     branches:
       - master
