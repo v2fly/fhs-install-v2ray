@@ -27,7 +27,9 @@ red=$(tput setaf 1)
 green=$(tput setaf 2)
 reset=$(tput sgr0)
 
-alias curl='"curl" --retry 5 --retry-delay 10 --retry-max-time 60 --false-start --http2 --tlsv1.2 -L'
+curl() {
+    $(type -P curl) -L -q --retry 5 --retry-delay 10 --retry-max-time 60 --false-start --http2 --tlsv1.2 "$@"
+}
 
 check_if_running_as_root() {
   # If you want to run as another user, please modify $UID to be owned by this user
