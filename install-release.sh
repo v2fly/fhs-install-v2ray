@@ -28,7 +28,7 @@ green=$(tput setaf 2)
 reset=$(tput sgr0)
 
 curl() {
-    $(type -P curl) -L -q -# --retry 5 --retry-delay 10 --retry-max-time 60 --false-start --http2 --tlsv1.2 "$@"
+    $(type -P curl) -L -q --retry 5 --retry-delay 10 --retry-max-time 60 --false-start --http2 --tlsv1.2 "$@"
 }
 
 check_if_running_as_root() {
