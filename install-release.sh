@@ -27,6 +27,8 @@ red=$(tput setaf 1)
 green=$(tput setaf 2)
 reset=$(tput sgr0)
 
+alias curl='"curl" --retry 5 --retry-delay 10 --retry-max-time 60 --false-start --http2 --tlsv1.2 -L'
+
 check_if_running_as_root() {
   # If you want to run as another user, please modify $UID to be owned by this user
   if [[ "$UID" -ne '0' ]]; then
@@ -170,7 +172,7 @@ judgment_parameters() {
 
 install_software() {
   COMPONENT="$1"
-  command -v "$COMPONENT" >/dev/null 2>&1 && return
+  command -v "$COMPONENT" > /dev/null 2>&1 && return
   if ${PACKAGE_MANAGEMENT_INSTALL} "$COMPONENT"; then
     echo "info: $COMPONENT is installed."
   else
@@ -211,7 +213,7 @@ get_version() {
   TMP_FILE="$(mktemp)"
   install_software curl
   # DO NOT QUOTE THESE `${PROXY}` VARIABLES!
-  if ! "curl" ${PROXY} -sSL -H "Accept: application/vnd.github.v3+json" -o "$TMP_FILE" 'https://api.github.com/repos/v2fly/v2ray-core/releases/latest'; then
+  if ! curl ${PROXY} -sS -H "Accept: application/vnd.github.v3+json" -o "$TMP_FILE" 'https://api.github.com/repos/v2fly/v2ray-core/releases/latest'; then
     "rm" "$TMP_FILE"
     echo 'error: Failed to get release list, please check your network.'
     exit 1
@@ -254,12 +256,12 @@ get_version() {
 download_v2ray() {
   DOWNLOAD_LINK="https://github.com/v2fly/v2ray-core/releases/download/$RELEASE_VERSION/v2ray-linux-$MACHINE.zip"
   echo "Downloading V2Ray archive: $DOWNLOAD_LINK"
-  if ! "curl" ${PROXY} -sSLR -H "Accept: application/vnd.github.v3+json" -H 'Cache-Control: no-cache' -o "$ZIP_FILE" "$DOWNLOAD_LINK"; then
+  if ! curl ${PROXY} -R -H 'Cache-Control: no-cache' -o "$ZIP_FILE" "$DOWNLOAD_LINK"; then
     echo 'error: Download failed! Please check your network or try again.'
     return 1
   fi
   echo "Downloading verification file for V2Ray archive: $DOWNLOAD_LINK.dgst"
-  if ! "curl" ${PROXY} -L -H 'Cache-Control: no-cache' -o "$ZIP_FILE.dgst" "$DOWNLOAD_LINK.dgst"; then
+  if ! curl ${PROXY} -sSR -H 'Cache-Control: no-cache' -o "$ZIP_FILE.dgst" "$DOWNLOAD_LINK.dgst"; then
     echo 'error: Download failed! Please check your network or try again.'
     return 1
   fi
@@ -312,7 +314,7 @@ install_v2ray() {
   # Install V2Ray configuration file to $JSON_PATH
   if [[ -z "$JSONS_PATH" ]] && [[ ! -d "$JSON_PATH" ]]; then
     install -d "$JSON_PATH"
-    echo "{}" >"${JSON_PATH}/config.json"
+    echo "{}" > "${JSON_PATH}/config.json"
     CONFIG_NEW='1'
   fi
 
