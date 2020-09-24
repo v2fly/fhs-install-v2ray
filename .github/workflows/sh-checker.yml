@@ -26,16 +26,10 @@ jobs:
           sh_checker_exclude: "LICENSE README.md README.zh-Hans-CN.md"
   filed-test:
     runs-on: ubuntu-latest
-    # container: 
-    #   image: centos:centos7.0.1406
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      # - name: What OS is running
-      #   run: uname -a
       - name: Run the filed-test
-        uses: docker://centos:centos7.0.1406
+        uses: docker://centos:centos8.1.1911
         with:
           args: bash install-release.sh
-        # run: |
-        #   sudo bash install-release.sh
