@@ -30,4 +30,4 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run the filed-test
         run: |
-          bash install-release.sh
+          sudo bash install-release.sh
