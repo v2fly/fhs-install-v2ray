@@ -97,21 +97,20 @@ identify_the_operating_system_and_architecture() {
       echo "error: Only Linux distributions using systemd are supported."
       exit 1
     fi
-    if [[ "$(command -v apt)" ]]; then
-      PACKAGE_MANAGEMENT_INSTALL='apt install'
-      PACKAGE_MANAGEMENT_REMOVE='apt remove'
-    elif [[ "$(command -v yum)" ]]; then
-      PACKAGE_MANAGEMENT_INSTALL='yum install'
-      PACKAGE_MANAGEMENT_REMOVE='yum remove'
-      if [[ "$(command -v dnf)" ]]; then
-        PACKAGE_MANAGEMENT_INSTALL='dnf install'
+    if [[ "$(type -P apt)" ]]; then
+      PACKAGE_MANAGEMENT_INSTALL='apt install -y --no-install-recommends'
+      PACKAGE_MANAGEMENT_REMOVE='apt purge'
+    elif [[ "$(type -P dnf)" ]]; then
+        PACKAGE_MANAGEMENT_INSTALL='dnf install -y'
         PACKAGE_MANAGEMENT_REMOVE='dnf remove'
-      fi
-    elif [[ "$(command -v zypper)" ]]; then
-      PACKAGE_MANAGEMENT_INSTALL='zypper install'
+    elif [[ "$(type -P yum)" ]]; then
+      PACKAGE_MANAGEMENT_INSTALL='yum install -y'
+      PACKAGE_MANAGEMENT_REMOVE='yum remove'
+    elif [[ "$(type -P zypper)" ]]; then
+      PACKAGE_MANAGEMENT_INSTALL='zypper install -y'
       PACKAGE_MANAGEMENT_REMOVE='zypper remove'
-    elif [[ "$(command -v pacman)" ]]; then
-      PACKAGE_MANAGEMENT_INSTALL='pacman -S'
+    elif [[ "$(type -P pacman)" ]]; then
+      PACKAGE_MANAGEMENT_INSTALL='pacman -S --noconfirm'
       PACKAGE_MANAGEMENT_REMOVE='pacman -R'
     else
       echo "error: The script does not support the package manager in this operating system."
