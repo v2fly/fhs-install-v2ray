@@ -175,7 +175,15 @@ install_software() {
   command -v "$COMPONENT" > /dev/null 2>&1 && return
   if ${PACKAGE_MANAGEMENT_INSTALL} "$COMPONENT"; then
     echo "info: $COMPONENT is installed."
-  else
+  elif [ ${PACKAGE_MANAGEMENT_INSTALL} == 'apt install' ]; then
+    apt update
+    if ${PACKAGE_MANAGEMENT_INSTALL} "$COMPONENT"; then
+      echo "info: $COMPONENT is installed."
+    else
+      echo "error: Installation of $COMPONENT failed, please check your network."
+      exit 1
+    fi
+  else  
     echo "error: Installation of $COMPONENT failed, please check your network."
     exit 1
   fi
