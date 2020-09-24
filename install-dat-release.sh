@@ -13,7 +13,7 @@
 
 # 0 0 * * * /usr/local/bin/install-dat-release > /dev/null 2>&1
 
-alias curl='curl --false-start --http2 --tlsv1.2 -L'
+alias curl='"curl" --retry 5 --retry-delay 10 --retry-max-time 60 --false-start --http2 --tlsv1.2 -L'
 
 # You can modify it to /usr/local/lib/v2ray
 V2RAY="/usr/local/share/v2ray"
