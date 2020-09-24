@@ -172,7 +172,7 @@ judgment_parameters() {
 
 install_software() {
   COMPONENT="$1"
-  command -v "$COMPONENT" >/dev/null 2>&1 && return
+  command -v "$COMPONENT" > /dev/null 2>&1 && return
   if ${PACKAGE_MANAGEMENT_INSTALL} "$COMPONENT"; then
     echo "info: $COMPONENT is installed."
   else
@@ -314,7 +314,7 @@ install_v2ray() {
   # Install V2Ray configuration file to $JSON_PATH
   if [[ -z "$JSONS_PATH" ]] && [[ ! -d "$JSON_PATH" ]]; then
     install -d "$JSON_PATH"
-    echo "{}" >"${JSON_PATH}/config.json"
+    echo "{}" > "${JSON_PATH}/config.json"
     CONFIG_NEW='1'
   fi
 
