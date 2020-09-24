@@ -24,3 +24,10 @@ jobs:
         with:
           sh_checker_comment: true
           sh_checker_exclude: "LICENSE README.md README.zh-Hans-CN.md"
+  filed-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run the filed-test
+        run: |
+          bash install-release.sh
