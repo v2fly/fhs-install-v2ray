@@ -93,7 +93,14 @@ identify_the_operating_system_and_architecture() {
       echo "error: Don't use outdated Linux distributions."
       exit 1
     fi
-    if [[ -z "$(ls -l /sbin/init | grep systemd)" ]]; then
+    # Do not combine this judgment condition with the following judgment condition.
+    ## Be aware of Linux distribution like Gentoo, which kernel supports switch between Systemd and OpenRC.
+    ### Refer: https://github.com/v2fly/fhs-install-v2ray/issues/84#issuecomment-688574989
+    if [[ -f /.dockerenv ]] || grep -q 'docker\|lxc' /proc/1/cgroup && [[ "$(type -P systemctl)" ]]; then
+      true
+    elif [[ -d /run/systemd/system ]] || grep -q systemd <(ls -l /sbin/init); then
+      true
+    else
       echo "error: Only Linux distributions using systemd are supported."
       exit 1
     fi
