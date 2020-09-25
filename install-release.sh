@@ -28,7 +28,7 @@ green=$(tput setaf 2)
 reset=$(tput sgr0)
 
 curl() {
-    $(type -P curl) -L -q --retry 5 --retry-delay 10 --retry-max-time 60 "$@"
+  $(type -P curl) -L -q --retry 5 --retry-delay 10 --retry-max-time 60 "$@"
 }
 
 check_if_running_as_root() {
@@ -108,8 +108,8 @@ identify_the_operating_system_and_architecture() {
       PACKAGE_MANAGEMENT_INSTALL='apt install -y --no-install-recommends'
       PACKAGE_MANAGEMENT_REMOVE='apt purge'
     elif [[ "$(type -P dnf)" ]]; then
-        PACKAGE_MANAGEMENT_INSTALL='dnf install -y'
-        PACKAGE_MANAGEMENT_REMOVE='dnf remove'
+      PACKAGE_MANAGEMENT_INSTALL='dnf install -y'
+      PACKAGE_MANAGEMENT_REMOVE='dnf remove'
     elif [[ "$(type -P yum)" ]]; then
       PACKAGE_MANAGEMENT_INSTALL='yum install -y'
       PACKAGE_MANAGEMENT_REMOVE='yum remove'
@@ -180,7 +180,7 @@ judgment_parameters() {
 
 install_software() {
   COMPONENT="$1"
-  command -v "$COMPONENT" > /dev/null 2>&1 && return
+  type -P "$COMPONENT" > /dev/null 2>&1 && return
   if ${PACKAGE_MANAGEMENT_INSTALL} "$COMPONENT"; then
     echo "info: $COMPONENT is installed."
   else
@@ -219,7 +219,6 @@ get_version() {
   fi
   # Get V2Ray release version number
   TMP_FILE="$(mktemp)"
-  install_software curl
   # DO NOT QUOTE THESE `${PROXY}` VARIABLES!
   if ! curl ${PROXY} -sS -H "Accept: application/vnd.github.v3+json" -o "$TMP_FILE" 'https://api.github.com/repos/v2fly/v2ray-core/releases/latest'; then
     "rm" "$TMP_FILE"
@@ -502,6 +501,7 @@ main() {
     decompression "$LOCAL_FILE"
   else
     # Normal way
+    install_software curl
     get_version
     NUMBER="$?"
     if [[ "$NUMBER" -eq '0' ]] || [[ "$FORCE" -eq '1' ]] || [[ "$NUMBER" -eq 2 ]]; then
