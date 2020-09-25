@@ -441,8 +441,10 @@ remove_v2ray() {
     "rm" /usr/local/bin/v2ray
     "rm" /usr/local/bin/v2ctl
     "rm" -r "$DAT_PATH"
-    "rm" /etc/systemd/system/v2ray.service
-    "rm" /etc/systemd/system/v2ray@.service
+    "rm" '/etc/systemd/system/v2ray.service'
+    "rm" '/etc/systemd/system/v2ray@.service'
+    "rm" -r '/etc/systemd/system/v2ray.service.d'
+    "rm" -r '/etc/systemd/system/v2ray@.service.d'
     if [[ "$?" -ne '0' ]]; then
       echo 'error: Failed to remove V2Ray.'
       exit 1
@@ -452,11 +454,17 @@ remove_v2ray() {
       echo "removed: $DAT_PATH"
       echo 'removed: /etc/systemd/system/v2ray.service'
       echo 'removed: /etc/systemd/system/v2ray@.service'
+      echo 'removed: /etc/systemd/system/v2ray.service.d'
+      echo 'removed: /etc/systemd/system/v2ray@.service.d'
       echo 'Please execute the command: systemctl disable v2ray'
       echo "You may need to execute a command to remove dependent software: $PACKAGE_MANAGEMENT_REMOVE curl unzip"
       echo 'info: V2Ray has been removed.'
       echo 'info: If necessary, manually delete the configuration and log files.'
-      echo "info: e.g., $JSON_PATH and /var/log/v2ray/ ..."
+      if [[ -n "$JSONS_PATH" ]]; then
+        echo "info: e.g., $JSONS_PATH and /var/log/v2ray/ ..."
+      else
+        echo "info: e.g., $JSON_PATH and /var/log/v2ray/ ..."
+      fi
       exit 0
     fi
   else
