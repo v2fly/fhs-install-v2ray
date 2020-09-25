@@ -23,10 +23,6 @@ JSON_PATH=${JSON_PATH:-/usr/local/etc/v2ray}
 # Set this variable only if you are starting v2ray with multiple configuration files:
 # export JSONS_PATH='/usr/local/etc/v2ray'
 
-red=$(tput setaf 1)
-green=$(tput setaf 2)
-reset=$(tput sgr0)
-
 curl() {
   $(type -P curl) -L -q --retry 5 --retry-delay 10 --retry-max-time 60 "$@"
 }
@@ -107,18 +103,23 @@ identify_the_operating_system_and_architecture() {
     if [[ "$(type -P apt)" ]]; then
       PACKAGE_MANAGEMENT_INSTALL='apt install -y --no-install-recommends'
       PACKAGE_MANAGEMENT_REMOVE='apt purge -y --auto-remove'
+      package_provide_tput='ncurses-bin'
     elif [[ "$(type -P dnf)" ]]; then
       PACKAGE_MANAGEMENT_INSTALL='dnf install -y'
       PACKAGE_MANAGEMENT_REMOVE='dnf remove -y'
+      package_provide_tput='ncurses'
     elif [[ "$(type -P yum)" ]]; then
       PACKAGE_MANAGEMENT_INSTALL='yum install -y'
       PACKAGE_MANAGEMENT_REMOVE='yum remove -y'
+      package_provide_tput='ncurses'
     elif [[ "$(type -P zypper)" ]]; then
       PACKAGE_MANAGEMENT_INSTALL='zypper install -y --no-recommends'
       PACKAGE_MANAGEMENT_REMOVE='zypper remove -yu'
+      package_provide_tput='ncurses-utils'
     elif [[ "$(type -P pacman)" ]]; then
       PACKAGE_MANAGEMENT_INSTALL='pacman -Syu --noconfirm'
       PACKAGE_MANAGEMENT_REMOVE='pacman -Rsun --noconfirm'
+      package_provide_tput='ncurses'
     else
       echo "error: The script does not support the package manager in this operating system."
       exit 1
@@ -179,12 +180,13 @@ judgment_parameters() {
 }
 
 install_software() {
-  COMPONENT="$1"
-  type -P "$COMPONENT" > /dev/null 2>&1 && return
-  if ${PACKAGE_MANAGEMENT_INSTALL} "$COMPONENT"; then
-    echo "info: $COMPONENT is installed."
+  package_name="$1"
+  file_to_detect="$2"
+  type -P "$file_to_detect" > /dev/null 2>&1 && return
+  if ${PACKAGE_MANAGEMENT_INSTALL} "$package_name"; then
+    echo "info: $package_name is installed."
   else
-    echo "error: Installation of $COMPONENT failed, please check your network."
+    echo "error: Installation of $package_name failed, please check your network."
     exit 1
   fi
 }
@@ -483,6 +485,11 @@ main() {
   identify_the_operating_system_and_architecture
   judgment_parameters "$@"
 
+  install_software "$package_provide_tput" 'tput'
+  red=$(tput setaf 1)
+  green=$(tput setaf 2)
+  reset=$(tput sgr0)
+
   # Parameter information
   [[ "$HELP" -eq '1' ]] && show_help
   [[ "$CHECK" -eq '1' ]] && check_update
@@ -497,11 +504,11 @@ main() {
     echo 'warn: Install V2Ray from a local file, but still need to make sure the network is available.'
     echo -n 'warn: Please make sure the file is valid because we cannot confirm it. (Press any key) ...'
     read
-    install_software unzip
+    install_software 'unzip' 'unzip'
     decompression "$LOCAL_FILE"
   else
     # Normal way
-    install_software curl
+    install_software 'curl' 'curl'
     get_version
     NUMBER="$?"
     if [[ "$NUMBER" -eq '0' ]] || [[ "$FORCE" -eq '1' ]] || [[ "$NUMBER" -eq 2 ]]; then
@@ -512,7 +519,7 @@ main() {
         echo "removed: $TMP_DIRECTORY"
         exit 0
       fi
-      install_software unzip
+      install_software 'unzip' 'unzip'
       decompression "$ZIP_FILE"
     elif [[ "$NUMBER" -eq '1' ]]; then
       echo "info: No new version. The current version of V2Ray is $CURRENT_VERSION ."
