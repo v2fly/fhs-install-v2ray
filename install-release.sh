@@ -106,19 +106,19 @@ identify_the_operating_system_and_architecture() {
     fi
     if [[ "$(type -P apt)" ]]; then
       PACKAGE_MANAGEMENT_INSTALL='apt install -y --no-install-recommends'
-      PACKAGE_MANAGEMENT_REMOVE='apt purge'
+      PACKAGE_MANAGEMENT_REMOVE='apt purge -y --auto-remove'
     elif [[ "$(type -P dnf)" ]]; then
       PACKAGE_MANAGEMENT_INSTALL='dnf install -y'
-      PACKAGE_MANAGEMENT_REMOVE='dnf remove'
+      PACKAGE_MANAGEMENT_REMOVE='dnf remove -y'
     elif [[ "$(type -P yum)" ]]; then
       PACKAGE_MANAGEMENT_INSTALL='yum install -y'
-      PACKAGE_MANAGEMENT_REMOVE='yum remove'
+      PACKAGE_MANAGEMENT_REMOVE='yum remove -y'
     elif [[ "$(type -P zypper)" ]]; then
-      PACKAGE_MANAGEMENT_INSTALL='zypper install -y'
-      PACKAGE_MANAGEMENT_REMOVE='zypper remove'
+      PACKAGE_MANAGEMENT_INSTALL='zypper install -y --no-recommends'
+      PACKAGE_MANAGEMENT_REMOVE='zypper remove -yu'
     elif [[ "$(type -P pacman)" ]]; then
-      PACKAGE_MANAGEMENT_INSTALL='pacman -S --noconfirm'
-      PACKAGE_MANAGEMENT_REMOVE='pacman -R'
+      PACKAGE_MANAGEMENT_INSTALL='pacman -Syu --noconfirm'
+      PACKAGE_MANAGEMENT_REMOVE='pacman -Rsun --noconfirm'
     else
       echo "error: The script does not support the package manager in this operating system."
       exit 1
