@@ -28,7 +28,7 @@ green=$(tput setaf 2)
 reset=$(tput sgr0)
 
 curl() {
-    $(type -P curl) -L -q --retry 5 --retry-delay 10 --retry-max-time 60 "$@"
+  $(type -P curl) -L -q --retry 5 --retry-delay 10 --retry-max-time 60 "$@"
 }
 
 check_if_running_as_root() {
@@ -93,25 +93,32 @@ identify_the_operating_system_and_architecture() {
       echo "error: Don't use outdated Linux distributions."
       exit 1
     fi
-    if [[ -z "$(ls -l /sbin/init | grep systemd)" ]]; then
+    # Do not combine this judgment condition with the following judgment condition.
+    ## Be aware of Linux distribution like Gentoo, which kernel supports switch between Systemd and OpenRC.
+    ### Refer: https://github.com/v2fly/fhs-install-v2ray/issues/84#issuecomment-688574989
+    if [[ -f /.dockerenv ]] || grep -q 'docker\|lxc' /proc/1/cgroup && [[ "$(type -P systemctl)" ]]; then
+      true
+    elif [[ -d /run/systemd/system ]] || grep -q systemd <(ls -l /sbin/init); then
+      true
+    else
       echo "error: Only Linux distributions using systemd are supported."
       exit 1
     fi
     if [[ "$(type -P apt)" ]]; then
       PACKAGE_MANAGEMENT_INSTALL='apt install -y --no-install-recommends'
-      PACKAGE_MANAGEMENT_REMOVE='apt purge'
+      PACKAGE_MANAGEMENT_REMOVE='apt purge -y --auto-remove'
     elif [[ "$(type -P dnf)" ]]; then
-        PACKAGE_MANAGEMENT_INSTALL='dnf install -y'
-        PACKAGE_MANAGEMENT_REMOVE='dnf remove'
+      PACKAGE_MANAGEMENT_INSTALL='dnf install -y'
+      PACKAGE_MANAGEMENT_REMOVE='dnf remove -y'
     elif [[ "$(type -P yum)" ]]; then
       PACKAGE_MANAGEMENT_INSTALL='yum install -y'
-      PACKAGE_MANAGEMENT_REMOVE='yum remove'
+      PACKAGE_MANAGEMENT_REMOVE='yum remove -y'
     elif [[ "$(type -P zypper)" ]]; then
-      PACKAGE_MANAGEMENT_INSTALL='zypper install -y'
-      PACKAGE_MANAGEMENT_REMOVE='zypper remove'
+      PACKAGE_MANAGEMENT_INSTALL='zypper install -y --no-recommends'
+      PACKAGE_MANAGEMENT_REMOVE='zypper remove -yu'
     elif [[ "$(type -P pacman)" ]]; then
-      PACKAGE_MANAGEMENT_INSTALL='pacman -S --noconfirm'
-      PACKAGE_MANAGEMENT_REMOVE='pacman -R'
+      PACKAGE_MANAGEMENT_INSTALL='pacman -Syu --noconfirm'
+      PACKAGE_MANAGEMENT_REMOVE='pacman -Rsun --noconfirm'
     else
       echo "error: The script does not support the package manager in this operating system."
       exit 1
@@ -173,7 +180,7 @@ judgment_parameters() {
 
 install_software() {
   COMPONENT="$1"
-  command -v "$COMPONENT" > /dev/null 2>&1 && return
+  type -P "$COMPONENT" > /dev/null 2>&1 && return
   if ${PACKAGE_MANAGEMENT_INSTALL} "$COMPONENT"; then
     echo "info: $COMPONENT is installed."
   else
@@ -212,7 +219,6 @@ get_version() {
   fi
   # Get V2Ray release version number
   TMP_FILE="$(mktemp)"
-  install_software curl
   # DO NOT QUOTE THESE `${PROXY}` VARIABLES!
   if ! curl ${PROXY} -sS -H "Accept: application/vnd.github.v3+json" -o "$TMP_FILE" 'https://api.github.com/repos/v2fly/v2ray-core/releases/latest'; then
     "rm" "$TMP_FILE"
@@ -495,6 +501,7 @@ main() {
     decompression "$LOCAL_FILE"
   else
     # Normal way
+    install_software curl
     get_version
     NUMBER="$?"
     if [[ "$NUMBER" -eq '0' ]] || [[ "$FORCE" -eq '1' ]] || [[ "$NUMBER" -eq 2 ]]; then
