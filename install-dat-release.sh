@@ -13,8 +13,6 @@
 
 # 0 0 * * * /usr/local/bin/install-dat-release > /dev/null 2>&1
 
-alias curl='"curl" --retry 5 --retry-delay 10 --retry-max-time 60 --false-start --http2 --tlsv1.2 -L'
-
 # You can modify it to /usr/local/lib/v2ray
 V2RAY="/usr/local/share/v2ray"
 DOWNLOAD_LINK_GEOIP="https://github.com/v2fly/geoip/releases/latest/download/geoip.dat"
@@ -23,6 +21,10 @@ file_ip='geoip.dat'
 file_dlc='dlc.dat'
 file_site='geosite.dat'
 dir_tmp="$(mktemp -d)"
+
+curl() {
+  $(type -P curl) -L -q --retry 5 --retry-delay 10 --retry-max-time 60 "$@"
+}
 
 check_if_running_as_root() {
   # If you want to run as another user, please modify $UID to be owned by this user
