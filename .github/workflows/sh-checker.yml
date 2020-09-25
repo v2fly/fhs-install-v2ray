@@ -32,6 +32,7 @@ jobs:
       - name: Filed-test on Ubuntu
         run: |
           sudo bash install-release.sh
+          sudo bash install-dat-release.sh
       - name: Filed-test on CentOS
         uses: docker://centos:centos8.1.1911
         with:
