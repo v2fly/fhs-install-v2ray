@@ -438,7 +438,6 @@ remove_v2ray() {
     if [[ -n "$(pidof v2ray)" ]]; then
       stop_v2ray
     fi
-    NAME="$1"
     "rm" /usr/local/bin/v2ray
     "rm" /usr/local/bin/v2ctl
     "rm" -r "$DAT_PATH"
