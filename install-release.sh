@@ -101,24 +101,24 @@ identify_the_operating_system_and_architecture() {
       exit 1
     fi
     if [[ "$(type -P apt)" ]]; then
-      PACKAGE_MANAGEMENT_INSTALL='apt install -y --no-install-recommends'
-      PACKAGE_MANAGEMENT_REMOVE='apt purge -y --auto-remove'
+      PACKAGE_MANAGEMENT_INSTALL='apt -y --no-install-recommends install'
+      PACKAGE_MANAGEMENT_REMOVE='apt purge'
       package_provide_tput='ncurses-bin'
     elif [[ "$(type -P dnf)" ]]; then
-      PACKAGE_MANAGEMENT_INSTALL='dnf install -y'
-      PACKAGE_MANAGEMENT_REMOVE='dnf remove -y'
+      PACKAGE_MANAGEMENT_INSTALL='dnf -y install'
+      PACKAGE_MANAGEMENT_REMOVE='dnf remove'
       package_provide_tput='ncurses'
     elif [[ "$(type -P yum)" ]]; then
-      PACKAGE_MANAGEMENT_INSTALL='yum install -y'
-      PACKAGE_MANAGEMENT_REMOVE='yum remove -y'
+      PACKAGE_MANAGEMENT_INSTALL='yum -y install'
+      PACKAGE_MANAGEMENT_REMOVE='yum remove'
       package_provide_tput='ncurses'
     elif [[ "$(type -P zypper)" ]]; then
       PACKAGE_MANAGEMENT_INSTALL='zypper install -y --no-recommends'
-      PACKAGE_MANAGEMENT_REMOVE='zypper remove -yu'
+      PACKAGE_MANAGEMENT_REMOVE='zypper remove'
       package_provide_tput='ncurses-utils'
     elif [[ "$(type -P pacman)" ]]; then
       PACKAGE_MANAGEMENT_INSTALL='pacman -Syu --noconfirm'
-      PACKAGE_MANAGEMENT_REMOVE='pacman -Rsun --noconfirm'
+      PACKAGE_MANAGEMENT_REMOVE='pacman -Rsn'
       package_provide_tput='ncurses'
     else
       echo "error: The script does not support the package manager in this operating system."
