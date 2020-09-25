@@ -29,7 +29,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Run the filed-test
+      - name: Filed-test on Ubuntu
+        run: |
+          sudo bash install-release.sh
+      - name: Filed-test on CentOS
         uses: docker://centos:centos8.1.1911
+        with:
+          args: bash install-release.sh
+      - name: Filed-test on OpenSUSE
+        uses: docker://opensuse/archive:42.1
+        with:
+          args: bash install-release.sh
+      - name: Filed-test on Arch Linux
+        uses: docker://archlinux:latest
         with:
           args: bash install-release.sh
