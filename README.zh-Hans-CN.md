@@ -4,7 +4,7 @@
 
 > Bash script for installing V2Ray in operating systems such as Debian / CentOS / Fedora / openSUSE that support systemd
 
-该脚本安装的文档符合 [Filesystem Hierarchy Standard (FHS)](https://wiki.linuxfoundation.org/lsb/fhs)：
+该脚本安装的文件符合 [Filesystem Hierarchy Standard (FHS)](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard)：
 
 ```
 installed: /usr/local/bin/v2ray
