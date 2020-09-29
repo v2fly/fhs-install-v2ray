@@ -18,9 +18,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Run the sh-checker
-        uses: luizm/action-sh-checker@v0.1.7
+        uses: luizm/action-sh-checker@v0.1.8
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SHFMT_OPTS: -i 2 -ci -sr
         with:
           sh_checker_comment: true
           sh_checker_exclude: "LICENSE README.md README.zh-Hans-CN.md"
