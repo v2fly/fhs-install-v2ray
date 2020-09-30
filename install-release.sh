@@ -362,6 +362,8 @@ install_startup_service_file() {
   mkdir -p '/etc/systemd/system/v2ray.service.d'
   mkdir -p '/etc/systemd/system/v2ray@.service.d/'
   if [[ -n "$JSONS_PATH" ]]; then
+    "rm" '/etc/systemd/system/v2ray.service.d/10-donot_touch_single_conf.conf' \
+         '/etc/systemd/system/v2ray@.service.d/10-donot_touch_single_conf.conf';
     echo "# Duplicate this file in the same directory and make your customizes there. Or all changes you made will be lost!
 ## Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
 [Service]
@@ -370,6 +372,8 @@ ExecStart=/usr/local/bin/v2ray -confdir $JSONS_PATH" |
       tee '/etc/systemd/system/v2ray.service.d/10-donot_touch_multi_conf.conf' > \
         '/etc/systemd/system/v2ray@.service.d/10-donot_touch_multi_conf.conf'
   else
+    "rm" '/etc/systemd/system/v2ray.service.d/10-donot_touch_multi_conf.conf' \
+         '/etc/systemd/system/v2ray@.service.d/10-donot_touch_multi_conf.conf';
     echo "${red}~~~~~~~~~~~~~~~~ ${green}/etc/systemd/system/v2ray.service.d/10-donot_touch_single_conf ${red}~~~~~~~~~~~~~~~~${reset}"
     echo 'info: The following are the actual parameters for the v2ray service startup.'
     echo 'info: Please make sure the configuration file path is correctly set.'
