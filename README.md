@@ -27,26 +27,26 @@ installed: /etc/systemd/system/v2ray@.service
 
 ## 使用
 
-* 該腳本在執行時會提供 `info`、`warning` 和 `error` 等信息，請仔細閱讀。
+* 該腳本在執行時會提供 `info` 和 `error` 等信息，請仔細閱讀。
 
 ### 安裝和更新 V2Ray
 
 ```
 // 安裝執行檔和 .dat 資料檔
-# bash <(curl -H 'Cache-Control: no-cache' -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
+# bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
 ```
 
 ### 安裝最新發行的 geoip.dat 和 geosite.dat
 
 ```
 // 只更新 .dat 資料檔
-# bash <(curl -H 'Cache-Control: no-cache' -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-dat-release.sh)
+# bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-dat-release.sh)
 ```
 
 ### 移除 V2Ray
 
 ```
-# bash <(curl -H 'Cache-Control: no-cache' -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh) --remove
+# bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh) --remove
 ```
 
 ### 解決問題
