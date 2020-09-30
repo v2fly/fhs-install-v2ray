@@ -23,6 +23,9 @@ JSON_PATH=${JSON_PATH:-/usr/local/etc/v2ray}
 # Set this variable only if you are starting v2ray with multiple configuration files:
 # export JSONS_PATH='/usr/local/etc/v2ray'
 
+# Set this variable only if you want this script to check all the systemd unit file:
+# export check_all_service_files='yes'
+
 curl() {
   $(type -P curl) -L -q --retry 5 --retry-delay 10 --retry-max-time 60 "$@"
 }
@@ -364,8 +367,8 @@ install_startup_service_file() {
   if [[ -n "$JSONS_PATH" ]]; then
     "rm" '/etc/systemd/system/v2ray.service.d/10-donot_touch_single_conf.conf' \
          '/etc/systemd/system/v2ray@.service.d/10-donot_touch_single_conf.conf';
-    echo "# Duplicate this file in the same directory and make your customizes there. Or all changes you made will be lost!
-## Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
+    echo "# In case you have a good reason to do so, duplicate this file in the same directory and make your customizes there.
+# Or all changes you made will be lost!  # Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
 [Service]
 ExecStart=
 ExecStart=/usr/local/bin/v2ray -confdir $JSONS_PATH" |
@@ -374,29 +377,27 @@ ExecStart=/usr/local/bin/v2ray -confdir $JSONS_PATH" |
   else
     "rm" '/etc/systemd/system/v2ray.service.d/10-donot_touch_multi_conf.conf' \
          '/etc/systemd/system/v2ray@.service.d/10-donot_touch_multi_conf.conf';
-    echo "${red}~~~~~~~~~~~~~~~~ ${green}/etc/systemd/system/v2ray.service.d/10-donot_touch_single_conf ${red}~~~~~~~~~~~~~~~~${reset}"
-    echo 'info: The following are the actual parameters for the v2ray service startup.'
-    echo 'info: Please make sure the configuration file path is correctly set.'
-    echo "# Duplicate this file in the same directory and make your customizes there. Or all changes you made will be lost!
-## Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
+    echo "# In case you have a good reason to do so, duplicate this file in the same directory and make your customizes there.
+# Or all changes you made will be lost!  # Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
 [Service]
 ExecStart=
-ExecStart=/usr/local/bin/v2ray -config ${JSON_PATH}/config.json" |
-      tee '/etc/systemd/system/v2ray.service.d/10-donot_touch_single_conf.conf'
-    echo
-    echo
-
-    echo "${red}~~~~~~~~~~~~~~~~ ${green}/etc/systemd/system/v2ray@.service.d/10-donot_touch_single_conf ${red}~~~~~~~~~~~~~~~~${reset}"
-    echo 'info: The following are the actual parameters for the v2ray service startup.'
-    echo 'info: Please make sure the configuration file path is correctly set.'
-    echo "# Duplicate this file in the same directory and make your customizes there. Or all changes you made will be lost!
-## Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
+ExecStart=/usr/local/bin/v2ray -config ${JSON_PATH}/config.json" > \
+      '/etc/systemd/system/v2ray.service.d/10-donot_touch_single_conf.conf'
+    echo "# In case you have a good reason to do so, duplicate this file in the same directory and make your customizes there.
+# Or all changes you made will be lost!  # Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
 [Service]
 ExecStart=
-ExecStart=/usr/local/bin/v2ray -config ${JSON_PATH}/%i.json" |
-      tee '/etc/systemd/system/v2ray@.service.d/10-donot_touch_single_conf.conf'
+ExecStart=/usr/local/bin/v2ray -config ${JSON_PATH}/%i.json" > \
+      '/etc/systemd/system/v2ray@.service.d/10-donot_touch_single_conf.conf'
+  fi
+  echo "info: Systemd service files have been installed successfully!"
+  echo "${red}warning: ${green}The following are the actual parameters for the v2ray service startup."
+  echo "${red}warning: ${green}Please make sure the configuration file path is correctly set.${reset}"
+  systemd-analyze cat-config /etc/systemd/system/v2ray.service
+  if [[ x"${check_all_service_files:0:1}" = x'y' ]]; then
     echo
     echo
+    systemd-analyze cat-config /etc/systemd/system/v2ray@.service
   fi
   systemctl daemon-reload
   SYSTEMD='1'
