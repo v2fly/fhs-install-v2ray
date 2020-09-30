@@ -366,7 +366,7 @@ install_startup_service_file() {
   mkdir -p '/etc/systemd/system/v2ray@.service.d/'
   if [[ -n "$JSONS_PATH" ]]; then
     "rm" '/etc/systemd/system/v2ray.service.d/10-donot_touch_single_conf.conf' \
-         '/etc/systemd/system/v2ray@.service.d/10-donot_touch_single_conf.conf';
+      '/etc/systemd/system/v2ray@.service.d/10-donot_touch_single_conf.conf'
     echo "# In case you have a good reason to do so, duplicate this file in the same directory and make your customizes there.
 # Or all changes you made will be lost!  # Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
 [Service]
@@ -376,7 +376,7 @@ ExecStart=/usr/local/bin/v2ray -confdir $JSONS_PATH" |
         '/etc/systemd/system/v2ray@.service.d/10-donot_touch_multi_conf.conf'
   else
     "rm" '/etc/systemd/system/v2ray.service.d/10-donot_touch_multi_conf.conf' \
-         '/etc/systemd/system/v2ray@.service.d/10-donot_touch_multi_conf.conf';
+      '/etc/systemd/system/v2ray@.service.d/10-donot_touch_multi_conf.conf'
     echo "# In case you have a good reason to do so, duplicate this file in the same directory and make your customizes there.
 # Or all changes you made will be lost!  # Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
 [Service]
@@ -520,7 +520,7 @@ main() {
   if [[ "$LOCAL_INSTALL" -eq '1' ]]; then
     echo 'warn: Install V2Ray from a local file, but still need to make sure the network is available.'
     echo -n 'warn: Please make sure the file is valid because we cannot confirm it. (Press any key) ...'
-    read
+    read -r
     install_software "$package_provide_bsdtar" 'bsdtar'
     decompression "$LOCAL_FILE"
   else
