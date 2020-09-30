@@ -171,11 +171,10 @@ judgment_parameters() {
         break
         ;;
       '-p' | '--proxy')
-        if ! echo "${2:?undefine var}" | grep -qEo '^(https?|socks4a?|socks5h?):\/\/'; then
-          echo 'error: Please specify the correct proxy server address.'
+        if [[ -z "${2:?error: Please specify the proxy server address.}" ]]; then
           exit 1
         fi
-        PROXY="-x$2"
+        PROXY="$2"
         shift
         ;;
       *)
@@ -229,8 +228,7 @@ get_version() {
   fi
   # Get V2Ray release version number
   TMP_FILE="$(mktemp)"
-  # DO NOT QUOTE THESE `${PROXY}` VARIABLES!
-  if ! curl ${PROXY} -sS -H "Accept: application/vnd.github.v3+json" -o "$TMP_FILE" 'https://api.github.com/repos/v2fly/v2ray-core/releases/latest'; then
+  if ! curl -x "${PROXY}" -sS -H "Accept: application/vnd.github.v3+json" -o "$TMP_FILE" 'https://api.github.com/repos/v2fly/v2ray-core/releases/latest'; then
     "rm" "$TMP_FILE"
     echo 'error: Failed to get release list, please check your network.'
     exit 1
@@ -273,12 +271,12 @@ get_version() {
 download_v2ray() {
   DOWNLOAD_LINK="https://github.com/v2fly/v2ray-core/releases/download/$RELEASE_VERSION/v2ray-linux-$MACHINE.zip"
   echo "Downloading V2Ray archive: $DOWNLOAD_LINK"
-  if ! curl ${PROXY} -R -H 'Cache-Control: no-cache' -o "$ZIP_FILE" "$DOWNLOAD_LINK"; then
+  if ! curl -x "${PROXY}" -R -H 'Cache-Control: no-cache' -o "$ZIP_FILE" "$DOWNLOAD_LINK"; then
     echo 'error: Download failed! Please check your network or try again.'
     return 1
   fi
   echo "Downloading verification file for V2Ray archive: $DOWNLOAD_LINK.dgst"
-  if ! curl ${PROXY} -sSR -H 'Cache-Control: no-cache' -o "$ZIP_FILE.dgst" "$DOWNLOAD_LINK.dgst"; then
+  if ! curl -x "${PROXY}" -sSR -H 'Cache-Control: no-cache' -o "$ZIP_FILE.dgst" "$DOWNLOAD_LINK.dgst"; then
     echo 'error: Download failed! Please check your network or try again.'
     return 1
   fi
