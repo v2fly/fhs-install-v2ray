@@ -344,7 +344,7 @@ install_v2ray() {
 
   # Used to store V2Ray log files
   if [[ ! -d '/var/log/v2ray/' ]]; then
-    if [[ -n "$(id nobody | grep nogroup)" ]]; then
+    if id nobody | grep -qw 'nogroup'; then
       install -d -m 700 -o nobody -g nogroup /var/log/v2ray/
       install -m 600 -o nobody -g nogroup /dev/null /var/log/v2ray/access.log
       install -m 600 -o nobody -g nogroup /dev/null /var/log/v2ray/error.log
@@ -442,7 +442,7 @@ check_update() {
 }
 
 remove_v2ray() {
-  if [[ -n "$(systemctl list-unit-files | grep 'v2ray')" ]]; then
+  if systemctl list-unit-files | grep -qw 'v2ray'; then
     if [[ -n "$(pidof v2ray)" ]]; then
       stop_v2ray
     fi
@@ -543,7 +543,7 @@ main() {
   fi
 
   # Determine if V2Ray is running
-  if [[ -n "$(systemctl list-unit-files | grep 'v2ray')" ]]; then
+  if systemctl list-unit-files | grep -qw 'v2ray'; then
     if [[ -n "$(pidof v2ray)" ]]; then
       stop_v2ray
       V2RAY_RUNNING='1'
