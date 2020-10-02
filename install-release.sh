@@ -540,7 +540,7 @@ main() {
   fi
 
   # Determine if V2Ray is running
-  if [[ -n "$(systemctl list-unit-files | grep 'v2ray')" ]]; then
+  if [[ -n "$(systemctl list-unit-files | grep -w 'v2ray')" ]]; then
     if [[ -n "$(pidof v2ray)" ]]; then
       stop_v2ray
       V2RAY_RUNNING='1'
