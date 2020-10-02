@@ -30,6 +30,15 @@ curl() {
   $(type -P curl) -L -q --retry 5 --retry-delay 10 --retry-max-time 60 "$@"
 }
 
+systemd_cat_config() {
+  if systemd-analyze --help | grep -qw 'cat-config'; then
+    systemd-analyze cat-config "$@"
+  else
+    echo "${red}warning: ${green}The systemd version on the current operating system is too low."
+    echo "${red}warning: ${green}Please consider to upgrade the systemd or the operating system.${reset}"
+  fi
+}
+
 check_if_running_as_root() {
   # If you want to run as another user, please modify $UID to be owned by this user
   if [[ "$UID" -ne '0' ]]; then
@@ -393,12 +402,12 @@ ExecStart=/usr/local/bin/v2ray -config ${JSON_PATH}/%i.json" > \
   echo "info: Systemd service files have been installed successfully!"
   echo "${red}warning: ${green}The following are the actual parameters for the v2ray service startup."
   echo "${red}warning: ${green}Please make sure the configuration file path is correctly set.${reset}"
-  systemd-analyze cat-config /etc/systemd/system/v2ray.service
+  systemd_cat_config /etc/systemd/system/v2ray.service
   # shellcheck disable=SC2154
   if [[ x"${check_all_service_files:0:1}" = x'y' ]]; then
     echo
     echo
-    systemd-analyze cat-config /etc/systemd/system/v2ray@.service
+    systemd_cat_config /etc/systemd/system/v2ray@.service
   fi
   systemctl daemon-reload
   SYSTEMD='1'
