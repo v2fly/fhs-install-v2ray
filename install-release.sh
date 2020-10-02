@@ -415,11 +415,11 @@ start_v2ray() {
 stop_v2ray() {
   V2RAY_CUSTOMIZE="$(systemctl list-units | grep 'v2ray@' | awk -F ' ' '{print $1}')"
   if [[ -z "$V2RAY_CUSTOMIZE" ]]; then
-    systemctl stop v2ray
+    local v2ray_daemon_to_stop='v2ray.service'
   else
-    systemctl stop "$V2RAY_CUSTOMIZE"
+    local v2ray_daemon_to_stop="$V2RAY_CUSTOMIZE"
   fi
-  if [[ "$?" -ne '0' ]]; then
+  if ! systemctl stop "$v2ray_daemon_to_stop"; then
     echo 'error: Stopping the V2Ray service failed.'
     exit 1
   fi
@@ -428,10 +428,11 @@ stop_v2ray() {
 
 check_update() {
   if [[ -f '/etc/systemd/system/v2ray.service' ]]; then
-    get_version
-    if [[ "$?" -eq '0' ]]; then
+    (get_version)
+    local get_ver_exit_code=$?
+    if [[ "$get_ver_exit_code" -eq '0' ]]; then
       echo "info: Found the latest release of V2Ray $RELEASE_VERSION . (Current release: $CURRENT_VERSION)"
-    elif [[ "$?" -eq '1' ]]; then
+    elif [[ "$get_ver_exit_code" -eq '1' ]]; then
       echo "info: No new version. The current version of V2Ray is $CURRENT_VERSION ."
     fi
     exit 0
@@ -446,14 +447,13 @@ remove_v2ray() {
     if [[ -n "$(pidof v2ray)" ]]; then
       stop_v2ray
     fi
-    "rm" /usr/local/bin/v2ray
-    "rm" /usr/local/bin/v2ctl
-    "rm" -r "$DAT_PATH"
-    "rm" '/etc/systemd/system/v2ray.service'
-    "rm" '/etc/systemd/system/v2ray@.service'
-    "rm" -r '/etc/systemd/system/v2ray.service.d'
-    "rm" -r '/etc/systemd/system/v2ray@.service.d'
-    if [[ "$?" -ne '0' ]]; then
+    if ! ("rm" -r '/usr/local/bin/v2ray' \
+                  '/usr/local/bin/v2ctl' \
+                  "$DAT_PATH" \
+                  '/etc/systemd/system/v2ray.service' \
+                  '/etc/systemd/system/v2ray@.service' \
+                  '/etc/systemd/system/v2ray.service.d' \
+                  '/etc/systemd/system/v2ray@.service.d'); then
       echo 'error: Failed to remove V2Ray.'
       exit 1
     else
