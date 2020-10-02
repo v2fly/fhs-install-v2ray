@@ -242,6 +242,7 @@ get_version() {
     RELEASE_MAJOR_VERSION_NUMBER="${RELEASE_VERSIONSION_NUMBER%%.*}"
     RELEASE_MINOR_VERSION_NUMBER="$(echo "$RELEASE_VERSIONSION_NUMBER" | awk -F '.' '{print $2}')"
     RELEASE_MINIMUM_VERSION_NUMBER="${RELEASE_VERSIONSION_NUMBER##*.}"
+    # shellcheck disable=SC2001
     CURRENT_VERSIONSION_NUMBER="$(echo "${CURRENT_VERSION#v}" | sed 's/-.*//')"
     CURRENT_MAJOR_VERSION_NUMBER="${CURRENT_VERSIONSION_NUMBER%%.*}"
     CURRENT_MINOR_VERSION_NUMBER="$(echo "$CURRENT_VERSIONSION_NUMBER" | awk -F '.' '{print $2}')"
@@ -327,6 +328,7 @@ install_v2ray() {
   fi
 
   # Install V2Ray configuration file to $JSON_PATH
+   # shellcheck disable=SC2153
   if [[ -z "$JSONS_PATH" ]] && [[ ! -d "$JSON_PATH" ]]; then
     install -d "$JSON_PATH"
     echo "{}" > "${JSON_PATH}/config.json"
@@ -392,6 +394,7 @@ ExecStart=/usr/local/bin/v2ray -config ${JSON_PATH}/%i.json" > \
   echo "${red}warning: ${green}The following are the actual parameters for the v2ray service startup."
   echo "${red}warning: ${green}Please make sure the configuration file path is correctly set.${reset}"
   systemd-analyze cat-config /etc/systemd/system/v2ray.service
+   # shellcheck disable=SC2154
   if [[ x"${check_all_service_files:0:1}" = x'y' ]]; then
     echo
     echo
