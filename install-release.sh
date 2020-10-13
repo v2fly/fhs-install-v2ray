@@ -34,8 +34,9 @@ systemd_cat_config() {
   if systemd-analyze --help | grep -qw 'cat-config'; then
     systemd-analyze --no-pager cat-config "$@"
   else
-    echo
+    echo "${aoi}~~~~~~~~~~~~~~~~"
     cat "$@" "$1".d/*
+    echo "${aoi}~~~~~~~~~~~~~~~~"
     echo "${red}warning: ${green}The systemd version on the current operating system is too low."
     echo "${red}warning: ${green}Please consider to upgrade the systemd or the operating system.${reset}"
   fi
@@ -512,6 +513,7 @@ main() {
   install_software "$package_provide_tput" 'tput'
   red=$(tput setaf 1)
   green=$(tput setaf 2)
+  aoi=$(tput setaf 6)
   reset=$(tput sgr0)
 
   # Parameter information
