@@ -33,12 +33,14 @@ curl() {
 systemd_cat_config() {
   if systemd-analyze --help | grep -qw 'cat-config'; then
     systemd-analyze --no-pager cat-config "$@"
+    echo
   else
     echo "${aoi}~~~~~~~~~~~~~~~~"
     cat "$@" "$1".d/*
     echo "${aoi}~~~~~~~~~~~~~~~~"
     echo "${red}warning: ${green}The systemd version on the current operating system is too low."
     echo "${red}warning: ${green}Please consider to upgrade the systemd or the operating system.${reset}"
+    echo
   fi
 }
 
