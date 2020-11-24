@@ -534,7 +534,7 @@ main() {
       if [[ "$?" -eq '1' ]]; then
         "rm" -r "$TMP_DIRECTORY"
         echo "removed: $TMP_DIRECTORY"
-        exit 0
+        exit 1
       fi
       install_software 'unzip' 'unzip'
       decompression "$ZIP_FILE"
