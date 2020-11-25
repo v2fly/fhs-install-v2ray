@@ -66,9 +66,11 @@ identify_the_operating_system_and_architecture() {
         ;;
       'armv6l')
         MACHINE='arm32-v6'
+        grep Features /proc/cpuinfo | grep -qw 'vfp' || MACHINE='arm32-v5'
         ;;
       'armv7' | 'armv7l')
         MACHINE='arm32-v7a'
+        grep Features /proc/cpuinfo | grep -qw 'vfp' || MACHINE='arm32-v5'
         ;;
       'armv8' | 'aarch64')
         MACHINE='arm64-v8a'
