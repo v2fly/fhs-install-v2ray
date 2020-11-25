@@ -2,8 +2,8 @@
 
 # This Bash script to install the latest release of geoip.dat and geosite.dat:
 
-# https://github.com/v2ray/geoip
-# https://github.com/v2ray/domain-list-community
+# https://github.com/v2fly/geoip
+# https://github.com/v2fly/domain-list-community
 
 # Depends on cURL, please solve it yourself
 
