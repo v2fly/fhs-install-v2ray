@@ -47,7 +47,7 @@ systemd_cat_config() {
 check_if_running_as_root() {
   # If you want to run as another user, please modify $UID to be owned by this user
   if [[ "$UID" -ne '0' ]]; then
-    echo "Warning: You are root, and you may reach insufficient permission errors."
+    echo "Warning: You are not root, and you may reach insufficient permission errors."
     read -p "Are you sure you want to continue? [y/N] " prompt
     if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
     then
