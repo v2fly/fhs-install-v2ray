@@ -49,7 +49,7 @@ check_if_running_as_root() {
   if [[ "$UID" -ne '0' ]]; then
     echo "Warning: You are not root, and you may reach insufficient permission errors."
     read -r -p "Are you sure you want to continue? [y/N] " prompt
-    if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]] then
+    if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]; then
       echo "Continuing the installation with current user..."
     else
       echo "Not running with root, exiting..."
