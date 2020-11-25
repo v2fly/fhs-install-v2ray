@@ -26,14 +26,6 @@ curl() {
   $(type -P curl) -L -q --retry 5 --retry-delay 10 --retry-max-time 60 "$@"
 }
 
-check_if_running_as_root() {
-  # If you want to run as another user, please modify $UID to be owned by this user
-  if [[ "$UID" -ne '0' ]]; then
-    echo "error: You must run this script as root!"
-    exit 1
-  fi
-}
-
 download_files() {
   if ! curl -R -H 'Cache-Control: no-cache' -o "${dir_tmp}/${2}" "${1}"; then
     echo 'error: Download failed! Please check your network or try again.'
@@ -64,7 +56,6 @@ install_file() {
 }
 
 main() {
-  check_if_running_as_root
   download_files $DOWNLOAD_LINK_GEOIP $file_ip
   download_files $DOWNLOAD_LINK_GEOSITE $file_dlc
   check_sum

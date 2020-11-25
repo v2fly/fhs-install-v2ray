@@ -44,14 +44,6 @@ systemd_cat_config() {
   fi
 }
 
-check_if_running_as_root() {
-  # If you want to run as another user, please modify $UID to be owned by this user
-  if [[ "$UID" -ne '0' ]]; then
-    echo "error: You must run this script as root!"
-    exit 1
-  fi
-}
-
 identify_the_operating_system_and_architecture() {
   if [[ "$(uname)" == 'Linux' ]]; then
     case "$(uname -m)" in
@@ -499,7 +491,6 @@ show_help() {
 }
 
 main() {
-  check_if_running_as_root
   identify_the_operating_system_and_architecture
   judgment_parameters "$@"
 
