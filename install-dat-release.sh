@@ -13,8 +13,10 @@
 
 # 0 0 * * * /usr/local/bin/install-dat-release > /dev/null 2>&1
 
-# You can modify it to /usr/local/lib/v2ray
-V2RAY="/usr/local/share/v2ray"
+# You can set this variable whatever you want in shell session right before running this script by issuing:
+# export DAT_PATH='/usr/local/lib/v2ray'
+DAT_PATH=${DAT_PATH:-/usr/local/share/v2ray}
+
 DOWNLOAD_LINK_GEOIP="https://github.com/v2fly/geoip/releases/latest/download/geoip.dat"
 DOWNLOAD_LINK_GEOSITE="https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat"
 file_ip='geoip.dat'
@@ -64,8 +66,8 @@ check_sum() {
 }
 
 install_file() {
-  install -m 644 "${dir_tmp}"/${file_dlc} "${V2RAY}"/${file_site}
-  install -m 644 "${dir_tmp}"/${file_ip} "${V2RAY}"/${file_ip}
+  install -m 644 "${dir_tmp}"/${file_dlc} "${DAT_PATH}"/${file_site}
+  install -m 644 "${dir_tmp}"/${file_ip} "${DAT_PATH}"/${file_ip}
   rm -r "${dir_tmp}"
 }
 
