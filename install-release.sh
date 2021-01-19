@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # The files installed by the script conform to the Filesystem Hierarchy Standard:
 # https://wiki.linuxfoundation.org/lsb/fhs
