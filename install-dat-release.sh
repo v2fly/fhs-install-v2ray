@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # This Bash script to install the latest release of geoip.dat and geosite.dat:
 
