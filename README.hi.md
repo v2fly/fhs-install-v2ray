@@ -26,7 +26,7 @@
 
 ### स्थापित करें और V2Ray को अपडेट करें
 
-    // 安裝執行檔和 .dat 資料檔
+    ## 安裝執行檔和 .dat 資料檔
     # bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
 
 ### V2Ray कॉन्फ़िगरेशन
@@ -44,11 +44,11 @@
 4.  दो ज़िप फ़ाइलों को खोल दो
 5.  स्थापना चलाएँ:`bash install-release.sh --local /path/to/v2ray-linux-64.zip`
 
-## 更新或刪除
+## अद्यतन या हटाना
 
 ### नवीनतम geoip.dat और geosite.dat स्थापित करें
 
-    // 只更新 .dat 資料檔
+    ## 只更新 .dat 資料檔
     # bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-dat-release.sh)
 
 ### V2Ray निकालें
@@ -57,7 +57,7 @@
 
 ## पैकेज सामग्री
 
-स्क्रिप्ट द्वारा स्थापित फाइलें इसके अनुरूप हैं[फाइलसिस्टम पदानुक्रम मानक (FHS)](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard)：
+इस स्क्रिप्ट द्वारा स्थापित फ़ाइलें इसके अनुरूप हैं:[फाइलसिस्टम पदानुक्रम मानक (FHS)](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard)：
 
     installed: /usr/local/bin/v2ray
     installed: /usr/local/bin/v2ctl
@@ -72,12 +72,13 @@
 
 ## महत्वपूर्ण संकेत
 
-**डॉकटर में v2ray को स्थापित करने के लिए इस परियोजना का उपयोग करने की अनुशंसा नहीं की गई है, कृपया इसे सीधे उपयोग करें[आधिकारिक छवि](https://github.com/v2fly/docker)。**  
+**डॉकटर में v2ray को स्थापित करने के लिए इस परियोजना का उपयोग करने की अनुशंसा नहीं की गई है, कृपया सीधे उपयोग करें:[आधिकारिक छवि](https://github.com/v2fly/docker)。**  
 यदि आधिकारिक छवि आपकी कस्टम स्थापना आवश्यकताओं को पूरा नहीं कर सकती है, तो कृपया**प्राप्त करने के लिए अपस्ट्रीम dockerfile को पुन: प्रस्तुत और संशोधित करें**。
 
 इस प्रोजेक्ट**स्वचालित रूप से आपके लिए कॉन्फ़िगरेशन फ़ाइल उत्पन्न नहीं करेगा**；**केवल स्थापना के दौरान उपयोगकर्ताओं द्वारा सामना की जाने वाली समस्याओं का समाधान करें**। अन्य मुद्दों पर यहाँ मदद नहीं की जा सकती।  
-स्थापना के बाद कृपया देखें[फ़ाइल](https://www.v2fly.org/)कॉन्फ़िगरेशन फ़ाइल सिंटैक्स को समझें, और अपने लिए उपयुक्त कॉन्फ़िगरेशन फ़ाइल को पूरा करें। आप प्रक्रिया के दौरान सामुदायिक योगदान का उल्लेख कर सकते हैं[कॉन्फ़िगरेशन प्रोफ़ाइल टेम्पलेट](https://github.com/v2fly/v2ray-examples)  
-（**कृपया ध्यान दें कि इन टेम्प्लेट को कॉपी किए जाने के बाद स्वयं द्वारा संशोधित और समायोजित करने की आवश्यकता होती है, और सीधे उपयोग नहीं किया जा सकता है**）
+कृपया देखें:[फ़ाइल](https://www.v2fly.org/)कॉन्फ़िगरेशन फ़ाइल सिंटैक्स को समझें, और अपने लिए उपयुक्त कॉन्फ़िगरेशन फ़ाइल को पूरा करें। इस प्रक्रिया में, आप समुदाय के योगदानों का उल्लेख कर सकते हैं:[कॉन्फ़िगरेशन प्रोफ़ाइल टेम्पलेट](https://github.com/v2fly/v2ray-examples)
+
+(**कृपया ध्यान दें कि इन टेम्प्लेट को कॉपी किए जाने के बाद स्वयं द्वारा संशोधित और समायोजित करने की आवश्यकता होती है, और सीधे उपयोग नहीं किया जा सकता है**）
 
 ## उपयोग
 
@@ -85,15 +86,15 @@
 
 ## समस्या का समाधान
 
--   「[Geoip.dat और geosite.dat इंस्टॉल या अपडेट न करें](https://github.com/v2fly/fhs-install-v2ray/wiki/Do-not-install-or-update-geoip.dat-and-geosite.dat)」。
--   「[प्रमाण पत्र का उपयोग करते समय अपर्याप्त अनुमति](https://github.com/v2fly/fhs-install-v2ray/wiki/Insufficient-permissions-when-using-certificates)」。
--   「[पुरानी स्क्रिप्ट से इसे माइग्रेट करें](https://github.com/v2fly/fhs-install-v2ray/wiki/Migrate-from-the-old-script-to-this)」。
--   「[निर्देशिका साझा करने के लिए lib निर्देशिका से .dat फ़ाइलों को स्थानांतरित करें](https://github.com/v2fly/fhs-install-v2ray/wiki/Move-.dat-files-from-lib-directory-to-share-directory)」。
--   「[वीएलएसई प्रोटोकॉल का उपयोग करें](https://github.com/v2fly/fhs-install-v2ray/wiki/To-use-the-VLESS-protocol)」。
+-   [Geoip.dat और geosite.dat इंस्टॉल या अपडेट न करें](https://github.com/v2fly/fhs-install-v2ray/wiki/Do-not-install-or-update-geoip.dat-and-geosite.dat)
+-   [प्रमाण पत्र का उपयोग करते समय अपर्याप्त अनुमति](https://github.com/v2fly/fhs-install-v2ray/wiki/Insufficient-permissions-when-using-certificates)
+-   [पुरानी स्क्रिप्ट से इसे माइग्रेट करें](https://github.com/v2fly/fhs-install-v2ray/wiki/Migrate-from-the-old-script-to-this)
+-   [निर्देशिका साझा करने के लिए lib निर्देशिका से .dat फ़ाइलों को स्थानांतरित करें](https://github.com/v2fly/fhs-install-v2ray/wiki/Move-.dat-files-from-lib-directory-to-share-directory)
+-   [वीएलएसई प्रोटोकॉल का उपयोग करें](https://github.com/v2fly/fhs-install-v2ray/wiki/To-use-the-VLESS-protocol)
 
 > यदि आपका प्रश्न ऊपर सूचीबद्ध नहीं है, तो इसे मुद्दे क्षेत्र में बढ़ाने के लिए स्वागत करें।
 
-**कृपया प्रश्न पूछने से पहले पढ़ें[अंक # 63](https://github.com/v2fly/fhs-install-v2ray/issues/63), अन्यथा इसका जवाब नहीं दिया जा सकता है और लॉक नहीं किया जा सकता है।**
+**提問前請先閱讀: [अंक # 63](https://github.com/v2fly/fhs-install-v2ray/issues/63), अन्यथा इसका जवाब नहीं दिया जा सकता है और लॉक नहीं किया जा सकता है।**
 
 ## योगदान
 
