@@ -2,9 +2,9 @@
 
 # README 翻譯/翻译/Translation/अनुवाद
 - [繁體中文 - README.md](README.md)
-- [簡體中文 - README.zh-CN.md] (README.zh-CN.md)
-- [英語 - README.en.md] (README.en.md)
-- [印地語 - README.hi.md] (README.hi.md)
+- [簡體中文 - README.zh-CN.md](README.zh-CN.md)
+- [英語 - README.en.md](README.en.md)
+- [印地語 - README.hi.md](README.hi.md)
 
 # 總覽
 fhs-install-v2ray是v2ray的自動安裝腳本，v2ray是一種流行的解決方案，用於構建您自己的代理以繞過網絡限制
