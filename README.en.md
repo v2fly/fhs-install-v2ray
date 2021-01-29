@@ -72,10 +72,10 @@ The files installed by the script conform to[Filesystem Hierarchy Standard (FHS)
 
 ## important hint
 
--   It is not recommended to use this project to install v2ray in docker, please use it directly[Official image](https://github.com/v2fly/docker)。\*\*
+-   It is not recommended to use this project to install v2ray in docker, please use it directly[github.com/v2fly/docker](https://github.com/v2fly/docker)
 -   If the official image cannot meet your custom installation needs, please reproduce and modify the upstream dockerfile to achieve
 -   This project will not automatically generate configuration files for you; it only solves the problems encountered by users during the installation phase. Other issues cannot be helped here.
--   Please refer to after installation[文件](https://www.v2fly.org/)Understand the configuration file syntax, and complete the configuration file suitable for yourself. You can refer to community contributions during the process[Configuration profile template](https://github.com/v2fly/v2ray-examples)
+-   Please refer to after installation[v2fly.org](https://www.v2fly.org/)Understand the configuration file syntax, and complete the configuration file suitable for yourself. You can refer to community contributions during the process[Configuration profile template](https://github.com/v2fly/v2ray-examples)
 -   Please note that these templates need to be modified and adjusted by yourself after they are copied, and cannot be used directly
 
 ## In record
@@ -90,12 +90,12 @@ The files installed by the script conform to[Filesystem Hierarchy Standard (FHS)
 -   [Move .dat files from lib directory to share directory](https://github.com/v2fly/fhs-install-v2ray/wiki/Move-.dat-files-from-lib-directory-to-share-directory)
 -   [Use VLESS protocol](https://github.com/v2fly/fhs-install-v2ray/wiki/To-use-the-VLESS-protocol)
 
-> If your question is not listed above, you are welcome to raise it in the Issue area.
+> If your question is not listed above, welcome to raise it in the Issue area.
 
 **Please read before asking questions[Issue #63](https://github.com/v2fly/fhs-install-v2ray/issues/63), Otherwise it may not be answered and locked.**
 
 ## contribution
 
-Please[develop](https://github.com/v2fly/fhs-install-v2ray/tree/develop)Branching is carried out to avoid damage to the main branch.
+Please[develop](https://github.com/v2fly/fhs-install-v2ray/tree/develop)Branching to avoid damage to the main branch.
 
 After confirmation, the two branches will be merged.
