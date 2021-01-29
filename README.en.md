@@ -27,7 +27,7 @@ Requires Linux systemd
 ### Install and update V2Ray
 
     ## 安裝執行檔和 .dat 資料檔
-    # bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
+    # sudo bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
 
 ### V2Ray configuration
 
@@ -37,23 +37,21 @@ Requires Linux systemd
 ### Offline installation
 
 In an environment with network download restrictions, we recommend:
-
-1.  Download the repository as a zip file from GitHub.
-2.  Download the v2ray-core zip file from the following location<https://github.com/v2fly/v2ray-core/releases>
-3.  Upload both zip files to your server
-4.  Unzip the two zip files
-5.  Run the installation:`bash install-release.sh --local /path/to/v2ray-linux-64.zip`
+1\. Download the fhs-install-v2ray repository as a zip file from GitHub.com.
+2\. Download the v2ray-core release zip file from the following location[https://github.com/v2fly/v2ray-core/releases]\(<https://github.com/v2fly/v2ray-core/releases）>3. Upload both zip files to your server
+4\. Unzip the fhz-install-v2ray repository zip file
+5\. Run the installation and point it to the local v2ray-core zip file:`sudo bash install-release.sh --local /path/to/v2ray-linux-64.zip`
 
 ## Update or delete
 
 ### Install the latest geoip.dat and geosite.dat
 
     ## 只更新 .dat 資料檔
-    # bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-dat-release.sh)
+    # sudo bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-dat-release.sh)
 
 ### Remove V2Ray
 
-    # bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh) --remove
+    # sudo bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh) --remove
 
 ## Package Contents
 
@@ -92,12 +90,12 @@ Please refer to:[file](https://www.v2fly.org/)Understand the configuration file 
 -   [Move .dat files from lib directory to share directory](https://github.com/v2fly/fhs-install-v2ray/wiki/Move-.dat-files-from-lib-directory-to-share-directory)
 -   [Use VLESS protocol](https://github.com/v2fly/fhs-install-v2ray/wiki/To-use-the-VLESS-protocol)
 
-> If your question is not listed above, welcome to raise it in the Issue area.
+> If your question is not listed above, you are welcome to raise it in the Issue area.
 
 **Please read before asking:[Issue #63](https://github.com/v2fly/fhs-install-v2ray/issues/63), Otherwise it may not be answered and locked.**
 
 ## contribution
 
-Please[develop](https://github.com/v2fly/fhs-install-v2ray/tree/develop)Branching to avoid damage to the main branch.
+Please[develop](https://github.com/v2fly/fhs-install-v2ray/tree/develop)Branching is carried out to avoid damage to the main branch.
 
 After confirmation, the two branches will be merged.
