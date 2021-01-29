@@ -4,10 +4,10 @@
 
 ## README translation
 
--   [Traditional Chinese-README.md](README.md)
--   [Simplified Chinese-README.zh-CN.md](README.zh-CN.md)
--   [English-README.en.md](README.en.md)
--   [Hindi-README.hi.md](README.hi.md)
+-   [Traditional Chinese README.md](README.md)
+-   [Simplified Chinese README.zh-CN.md](README.zh-CN.md)
+-   [English README.en.md](README.en.md)
+-   [Hindi README.hi.md](README.hi.md)
 
 ## Overview
 
@@ -37,7 +37,7 @@ Install executable file and .dat data file
 
 ### Offline installation
 
-In environments with network download restrictions, we recommend:
+In an environment with network download restrictions, we recommend:
 
 1.  Download the fhs-install-v2ray repository as a zip file from GitHub.com.
 2.  Download the v2ray-core release zip file from the following location<https://github.com/v2fly/v2ray-core/releases>
@@ -75,7 +75,7 @@ The files installed by the script conform to[Filesystem Hierarchy Standard (FHS)
 -   It is not recommended to use this project to install v2ray in docker, please use it directly[Official image](https://github.com/v2fly/docker)。\*\*
 -   If the official image cannot meet your custom installation needs, please reproduce and modify the upstream dockerfile to achieve
 -   This project will not automatically generate configuration files for you; it only solves the problems encountered by users during the installation phase. Other issues cannot be helped here.
--   Please refer to after installation[file](https://www.v2fly.org/)Understand the configuration file syntax, and complete the configuration file suitable for yourself. You can refer to community contributions during the process[Configuration profile template](https://github.com/v2fly/v2ray-examples)
+-   Please refer to after installation[文件](https://www.v2fly.org/)Understand the configuration file syntax, and complete the configuration file suitable for yourself. You can refer to community contributions during the process[Configuration profile template](https://github.com/v2fly/v2ray-examples)
 -   Please note that these templates need to be modified and adjusted by yourself after they are copied, and cannot be used directly
 
 ## In record
@@ -90,12 +90,12 @@ The files installed by the script conform to[Filesystem Hierarchy Standard (FHS)
 -   [Move .dat files from lib directory to share directory](https://github.com/v2fly/fhs-install-v2ray/wiki/Move-.dat-files-from-lib-directory-to-share-directory)
 -   [Use VLESS protocol](https://github.com/v2fly/fhs-install-v2ray/wiki/To-use-the-VLESS-protocol)
 
-> If your question is not listed above, welcome to raise it in the Issue area.
+> If your question is not listed above, you are welcome to raise it in the Issue area.
 
 **Please read before asking questions[Issue #63](https://github.com/v2fly/fhs-install-v2ray/issues/63), Otherwise it may not be answered and locked.**
 
 ## contribution
 
-Please[develop](https://github.com/v2fly/fhs-install-v2ray/tree/develop)Branching to avoid damage to the main branch.
+Please[develop](https://github.com/v2fly/fhs-install-v2ray/tree/develop)Branching is carried out to avoid damage to the main branch.
 
 After confirmation, the two branches will be merged.
