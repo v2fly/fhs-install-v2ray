@@ -3,9 +3,9 @@
 # README 翻译/翻译/Translation/अनुवाद
 
 -   [繁体中文 - README.md](README.md)
--   [简体中文 - README.zh-CN.md]\(readme.这-cn.面对)
--   [英语 - README.en.md]\(readme.恩.面对)
--   [印地语 - README.hi.md]\(readme.Hi.面对)
+-   [简体中文 - README.zh-CN.md](README.zh-CN.md)
+-   [英语 - README.en.md](README.en.md)
+-   [印地语 - README.hi.md](README.hi.md)
 
 # 总览
 
@@ -83,6 +83,6 @@ fhs-install-v2ray是v2ray的自动安装脚本，v2ray是一种流行的解决�
 
 ## 贡献
 
-请于[开发](https://github.com/v2fly/fhs-install-v2ray/tree/develop)分支进行，以避免对主分支造成破坏。
+请于[发展](https://github.com/v2fly/fhs-install-v2ray/tree/develop)分支进行，以避免对主分支造成破坏。
 
 待确定无误后，两分支将进行合并。
