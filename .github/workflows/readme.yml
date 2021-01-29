@@ -1,5 +1,5 @@
 # https://github.com/dephraiim/translate-readme
-name: Translate Readme
+name: Translate README
 
 on:
   push:
@@ -17,12 +17,16 @@ jobs:
         with:
           node-version: 12.x
 # Temporarily using my own fork, but use dephraiim/translate-readme@main for stable
-      - name: Adding English Readme
+      - name: Adding English README
         uses: benjaminchodroff/translate-readme@main
         with:
           lang: en
-      - name: Adding Chinese (Simplified) Readme
+      - name: Adding Chinese (Simplified) README
         uses: benjaminchodroff/translate-readme@main
         with:
           lang: zh-CN
+      - name: Adding Hindi README
+        uses: benjaminchodroff@translate-readme@main
+        with:
+          lang: hi
 
