@@ -6,7 +6,7 @@ on:
     branches:
       - main
       - master
-      - documentation_translate_english
+      - develop
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,7 +16,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
-# Temporarily using my own fork, but use dephraiim/translate-readme@main for stable
+      # Temporarily using my own fork, but use dephraiim/translate-readme@main in future
       - name: Adding English README
         uses: benjaminchodroff/translate-readme@main
         with:
