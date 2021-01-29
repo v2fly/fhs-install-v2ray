@@ -19,10 +19,9 @@ fhs-install-v2ray安裝腳本用於輕鬆部署v2ray以繞過網絡限制來構�
 ## 安裝與配置
 
 ### 安裝和更新 V2Ray
-
 ```
 ## 安裝執行檔和 .dat 資料檔
-# bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
+# sudo bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
 ```
 
 ### V2Ray 組態
@@ -31,23 +30,22 @@ fhs-install-v2ray安裝腳本用於輕鬆部署v2ray以繞過網絡限制來構�
 
 ### 離線安裝
 在具有網絡下載限制的環境中，我們建議：
-1. 從GitHub下載該存儲庫作為zip文件。
-2. 從以下位置下載v2ray-core zip文件 [https://github.com/v2fly/v2ray-core/releases](https://github.com/v2fly/v2ray-core/releases)
-3. 將兩個zip文件都上傳到您的服務器
-4. 解壓縮兩個zip文件
-5. 運行安裝：```bash install-release.sh --local /path/to/v2ray-linux-64.zip```
+1.從GitHub.com下載fhs-install-v2ray存儲庫作為zip文件。
+2.從以下位置下載v2ray-core發行zip文件[https://github.com/v2fly/v2ray-core/releases](https://github.com/v2fly/v2ray-core/releases）
+3.將兩個zip文件都上傳到您的服務器
+4.解壓縮fhz-install-v2ray存儲庫zip文件
+5.運行安裝，並將其指向本地v2ray-core zip文件：```sudo bash install-release.sh --local /path/to/v2ray-linux-64.zip```
 
 ## 更新或刪除
 ### 安裝最新發行的 geoip.dat 和 geosite.dat
 ```
 ## 只更新 .dat 資料檔
-# bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-dat-release.sh)
+# sudo bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-dat-release.sh)
 ```
 
 ### 移除 V2Ray
-
 ```
-# bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh) --remove
+# sudo bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh) --remove
 ```
 
 ## 包裝內容
