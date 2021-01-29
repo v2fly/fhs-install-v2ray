@@ -27,33 +27,31 @@
 ### स्थापित करें और V2Ray को अपडेट करें
 
     ## 安裝執行檔和 .dat 資料檔
-    # bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
+    # sudo bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
 
 ### V2Ray कॉन्फ़िगरेशन
 
-1.  कॉन्फ़िगरेशन फ़ाइल जनरेट करें[हत्तपः://ईंटमेंरेतुरण0.कॉम/व2राय-कॉन्फिग-गेन](https://intmainreturn0.com/v2ray-config-gen/)
+1.  कॉन्फ़िगरेशन फ़ाइल जनरेट करें[https://intmainreturn0.com/v2ray-config-gen](https://intmainreturn0.com/v2ray-config-gen/)
 2.  कॉन्फ़िगरेशन फ़ाइल config.json को /usr/local/etc/v2ray/config.json में डालें
 
 ### ऑफ़लाइन स्थापना
 
 नेटवर्क डाउनलोड प्रतिबंध वाले वातावरण में, हम अनुशंसा करते हैं:
-
-1.  GitHub से ज़िप फ़ाइल के रूप में रिपॉजिटरी डाउनलोड करें।
-2.  निम्न स्थान से v2ray-core ज़िप फ़ाइल डाउनलोड करें[हत्तपः://गिटहब.कॉम/व2फल्य/व2राय-कोर/रेलसेस](https://github.com/v2fly/v2ray-core/releases)
-3.  दोनों ज़िप फ़ाइलों को अपने सर्वर पर अपलोड करें
-4.  दो ज़िप फ़ाइलों को खोल दो
-5.  स्थापना चलाएँ:`bash install-release.sh --local /path/to/v2ray-linux-64.zip`
+1\. GitHub.com से ज़िप फ़ाइल के रूप में fhs-install-v2ray रिपॉजिटरी डाउनलोड करें।
+2\. निम्न स्थान से v2ray-core रिलीज़ ज़िप फ़ाइल डाउनलोड करें[हत्तपः://गिटहब.कॉम/व2फल्य/व2राय-कोर/रेलसेस]\([हत्तपः://गिटहब.कॉम/व2फल्य/व2राय-कोर/रेलसेस）](https://github.com/v2fly/v2ray-core/releases）)3. दोनों ज़िप फ़ाइलों को अपने सर्वर पर अपलोड करें
+4\. fhz-install-v2ray रिपॉजिटरी जिप फाइल को अनजिप करें
+5\. स्थापना चलाएँ और इसे स्थानीय v2ray-core ज़िप फ़ाइल में इंगित करें:`sudo bash install-release.sh --local /path/to/v2ray-linux-64.zip`
 
 ## अद्यतन या हटाना
 
 ### नवीनतम geoip.dat और geosite.dat स्थापित करें
 
     ## 只更新 .dat 資料檔
-    # bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-dat-release.sh)
+    # sudo bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-dat-release.sh)
 
 ### V2Ray निकालें
 
-    # bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh) --remove
+    # sudo bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh) --remove
 
 ## पैकेज सामग्री
 
@@ -78,7 +76,7 @@
 इस प्रोजेक्ट**स्वचालित रूप से आपके लिए कॉन्फ़िगरेशन फ़ाइल उत्पन्न नहीं करेगा**；**केवल स्थापना के दौरान उपयोगकर्ताओं द्वारा सामना की जाने वाली समस्याओं का समाधान करें**। अन्य मुद्दों पर यहाँ मदद नहीं की जा सकती।  
 कृपया देखें:[फ़ाइल](https://www.v2fly.org/)कॉन्फ़िगरेशन फ़ाइल सिंटैक्स को समझें, और अपने लिए उपयुक्त कॉन्फ़िगरेशन फ़ाइल को पूरा करें। इस प्रक्रिया में, आप समुदाय के योगदानों का उल्लेख कर सकते हैं:[कॉन्फ़िगरेशन प्रोफ़ाइल टेम्पलेट](https://github.com/v2fly/v2ray-examples)
 
-(**कृपया ध्यान दें कि इन टेम्प्लेट को कॉपी किए जाने के बाद स्वयं द्वारा संशोधित और समायोजित करने की आवश्यकता होती है, और सीधे उपयोग नहीं किया जा सकता है**）
+(**कृपया ध्यान दें कि इन टेम्प्लेट को कॉपी किए जाने के बाद स्वयं द्वारा संशोधित और समायोजित करने की आवश्यकता होती है, और सीधे उपयोग नहीं किया जा सकता**）
 
 ## उपयोग
 
@@ -94,10 +92,10 @@
 
 > यदि आपका प्रश्न ऊपर सूचीबद्ध नहीं है, तो इसे मुद्दे क्षेत्र में बढ़ाने के लिए स्वागत करें।
 
-**提問前請先閱讀: [अंक # 63](https://github.com/v2fly/fhs-install-v2ray/issues/63), अन्यथा इसका जवाब नहीं दिया जा सकता है और लॉक नहीं किया जा सकता है।**
+**कृपया पूछने से पहले पढ़ें:[अंक # 63](https://github.com/v2fly/fhs-install-v2ray/issues/63), अन्यथा इसका जवाब नहीं दिया जा सकता है और लॉक नहीं किया जा सकता है।**
 
 ## योगदान
 
-कृप्या[विकसित करना](https://github.com/v2fly/fhs-install-v2ray/tree/develop)मुख्य शाखा को नुकसान से बचने के लिए शाखा लगाई जाती है।
+कृप्या[विकसित करना](https://github.com/v2fly/fhs-install-v2ray/tree/develop)मुख्य शाखा को नुकसान से बचने के लिए शाखा।
 
 पुष्टि के बाद, दोनों शाखाओं को मिला दिया जाएगा।
