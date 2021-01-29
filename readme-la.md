@@ -17,7 +17,7 @@ Et installed per litteras configurati prioribus files[Latin filesystem Hierarchi
     installed: /etc/systemd/system/v2ray.service
     installed: /etc/systemd/system/v2ray@.service
 
-## 重要提示
+## magna admonitus
 
 **Id non commendatur uti in Docker v2ray institutionem, directe commodo[publica imago](https://github.com/v2fly/docker).**  
 Si publica imaginem non vestram in occursum mos postulo installation, obsecro,**Et modify reproductionis qui stabat super aquas fluminis usque ad consequi dockerfile**.
