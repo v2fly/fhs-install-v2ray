@@ -15,7 +15,7 @@ The fhs-install-v2ray installation script is used to easily deploy v2ray to bypa
 
 ## Supported operating system
 
-Requires Linux systemd
+需要Linux systemd
 
 -   Debian / Ubuntu
 -   CentOS / RHEL
