@@ -1,0 +1,24 @@
+# https://github.com/dephraiim/translate-readme
+name: Translate Readme
+
+on:
+  push:
+    branches:
+#      - main
+#      - master
+      - documentation_translate_english
+jobs:
+  build:
+#    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 15.x
+      - name: Adding License
+        uses: dephraiim/translate-readme@v1
+        with:
+          LANG: la
+          # ISO Langusge Code.
+          # Supported Languages below
