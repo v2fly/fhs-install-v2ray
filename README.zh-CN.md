@@ -27,7 +27,7 @@ fhs-install-v2ray安装脚本用于轻松部署v2ray以绕过网络限制来构�
 ### 安装和更新 V2Ray
 
     ## 安裝執行檔和 .dat 資料檔
-    # bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
+    # sudo bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
 
 ### V2Ray 组态
 
@@ -37,25 +37,23 @@ fhs-install-v2ray安装脚本用于轻松部署v2ray以绕过网络限制来构�
 ### 离线安装
 
 在具有网络下载限制的环境中，我们建议：
-
-1.  从GitHub下载该存储库作为zip文件。
-2.  从以下位置下载v2ray-core zip文件[HTTPS://GitHub.com/V2fly/V2Ray-core/releases](https://github.com/v2fly/v2ray-core/releases)
-3.  将两个zip文件都上传到您的服务器
-4.  解压缩两个zip文件
-5.  运行安装：`bash install-release.sh --local /path/to/v2ray-linux-64.zip`
+1.从GitHub.com下载fhs-install-v2ray存储库作为zip文件。
+2.从以下位置下载v2ray-core发行zip文件[HTTPS://GitHub.com/V2fly/V2Ray-core/releases]\([HTTPS://GitHub.com/V2fly/V2Ray-core/releases）](https://github.com/v2fly/v2ray-core/releases）)3.将两个zip文件都上传到您的服务器
+4.解压缩fhz-install-v2ray存储库zip文件
+5.运行安装，并将其指向本地v2ray-core zip文件：`sudo bash install-release.sh --local /path/to/v2ray-linux-64.zip`
 
 ## 更新或删除
 
 ### 安装最新发行的 geoip.dat 和 geosite.dat
 
     ## 只更新 .dat 資料檔
-    # bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-dat-release.sh)
+    # sudo bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-dat-release.sh)
 
 ### 移除 V2Ray
 
-    # bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh) --remove
+    # sudo bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh) --remove
 
-## 包裝內容
+## 包装内容
 
 该脚本安装的文件符合:[文件系统层次结构标准（FHS）](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard)：
 
@@ -84,7 +82,7 @@ fhs-install-v2ray安装脚本用于轻松部署v2ray以绕过网络限制来构�
 
 -   该脚本在执行时会提供`info`和`error`等信息，请仔细阅读。
 
-## 解決問題
+## 解决问题
 
 -   [不安装或更新 geoip.dat 和 geosite.dat](https://github.com/v2fly/fhs-install-v2ray/wiki/Do-not-install-or-update-geoip.dat-and-geosite.dat)
 -   [使用证书时权限不足](https://github.com/v2fly/fhs-install-v2ray/wiki/Insufficient-permissions-when-using-certificates)
@@ -98,6 +96,6 @@ fhs-install-v2ray安装脚本用于轻松部署v2ray以绕过网络限制来构�
 
 ## 贡献
 
-请于[开发](https://github.com/v2fly/fhs-install-v2ray/tree/develop)分支进行，以避免对主分支造成破坏。
+请于[发展](https://github.com/v2fly/fhs-install-v2ray/tree/develop)分支进行，以避免对主分支造成破坏。
 
 待确定无误后，两分支将进行合并。
