@@ -18,6 +18,6 @@ jobs:
           node-version: 12.x
       - name: Adding English Readme
         uses: dephraiim/translate-readme@v1
-        with:
-          lang: en
+#        with:
+#          lang: en
 
