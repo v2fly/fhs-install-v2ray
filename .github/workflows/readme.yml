@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: 12.x
       - name: Adding English Readme
-        uses: benjaminchodroff/translate-readme
+        uses: benjaminchodroff/translate-readme@v1
 #        with:
 #          lang: en
 
