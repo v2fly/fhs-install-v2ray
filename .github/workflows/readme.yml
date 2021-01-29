@@ -16,9 +16,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 15.x
-      - name: Adding License
+      - name: Adding English Readme
         uses: dephraiim/translate-readme@v1
         with:
-          LANG: la
-          # ISO Langusge Code.
-          # Supported Languages below
+          LANG: en
+      - name: Adding Simplified Chinese Readme
+        uses: dephraiim/translate-readme@v1
+        with:
+          LANG: zh-CN
+
