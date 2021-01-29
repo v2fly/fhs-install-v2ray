@@ -1,10 +1,10 @@
 # fhs-install-v2ray
 ---
 ## README 翻譯
-- [繁體中文 - README.md](README.md)
-- [簡體中文 - README.zh-CN.md](README.zh-CN.md)
-- [英語 - README.en.md](README.en.md)
-- [印地語 - README.hi.md](README.hi.md)
+- [繁體中文 README.md](README.md)
+- [简体中文 README.zh-CN.md](README.zh-CN.md)
+- [English README.en.md](README.en.md)
+- [हिंदी README.hi.md](README.hi.md)
 
 ## 總覽
 fhs-install-v2ray安裝腳本用於輕鬆部署v2ray以繞過網絡限制來構建自己的代理
