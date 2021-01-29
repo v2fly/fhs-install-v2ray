@@ -26,7 +26,8 @@ Requires Linux systemd
 
 ### Install and update V2Ray
 
-    ## 安裝執行檔和 .dat 資料檔
+Install executable file and .dat data file
+
     # sudo bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
 
 ### V2Ray configuration
@@ -48,7 +49,6 @@ In an environment with network download restrictions, we recommend:
 
 ### Install the latest geoip.dat and geosite.dat
 
-    ## 只更新 .dat 資料檔
     # sudo bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-dat-release.sh)
 
 ### Remove V2Ray
@@ -82,7 +82,7 @@ Please refer to:[file](https://www.v2fly.org/)Understand the configuration file 
 
 ## use
 
--   該腳本在執行時會提供 `info`with`error`Please read it carefully.
+-   The script will provide`info`with`error`Please read it carefully.
 
 ## Solve the problem
 
@@ -92,12 +92,12 @@ Please refer to:[file](https://www.v2fly.org/)Understand the configuration file 
 -   [Move .dat files from lib directory to share directory](https://github.com/v2fly/fhs-install-v2ray/wiki/Move-.dat-files-from-lib-directory-to-share-directory)
 -   [Use VLESS protocol](https://github.com/v2fly/fhs-install-v2ray/wiki/To-use-the-VLESS-protocol)
 
-> If your question is not listed above, you are welcome to raise it in the Issue area.
+> If your question is not listed above, welcome to raise it in the Issue area.
 
 **Please read before asking:[Issue #63](https://github.com/v2fly/fhs-install-v2ray/issues/63), Otherwise it may not be answered and locked.**
 
 ## contribution
 
-Please[develop](https://github.com/v2fly/fhs-install-v2ray/tree/develop)Branching is carried out to avoid damage to the main branch.
+Please[develop](https://github.com/v2fly/fhs-install-v2ray/tree/develop)Branching to avoid damage to the main branch.
 
 After confirmation, the two branches will be merged.
