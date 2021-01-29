@@ -37,10 +37,12 @@ fhs-install-v2ray安装脚本用于轻松部署v2ray以绕过网络限制来构�
 ### 离线安装
 
 在具有网络下载限制的环境中，我们建议：
-1.从GitHub.com下载fhs-install-v2ray存储库作为zip文件。
-2.从以下位置下载v2ray-core发行zip文件[HTTPS://GitHub.com/V2fly/V2Ray-core/releases]\([HTTPS://GitHub.com/V2fly/V2Ray-core/releases）](https://github.com/v2fly/v2ray-core/releases）)3.将两个zip文件都上传到您的服务器
-4.解压缩fhz-install-v2ray存储库zip文件
-5.运行安装，并将其指向本地v2ray-core zip文件：`sudo bash install-release.sh --local /path/to/v2ray-linux-64.zip`
+
+1.  从GitHub.com下载fhs-install-v2ray存储库作为zip文件。
+2.  从以下位置下载v2ray-core发行zip文件[HTTPS://GitHub.com/V2fly/V2Ray-core/releases](https://github.com/v2fly/v2ray-core/releases)
+3.  将两个zip文件都上传到您的服务器
+4.  解压缩fhz-install-v2ray存储库zip文件
+5.  运行安装，并将其指向本地v2ray-core zip文件：`sudo bash install-release.sh --local /path/to/v2ray-linux-64.zip`
 
 ## 更新或删除
 
@@ -55,7 +57,7 @@ fhs-install-v2ray安装脚本用于轻松部署v2ray以绕过网络限制来构�
 
 ## 包装内容
 
-该脚本安装的文件符合:[文件系统层次结构标准（FHS）](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard)：
+该脚本安装的文件符合[文件系统层次结构标准（FHS）](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard)：
 
     installed: /usr/local/bin/v2ray
     installed: /usr/local/bin/v2ctl
