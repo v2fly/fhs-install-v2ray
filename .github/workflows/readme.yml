@@ -26,7 +26,7 @@ jobs:
         with:
           lang: zh-CN
       - name: Adding Hindi README
-        uses: benjaminchodroff@translate-readme@main
+        uses: benjaminchodroff/translate-readme@main
         with:
           lang: hi
 
