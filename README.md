@@ -19,8 +19,8 @@ fhs-install-v2ray安裝腳本用於輕鬆部署v2ray以繞過網絡限制來構�
 ## 安裝與配置
 
 ### 安裝和更新 V2Ray
+安裝執行檔和 .dat 資料檔
 ```
-## 安裝執行檔和 .dat 資料檔
 # sudo bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
 ```
 
@@ -39,7 +39,6 @@ fhs-install-v2ray安裝腳本用於輕鬆部署v2ray以繞過網絡限制來構�
 ## 更新或刪除
 ### 安裝最新發行的 geoip.dat 和 geosite.dat
 ```
-## 只更新 .dat 資料檔
 # sudo bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-dat-release.sh)
 ```
 
