@@ -4,10 +4,10 @@
 
 ## README 翻译
 
--   [繁体中文 - README.md](README.md)
--   [简体中文 - README.zh-CN.md](README.zh-CN.md)
--   [英语 - README.en.md](README.en.md)
--   [印地语 - README.hi.md](README.hi.md)
+-   [繁体中文 README.md](README.md)
+-   [简体中文 README.zh-CN.md](README.zh-CN.md)
+-   [英文README.en.md](README.en.md)
+-   [印地语README.hi.md](README.hi.md)
 
 ## 总览
 
@@ -20,7 +20,7 @@ fhs-install-v2ray安装脚本用于轻松部署v2ray以绕过网络限制来构�
 -   Debian / Ubuntu
 -   CentOS的/ RHEL的
 -   软呢帽
--   openSUSE
+-   openSUSE 
 
 ## 安装与配置
 
@@ -41,7 +41,7 @@ fhs-install-v2ray安装脚本用于轻松部署v2ray以绕过网络限制来构�
 
 1.  从GitHub.com下载fhs-install-v2ray存储库作为zip文件。
 2.  从以下位置下载v2ray-core发行zip文件[HTTPS://GitHub.com/V2fly/V2Ray-core/releases](https://github.com/v2fly/v2ray-core/releases)
-3.  将两个zip文件都上传到您的服务器
+3.  將兩個zip文件都上傳到您的服務器
 4.  解压缩fhs-install-v2ray存储库zip文件
 5.  运行安装，并将其指向本地v2ray-core zip文件：`sudo bash install-release.sh --local /path/to/v2ray-linux-64.zip`
 
@@ -98,4 +98,4 @@ fhs-install-v2ray安装脚本用于轻松部署v2ray以绕过网络限制来构�
 
 请于[发展](https://github.com/v2fly/fhs-install-v2ray/tree/develop)分支进行，以避免对主分支造成破坏。
 
-待确定无误后，两分支将进行合并。
+待確定無誤後，兩分支將進行合併。
