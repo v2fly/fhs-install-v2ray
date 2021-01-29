@@ -37,10 +37,12 @@ Requires Linux systemd
 ### Offline installation
 
 In an environment with network download restrictions, we recommend:
-1\. Download the fhs-install-v2ray repository as a zip file from GitHub.com.
-2\. Download the v2ray-core release zip file from the following location[https://github.com/v2fly/v2ray-core/releases]\(<https://github.com/v2fly/v2ray-core/releases）>3. Upload both zip files to your server
-4\. Unzip the fhz-install-v2ray repository zip file
-5\. Run the installation and point it to the local v2ray-core zip file:`sudo bash install-release.sh --local /path/to/v2ray-linux-64.zip`
+
+1.  Download the fhs-install-v2ray repository as a zip file from GitHub.com.
+2.  Download the v2ray-core release zip file from the following location<https://github.com/v2fly/v2ray-core/releases>
+3.  Upload both zip files to your server
+4.  Unzip the fhz-install-v2ray repository zip file
+5.  Run the installation and point it to the local v2ray-core zip file:`sudo bash install-release.sh --local /path/to/v2ray-linux-64.zip`
 
 ## Update or delete
 
@@ -55,7 +57,7 @@ In an environment with network download restrictions, we recommend:
 
 ## Package Contents
 
-The files installed by this script conform to:[Filesystem Hierarchy Standard (FHS)](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard)：
+The files installed by the script conform to[Filesystem Hierarchy Standard (FHS)](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard)：
 
     installed: /usr/local/bin/v2ray
     installed: /usr/local/bin/v2ctl
@@ -80,7 +82,7 @@ Please refer to:[file](https://www.v2fly.org/)Understand the configuration file 
 
 ## use
 
--   The script will provide`info`with`error`Please read it carefully.
+-   該腳本在執行時會提供 `info`with`error`Please read it carefully.
 
 ## Solve the problem
 
