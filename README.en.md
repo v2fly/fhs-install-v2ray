@@ -1,11 +1,11 @@
 # fhs-install-v2ray
 
-# README Translation/Translation/Translation/अनुवाद
+# README 翻譯/翻译/Translation/अनुवाद
 
 -   [Traditional Chinese-README.md](README.md)
--   [Simplified Chinese-README.zh-CN.md]\(README.zh-CN.md)
--   [English-README.en.md]\(README.en.md)
--   [Hindi-README.hi.md]\(README.hi.md)
+-   [Simplified Chinese-README.zh-CN.md](README.zh-CN.md)
+-   [English-README.en.md](README.en.md)
+-   [Hindi-README.hi.md](README.hi.md)
 
 # Overview
 
@@ -44,7 +44,7 @@ The files installed by the script conform to[Filesystem Hierarchy Standard (FHS)
 
 ## important hint
 
-**It is not recommended to use this project to install v2ray in docker, please use it directly[Official image](https://github.com/v2fly/docker)。**  
+**It is not recommended to use this project to install v2ray in docker, please use it directly[官方映象](https://github.com/v2fly/docker)。**  
 If the official image cannot meet your custom installation needs, please**Reproduce and modify the upstream dockerfile to achieve**。
 
 This project**Will not automatically generate configuration files for you**；**Only solve problems encountered by users during installation**. Other issues cannot be helped here.  
@@ -77,12 +77,12 @@ Please refer to after installation[file](https://www.v2fly.org/)Understand the c
 -   「[Move .dat files from lib directory to share directory](https://github.com/v2fly/fhs-install-v2ray/wiki/Move-.dat-files-from-lib-directory-to-share-directory)」。
 -   「[Use VLESS protocol](https://github.com/v2fly/fhs-install-v2ray/wiki/To-use-the-VLESS-protocol)」。
 
-> If your question is not listed above, welcome to raise it in the Issue area.
+> If your question is not listed above, you are welcome to raise it in the Issue area.
 
 **Please read before asking questions[Issue #63](https://github.com/v2fly/fhs-install-v2ray/issues/63), Otherwise it may not be answered and locked.**
 
 ## contribution
 
-Please[develop](https://github.com/v2fly/fhs-install-v2ray/tree/develop)Branching to avoid damage to the main branch.
+Please[develop](https://github.com/v2fly/fhs-install-v2ray/tree/develop)Branching is carried out to avoid damage to the main branch.
 
 After confirmation, the two branches will be merged.
