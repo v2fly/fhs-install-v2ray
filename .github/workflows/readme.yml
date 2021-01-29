@@ -4,8 +4,8 @@ name: Translate Readme
 on:
   push:
     branches:
-#      - main
-#      - master
+      - main
+      - master
       - documentation_translate_english
 jobs:
   build:
@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: 12.x
       - name: Adding English Readme
-        uses: dephraiim/translate-readme@v1
+        uses: benjaminchodroff/translate-readme
 #        with:
 #          lang: en
 
