@@ -9,7 +9,7 @@ on:
       - documentation_translate_english
 jobs:
   build:
-#    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Setup Node.js
