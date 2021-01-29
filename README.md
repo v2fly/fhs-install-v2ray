@@ -1,29 +1,56 @@
 # fhs-install-v2ray
-
-# README 翻譯/翻译/Translation/अनुवाद
+---
+## README 翻譯
 - [繁體中文 - README.md](README.md)
 - [簡體中文 - README.zh-CN.md](README.zh-CN.md)
 - [英語 - README.en.md](README.en.md)
 - [印地語 - README.hi.md](README.hi.md)
 
-# 總覽
-fhs-install-v2ray是v2ray的自動安裝腳本，v2ray是一種流行的解決方案，用於構建您自己的代理以繞過網絡限制
+## 總覽
+fhs-install-v2ray安裝腳本用於輕鬆部署v2ray以繞過網絡限制來構建自己的代理
 
-# 支持的操作系統
-Systemd:
-- Debian
-- CentOS
+## 支持的操作系統
+需要systemd
+- Debian / Ubuntu
+- CentOS / RHEL
 - Fedora
 - openSUSE 
 
-# 離線安裝
-在具有網絡下載限制的環境中，我們建議：
-1.從GitHub下載該存儲庫作為zip文件。
-2.從以下位置下載v2ray-core zip文件：
-3.將兩個zip文件都上傳到您的服務器
-4.解壓縮兩個zip文件
-5.運行安裝：./install.sh --local /path/to/v2ray-core.zip
+## 安裝與配置
 
+### 安裝和更新 V2Ray
+
+```
+// 安裝執行檔和 .dat 資料檔
+# bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
+```
+
+### V2Ray 組態
+1. 生成配置文件 https://intmainreturn0.com/v2ray-config-gen/
+2. 將配置文件config.json放入/usr/local/etc/v2ray/config.json
+
+### 離線安裝
+在具有網絡下載限制的環境中，我們建議：
+1. 從GitHub下載該存儲庫作為zip文件。
+2. 從以下位置下載v2ray-core zip文件https://github.com/v2fly/v2ray-core/releases
+3. 將兩個zip文件都上傳到您的服務器
+4. 解壓縮兩個zip文件
+5. 運行安裝：bash install-release.sh --local /path/to/v2ray-linux-64.zip
+
+## 更新或刪除
+### 安裝最新發行的 geoip.dat 和 geosite.dat
+```
+// 只更新 .dat 資料檔
+# bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-dat-release.sh)
+```
+
+### 移除 V2Ray
+
+```
+# bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh) --remove
+```
+
+## 包裝內容
 該腳本安裝的文件符合 [Filesystem Hierarchy Standard (FHS)](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard)：
 
 ```
@@ -52,27 +79,7 @@ installed: /etc/systemd/system/v2ray@.service
 
 * 該腳本在執行時會提供 `info` 和 `error` 等信息，請仔細閱讀。
 
-### 安裝和更新 V2Ray
-
-```
-// 安裝執行檔和 .dat 資料檔
-# bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
-```
-
-### 安裝最新發行的 geoip.dat 和 geosite.dat
-
-```
-// 只更新 .dat 資料檔
-# bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-dat-release.sh)
-```
-
-### 移除 V2Ray
-
-```
-# bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh) --remove
-```
-
-### 解決問題
+## 解決問題
 
 * 「[不安裝或更新 geoip.dat 和 geosite.dat](https://github.com/v2fly/fhs-install-v2ray/wiki/Do-not-install-or-update-geoip.dat-and-geosite.dat)」。
 * 「[使用證書時權限不足](https://github.com/v2fly/fhs-install-v2ray/wiki/Insufficient-permissions-when-using-certificates)」。
