@@ -31,16 +31,18 @@
 
 ### V2Ray कॉन्फ़िगरेशन
 
-1.  कॉन्फ़िगरेशन फ़ाइल जनरेट करें[https://intmainreturn0.com/v2ray-config-gen](https://intmainreturn0.com/v2ray-config-gen/)
+1.  कॉन्फ़िगरेशन फ़ाइल जनरेट करें[हत्तपः://ईंटमेंरेतुरण0.कॉम/व2राय-कॉन्फिग-गेन](https://intmainreturn0.com/v2ray-config-gen/)
 2.  कॉन्फ़िगरेशन फ़ाइल config.json को /usr/local/etc/v2ray/config.json में डालें
 
 ### ऑफ़लाइन स्थापना
 
 नेटवर्क डाउनलोड प्रतिबंध वाले वातावरण में, हम अनुशंसा करते हैं:
-1\. GitHub.com से ज़िप फ़ाइल के रूप में fhs-install-v2ray रिपॉजिटरी डाउनलोड करें।
-2\. निम्न स्थान से v2ray-core रिलीज़ ज़िप फ़ाइल डाउनलोड करें[हत्तपः://गिटहब.कॉम/व2फल्य/व2राय-कोर/रेलसेस]\([हत्तपः://गिटहब.कॉम/व2फल्य/व2राय-कोर/रेलसेस）](https://github.com/v2fly/v2ray-core/releases）)3. दोनों ज़िप फ़ाइलों को अपने सर्वर पर अपलोड करें
-4\. fhz-install-v2ray रिपॉजिटरी जिप फाइल को अनजिप करें
-5\. स्थापना चलाएँ और इसे स्थानीय v2ray-core ज़िप फ़ाइल में इंगित करें:`sudo bash install-release.sh --local /path/to/v2ray-linux-64.zip`
+
+1.  GitHub.com से ज़िप फ़ाइल के रूप में fhs-install-v2ray रिपॉजिटरी डाउनलोड करें।
+2.  निम्न स्थान से v2ray-core रिलीज़ ज़िप फ़ाइल डाउनलोड करें[हत्तपः://गिटहब.कॉम/व2फल्य/व2राय-कोर/रेलसेस](https://github.com/v2fly/v2ray-core/releases)
+3.  दोनों ज़िप फ़ाइलों को अपने सर्वर पर अपलोड करें
+4.  Fhz-install-v2ray रिपॉजिटरी जिप फाइल को अनजिप करें
+5.  स्थापना चलाएँ और इसे स्थानीय v2ray-core ज़िप फ़ाइल की ओर इंगित करें:`sudo bash install-release.sh --local /path/to/v2ray-linux-64.zip`
 
 ## अद्यतन या हटाना
 
@@ -55,7 +57,7 @@
 
 ## पैकेज सामग्री
 
-इस स्क्रिप्ट द्वारा स्थापित फ़ाइलें इसके अनुरूप हैं:[फाइलसिस्टम पदानुक्रम मानक (FHS)](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard)：
+स्क्रिप्ट द्वारा स्थापित फाइलें इसके अनुरूप हैं[फाइलसिस्टम पदानुक्रम मानक (FHS)](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard)：
 
     installed: /usr/local/bin/v2ray
     installed: /usr/local/bin/v2ctl
