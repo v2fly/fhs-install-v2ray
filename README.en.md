@@ -15,7 +15,7 @@ The fhs-install-v2ray installation script is used to easily deploy v2ray to bypa
 
 ## Supported operating system
 
-Requires systemd
+Requires Linux systemd
 
 -   Debian / Ubuntu
 -   CentOS / RHEL
@@ -31,7 +31,7 @@ Requires systemd
 
 ### V2Ray configuration
 
-1.  Generate configuration file<https://intmainreturn0.com/v2ray-config-gen/>
+1.  Generate configuration file[https://intmainreturn0.com/v2ray-config-gen](https://intmainreturn0.com/v2ray-config-gen/)
 2.  Put the configuration file config.json into /usr/local/etc/v2ray/config.json
 
 ### Offline installation
@@ -42,11 +42,11 @@ In an environment with network download restrictions, we recommend:
 2.  Download the v2ray-core zip file from the following location<https://github.com/v2fly/v2ray-core/releases>
 3.  Upload both zip files to your server
 4.  Unzip the two zip files
-5.  Run and install: bash install-release.sh --local /path/to/v2ray-linux-64.zip
+5.  Run the installation:`bash install-release.sh --local /path/to/v2ray-linux-64.zip`
 
-## Update or delete
+## 更新或刪除
 
-### Install the latest geoip.dat and geosite.dat
+### 安裝最新發行的 geoip.dat 和 geosite.dat
 
     // 只更新 .dat 資料檔
     # bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-dat-release.sh)
@@ -91,12 +91,12 @@ Please refer to after installation[file](https://www.v2fly.org/)Understand the c
 -   「[Move .dat files from lib directory to share directory](https://github.com/v2fly/fhs-install-v2ray/wiki/Move-.dat-files-from-lib-directory-to-share-directory)」。
 -   「[Use VLESS protocol](https://github.com/v2fly/fhs-install-v2ray/wiki/To-use-the-VLESS-protocol)」。
 
-> If your question is not listed above, you are welcome to raise it in the Issue area.
+> If your question is not listed above, welcome to raise it in the Issue area.
 
 **Please read before asking questions[Issue #63](https://github.com/v2fly/fhs-install-v2ray/issues/63), Otherwise it may not be answered and locked.**
 
 ## contribution
 
-Please[develop](https://github.com/v2fly/fhs-install-v2ray/tree/develop)Branching is carried out to avoid damage to the main branch.
+Please[develop](https://github.com/v2fly/fhs-install-v2ray/tree/develop)Branching to avoid damage to the main branch.
 
 After confirmation, the two branches will be merged.
