@@ -16,12 +16,13 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
+# Temporarily using my own fork, but use dephraiim/translate-readme@main for stable
       - name: Adding English Readme
-        uses: benjaminchodroff/translate-readme@v3
+        uses: benjaminchodroff/translate-readme@main
         with:
           lang: en
       - name: Adding Chinese (Simplified) Readme
-        uses: benjaminchodroff/translate-readme@v3
+        uses: benjaminchodroff/translate-readme@main
         with:
           lang: zh-CN
 
