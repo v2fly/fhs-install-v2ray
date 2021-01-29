@@ -58,6 +58,6 @@ Post placere ad institutionem[lima](https://www.v2fly.org/)Intelligas file synta
 
 ## conlationem
 
-placere[develop](https://github.com/v2fly/fhs-install-v2ray/tree/develop)Rami primarii ad vitare damnum ut pelagus genere.
+placere[develop](https://github.com/v2fly/fhs-install-v2ray/tree/develop)Ad vitare damnum est de propagatione diffundi pelagus genere ferri.
 
 Deinde confirmatio, non duo rami confusa sint.
