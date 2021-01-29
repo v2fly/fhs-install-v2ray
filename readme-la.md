@@ -24,7 +24,7 @@ Si publica imaginem non vestram in occursum mos postulo installation, obsecro,**
 
 Hoc project**Non enim statim generate configuratione files**;**Tantum users solvere durante installation negotiorum quae sollicitant**. Aliis rebus potest, hic nihil habebis prosperum.  
 Post placere ad institutionem[lima](https://www.v2fly.org/)Intelligas file syntaxis figura et figura completa lima apta tibi. Et tunc temporis recurratur ad civitatem processus per contributions[Configurationis profile Template](https://github.com/v2fly/v2ray-examples)  
-(**提請您注意這些模板複製下來以後是需要您自己修改調整的，不能直接使用**)
+(**Lorem quod Ea opus est immutabile, et dirimit post te copied sunt, et non possunt directe solebat**）
 
 ## usus
 
