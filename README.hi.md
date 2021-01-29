@@ -5,7 +5,7 @@
 ## README अनुवाद
 
 -   [पारंपरिक चीनी README.md](README.md)
--   [简体中文 README.zh-CN.md](README.zh-CN.md)
+-   [सरलीकृत चीनी README.zh-CN.md](README.zh-CN.md)
 -   [अंग्रेजी README.en.md](README.en.md)
 -   [हिंदी README.hi.md](README.hi.md)
 
