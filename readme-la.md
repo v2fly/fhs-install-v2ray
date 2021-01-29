@@ -23,7 +23,7 @@ Et installed per litteras configurati prioribus files[Latin filesystem Hierarchi
 Si publica imaginem non vestram in occursum mos postulo installation, obsecro,**Et modify reproductionis qui stabat super aquas fluminis usque ad consequi dockerfile**.
 
 Hoc project**Non enim statim generate configuratione files**;**Tantum users solvere durante installation negotiorum quae sollicitant**. Aliis rebus potest, hic nihil habebis prosperum.  
-Post placere ad institutionem[lima](https://www.v2fly.org/)Intelligas file syntaxis figura et figura completa lima apta tibi. Et tunc temporis recurratur ad civitatem processus per contributions[Configurationis profile Template](https://github.com/v2fly/v2ray-examples)  
+請在安裝完成後參閱 [lima](https://www.v2fly.org/)Intelligas file syntaxis figura et figura completa lima apta tibi. Et tunc temporis recurratur ad civitatem processus per contributions[Configurationis profile Template](https://github.com/v2fly/v2ray-examples)  
 (**Lorem quod Ea opus est immutabile, et dirimit post te copied sunt, et non possunt directe solebat**)
 
 ## usus
