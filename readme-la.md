@@ -17,14 +17,14 @@ Et installed per litteras configurati prioribus files[Latin filesystem Hierarchi
     installed: /etc/systemd/system/v2ray.service
     installed: /etc/systemd/system/v2ray@.service
 
-## magna admonitus
+## 重要提示
 
 **Id non commendatur uti in Docker v2ray institutionem, directe commodo[publica imago](https://github.com/v2fly/docker).**  
 Si publica imaginem non vestram in occursum mos postulo installation, obsecro,**Et modify reproductionis qui stabat super aquas fluminis usque ad consequi dockerfile**.
 
 Hoc project**Non enim statim generate configuratione files**;**Tantum users solvere durante installation negotiorum quae sollicitant**. Aliis rebus potest, hic nihil habebis prosperum.  
 Post placere ad institutionem[lima](https://www.v2fly.org/)Intelligas file syntaxis figura et figura completa lima apta tibi. Et tunc temporis recurratur ad civitatem processus per contributions[Configurationis profile Template](https://github.com/v2fly/v2ray-examples)  
-(**Lorem quod Ea opus est immutabile, et dirimit post te copied sunt, et non possunt directe solebat**）
+(**Lorem quod Ea opus est immutabile, et dirimit post te copied sunt, et non possunt directe solebat**)
 
 ## usus
 
@@ -58,6 +58,6 @@ Post placere ad institutionem[lima](https://www.v2fly.org/)Intelligas file synta
 
 ## conlationem
 
-placere[develop](https://github.com/v2fly/fhs-install-v2ray/tree/develop)Ad vitare damnum est de propagatione diffundi pelagus genere ferri.
+placere[develop](https://github.com/v2fly/fhs-install-v2ray/tree/develop)Rami primarii ad vitare damnum ut pelagus genere.
 
 Deinde confirmatio, non duo rami confusa sint.
