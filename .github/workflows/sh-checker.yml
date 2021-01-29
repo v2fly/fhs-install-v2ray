@@ -7,7 +7,7 @@ on:
     paths-ignore:
       - "**/LICENSE"
       - "**/README.md"
-      - "**/README.zh-Hans-CN.md"
+      - "**/README.*.md"
   pull_request:
     branches:
       - master
@@ -24,7 +24,7 @@ jobs:
           SHFMT_OPTS: -i 2 -ci -sr
         with:
           sh_checker_comment: true
-          sh_checker_exclude: "LICENSE README.md README.zh-Hans-CN.md"
+          sh_checker_exclude: "LICENSE README.md README.*.md"
   filed-test:
     runs-on: ubuntu-16.04
     steps:

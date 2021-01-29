@@ -1,0 +1,32 @@
+# https://github.com/dephraiim/translate-readme
+name: Translate README
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      # Temporarily using my own fork, but use dephraiim/translate-readme@main in future
+      - name: Adding English README
+        uses: benjaminchodroff/translate-readme@main
+        with:
+          lang: en
+      - name: Adding Chinese (Simplified) README
+        uses: benjaminchodroff/translate-readme@main
+        with:
+          lang: zh-CN
+      - name: Adding Hindi README
+        uses: benjaminchodroff/translate-readme@main
+        with:
+          lang: hi
+
