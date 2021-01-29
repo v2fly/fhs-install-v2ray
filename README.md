@@ -40,7 +40,7 @@ installed: /etc/systemd/system/v2ray@.service
 ```
 
 ### V2Ray 組態
-1. 生成配置文件 [https://intmainreturn0.com/v2ray-config-gen](https://intmainreturn0.com/v2ray-config-gen/)
+1. 產生配置文檔 [https://intmainreturn0.com/v2ray-config-gen](https://intmainreturn0.com/v2ray-config-gen/)
 2. 將配置文件 config.json放入 /usr/local/etc/v2ray/config.json
 
 ### 離線安裝
