@@ -20,8 +20,4 @@ jobs:
         uses: dephraiim/translate-readme@v1
         with:
           LANG: en
-      - name: Adding Simplified Chinese Readme
-        uses: dephraiim/translate-readme@v1
-        with:
-          LANG: zh-CN
 
