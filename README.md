@@ -1,8 +1,28 @@
 # fhs-install-v2ray
 
-> 欲查阅以简体中文撰写的介绍，请访问：[README.zh-Hans-CN.md](README.zh-Hans-CN.md)
+# README 翻譯/翻译/Translation/अनुवाद
+- [繁體中文 - README.md](README.md)
+- [簡體中文 - README.zh-CN.md] (README.zh-CN.md)
+- [英語 - README.en.md] (README.en.md)
+- [印地語 - README.hi.md] (README.hi.md)
 
-> Bash script for installing V2Ray in operating systems such as Debian / CentOS / Fedora / openSUSE that support systemd
+# 總覽
+fhs-install-v2ray是v2ray的自動安裝腳本，v2ray是一種流行的解決方案，用於構建您自己的代理以繞過網絡限制
+
+# 支持的操作系統
+Systemd:
+- Debian
+- CentOS
+- Fedora
+- openSUSE 
+
+# 離線安裝
+在具有網絡下載限制的環境中，我們建議：
+1.從GitHub下載該存儲庫作為zip文件。
+2.從以下位置下載v2ray-core zip文件：
+3.將兩個zip文件都上傳到您的服務器
+4.解壓縮兩個zip文件
+5.運行安裝：./install.sh --local /path/to/v2ray-core.zip
 
 該腳本安裝的文件符合 [Filesystem Hierarchy Standard (FHS)](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard)：
 
