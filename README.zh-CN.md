@@ -15,7 +15,7 @@ fhs-install-v2ray安装脚本用于轻松部署v2ray以绕过网络限制来构�
 
 ## 支持的操作系统
 
-需要systemd
+需要Linux systemd
 
 -   Debian / Ubuntu
 -   CentOS的/ RHEL的
@@ -31,18 +31,18 @@ fhs-install-v2ray安装脚本用于轻松部署v2ray以绕过网络限制来构�
 
 ### V2Ray 组态
 
-1.  生成配置文件[HTTPS://int main return0.com/V2Ray-config-跟/](https://intmainreturn0.com/v2ray-config-gen/)
-2.  将配置文件config.json放入/usr/local/etc/v2ray/config.json
+1.  生成配置文件[HTTPS://int main return0.com/V2Ray-config-跟](https://intmainreturn0.com/v2ray-config-gen/)
+2.  将配置文件 config.json放入 /usr/local/etc/v2ray/config.json
 
 ### 离线安装
 
 在具有网络下载限制的环境中，我们建议：
 
 1.  从GitHub下载该存储库作为zip文件。
-2.  从以下位置下载v2ray-core zip文件<https://github.com/v2fly/v2ray-core/releases>
+2.  从以下位置下载v2ray-core zip文件[HTTPS://GitHub.com/V2fly/V2Ray-core/releases](https://github.com/v2fly/v2ray-core/releases)
 3.  将两个zip文件都上传到您的服务器
 4.  解压缩两个zip文件
-5.  运行安装：bash install-release.sh --local /path/to/v2ray-linux-64.zip
+5.  运行安装：`bash install-release.sh --local /path/to/v2ray-linux-64.zip`
 
 ## 更新或删除
 
@@ -97,6 +97,6 @@ fhs-install-v2ray安装脚本用于轻松部署v2ray以绕过网络限制来构�
 
 ## 贡献
 
-请于[发展](https://github.com/v2fly/fhs-install-v2ray/tree/develop)分支进行，以避免对主分支造成破坏。
+请于[开发](https://github.com/v2fly/fhs-install-v2ray/tree/develop)分支进行，以避免对主分支造成破坏。
 
 待确定无误后，两分支将进行合并。
