@@ -41,15 +41,15 @@ installed: /etc/systemd/system/v2ray@.service
 
 ### V2Ray 組態
 1. 產生配置文檔 [https://intmainreturn0.com/v2ray-config-gen](https://intmainreturn0.com/v2ray-config-gen/)
-2. 將配置文件 config.json放入 /usr/local/etc/v2ray/config.json
+2. 將配置文件 config.json 放入 /usr/local/etc/v2ray/config.json
 
 ### 離線安裝
 在具有網路下載限制的環境中，我們建議：
-1. 從GitHub.com下載fhs-install-v2ray存儲庫作為zip文件。
-2. 從以下位置下載v2ray-core發行zip文件  [https://github.com/v2fly/v2ray-core/releases](https://github.com/v2fly/v2ray-core/releases)
+1. 從 GitHub.com 下載 fhs-install-v2ray 存儲庫作為 zip 文件。
+2. 從以下位置下載 v2ray-core 發行 zip 文件  [https://github.com/v2fly/v2ray-core/releases](https://github.com/v2fly/v2ray-core/releases)
 3. 將兩個 zip 文檔都上傳到您的伺服器
-4. 解壓縮fhs-install-v2ray存儲庫zip文件
-5. 運行安裝，並將其指向本地v2ray-core zip文件：```sudo bash install-release.sh --local /path/to/v2ray-linux-64.zip```
+4. 解壓縮 fhs-install-v2ray 存儲庫zip文件
+5. 運行安裝，並將其指向本地 v2ray-core zip 文件：```sudo bash install-release.sh --local /path/to/v2ray-linux-64.zip```
 
 ### 安裝最新發行的 geoip.dat 和 geosite.dat
 
