@@ -1,0 +1,8 @@
+# vim install-release.sh
+
+DAT_PATH='/usr/local/share/v2ray/'
+# mv /usr/local/lib/v2ray/ /usr/local/share/
+# systemctl edit v2ray.service
+
+[Service]
+Environment=V2RAY_LOCATION_ASSET=/usr/local/share/v2ray/
