@@ -126,7 +126,7 @@ identify_the_operating_system_and_architecture() {
       exit 1
     fi
     if [[ "$(type -P apt)" ]]; then
-      PACKAGE_MANAGEMENT_INSTALL='apt -y --no-install-recommends install'
+      PACKAGE_MANAGEMENT_INSTALL='apt update && apt -y --no-install-recommends install'
       PACKAGE_MANAGEMENT_REMOVE='apt purge'
       package_provide_tput='ncurses-bin'
     elif [[ "$(type -P dnf)" ]]; then
