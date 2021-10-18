@@ -14,7 +14,7 @@ on:
       - develop
 jobs:
   sh-checker:
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
       - name: Run the sh-checker
@@ -26,11 +26,11 @@ jobs:
           sh_checker_comment: true
           sh_checker_exclude: "LICENSE README.md README.zh-Hans-CN.md"
   filed-test:
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-18.04
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Filed-test on Ubuntu 16.04
+      - name: Filed-test on Ubuntu 18.04
         run: |
           sudo bash install-release.sh
           sudo bash install-release.sh --check
