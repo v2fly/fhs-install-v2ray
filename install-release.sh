@@ -226,8 +226,11 @@ get_version() {
   fi
   # Determine the version number for V2Ray installed from a local file
   if [[ -f '/usr/local/bin/v2ray' ]]; then
-    VERSION="$(/usr/local/bin/v2ray -version | awk 'NR==1 {print $2}')"
-    CURRENT_VERSION="v${VERSION#v}"
+    CURRENT_VERSION="$(/usr/local/bin/v2ray -version 2>/dev/null | awk 'NR==1 {print $2}')"
+    if [[ -z "$CURRENT_VERSION" ]]; then
+      CURRENT_VERSION="$(/usr/local/bin/v2ray version | awk 'NR==1 {print $2}')"
+    fi
+    CURRENT_VERSION="v${CURRENT_VERSION#v}"
     if [[ "$LOCAL_INSTALL" -eq '1' ]]; then
       RELEASE_VERSION="$CURRENT_VERSION"
       return
@@ -371,6 +374,21 @@ install_startup_service_file() {
   install -m 644 "${TMP_DIRECTORY}/systemd/system/v2ray@.service" /etc/systemd/system/v2ray@.service
   mkdir -p '/etc/systemd/system/v2ray.service.d'
   mkdir -p '/etc/systemd/system/v2ray@.service.d/'
+
+  CURRENT_VERSION="$(/usr/local/bin/v2ray -version 2>/dev/null | awk 'NR==1 {print $2}')"
+    if [[ -z "$CURRENT_VERSION" ]]; then
+      CURRENT_VERSION="$(/usr/local/bin/v2ray version | awk 'NR==1 {print $2}')"
+    fi
+  CURRENT_VERSION="v${CURRENT_VERSION#v}"
+  CURRENT_VERSION_NUMBER="${CURRENT_VERSION#v}"
+  CURRENT_MAJOR_VERSION_NUMBER="${CURRENT_VERSION_NUMBER%%.*}"
+  RUN_CONFIG_DIR_CMD='-confdir'
+  RUN_CONFIG_CMD='-config'
+  if [[ "$CURRENT_MAJOR_VERSION_NUMBER" -ge '5' ]]; then
+    RUN_CONFIG_DIR_CMD='run -d'
+    RUN_CONFIG_CMD='run -c'
+  fi
+
   if [[ -n "$JSONS_PATH" ]]; then
     "rm" -f '/etc/systemd/system/v2ray.service.d/10-donot_touch_single_conf.conf' \
       '/etc/systemd/system/v2ray@.service.d/10-donot_touch_single_conf.conf'
@@ -378,7 +396,7 @@ install_startup_service_file() {
 # Or all changes you made will be lost!  # Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
 [Service]
 ExecStart=
-ExecStart=/usr/local/bin/v2ray -confdir $JSONS_PATH" |
+ExecStart=/usr/local/bin/v2ray $RUN_CONFIG_DIR_CMD $JSONS_PATH" |
       tee '/etc/systemd/system/v2ray.service.d/10-donot_touch_multi_conf.conf' > \
         '/etc/systemd/system/v2ray@.service.d/10-donot_touch_multi_conf.conf'
   else
@@ -388,13 +406,13 @@ ExecStart=/usr/local/bin/v2ray -confdir $JSONS_PATH" |
 # Or all changes you made will be lost!  # Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
 [Service]
 ExecStart=
-ExecStart=/usr/local/bin/v2ray -config ${JSON_PATH}/config.json" > \
+ExecStart=/usr/local/bin/v2ray $RUN_CONFIG_CMD ${JSON_PATH}/config.json" > \
       '/etc/systemd/system/v2ray.service.d/10-donot_touch_single_conf.conf'
     echo "# In case you have a good reason to do so, duplicate this file in the same directory and make your customizes there.
 # Or all changes you made will be lost!  # Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
 [Service]
 ExecStart=
-ExecStart=/usr/local/bin/v2ray -config ${JSON_PATH}/%i.json" > \
+ExecStart=/usr/local/bin/v2ray $RUN_CONFIG_CMD ${JSON_PATH}/%i.json" > \
       '/etc/systemd/system/v2ray@.service.d/10-donot_touch_single_conf.conf'
   fi
   echo "info: Systemd service files have been installed successfully!"
