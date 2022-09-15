@@ -334,7 +334,13 @@ install_file() {
 install_v2ray() {
   # Install V2Ray binary to /usr/local/bin/ and $DAT_PATH
   install_file v2ray
-  install_file v2ctl
+  if [[ -f "${TMP_DIRECTORY}/v2ctl" ]]; then
+    install_file v2ctl
+  else
+    if [[ -f '/usr/local/bin/v2ctl' ]]; then
+      rm '/usr/local/bin/v2ctl'
+    fi
+  fi
   install -d "$DAT_PATH"
   # If the file exists, geoip.dat and geosite.dat will not be installed or updated
   if [[ ! -f "${DAT_PATH}/.undat" ]]; then
@@ -472,7 +478,6 @@ remove_v2ray() {
       stop_v2ray
     fi
     if ! ("rm" -r '/usr/local/bin/v2ray' \
-      '/usr/local/bin/v2ctl' \
       "$DAT_PATH" \
       '/etc/systemd/system/v2ray.service' \
       '/etc/systemd/system/v2ray@.service' \
@@ -482,7 +487,10 @@ remove_v2ray() {
       exit 1
     else
       echo 'removed: /usr/local/bin/v2ray'
-      echo 'removed: /usr/local/bin/v2ctl'
+      if [[ -f '/usr/local/bin/v2ctl' ]]; then
+        rm '/usr/local/bin/v2ctl'
+        echo 'removed: /usr/local/bin/v2ctl'
+      fi
       echo "removed: $DAT_PATH"
       echo 'removed: /etc/systemd/system/v2ray.service'
       echo 'removed: /etc/systemd/system/v2ray@.service'
@@ -577,7 +585,9 @@ main() {
   install_v2ray
   install_startup_service_file
   echo 'installed: /usr/local/bin/v2ray'
-  echo 'installed: /usr/local/bin/v2ctl'
+  if [[ -f '/usr/local/bin/v2ctl' ]]; then
+    echo 'installed: /usr/local/bin/v2ctl'
+  fi
   # If the file exists, the content output of installing or updating geoip.dat and geosite.dat will not be displayed
   if [[ ! -f "${DAT_PATH}/.undat" ]]; then
     echo "installed: ${DAT_PATH}/geoip.dat"
