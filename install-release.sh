@@ -216,6 +216,15 @@ install_software() {
   fi
 }
 
+get_current_version() {
+  if /usr/local/bin/v2ray -version >/dev/null 2>&1;then
+    VERSION="$(/usr/local/bin/v2ray -version | awk 'NR==1 {print $2}')"
+  else
+    VERSION="$(/usr/local/bin/v2ray version | awk 'NR==1 {print $2}')"
+  fi
+  CURRENT_VERSION="v${VERSION#v}"
+}
+
 get_version() {
   # 0: Install or update V2Ray.
   # 1: Installed or no new version of V2Ray.
@@ -226,8 +235,7 @@ get_version() {
   fi
   # Determine the version number for V2Ray installed from a local file
   if [[ -f '/usr/local/bin/v2ray' ]]; then
-    VERSION="$(/usr/local/bin/v2ray -version | awk 'NR==1 {print $2}')"
-    CURRENT_VERSION="v${VERSION#v}"
+    get_current_version
     if [[ "$LOCAL_INSTALL" -eq '1' ]]; then
       RELEASE_VERSION="$CURRENT_VERSION"
       return
@@ -250,10 +258,10 @@ get_version() {
     RELEASE_MINOR_VERSION_NUMBER="$(echo "$RELEASE_VERSIONSION_NUMBER" | awk -F '.' '{print $2}')"
     RELEASE_MINIMUM_VERSION_NUMBER="${RELEASE_VERSIONSION_NUMBER##*.}"
     # shellcheck disable=SC2001
-    CURRENT_VERSIONSION_NUMBER="$(echo "${CURRENT_VERSION#v}" | sed 's/-.*//')"
-    CURRENT_MAJOR_VERSION_NUMBER="${CURRENT_VERSIONSION_NUMBER%%.*}"
-    CURRENT_MINOR_VERSION_NUMBER="$(echo "$CURRENT_VERSIONSION_NUMBER" | awk -F '.' '{print $2}')"
-    CURRENT_MINIMUM_VERSION_NUMBER="${CURRENT_VERSIONSION_NUMBER##*.}"
+    CURRENT_VERSION_NUMBER="$(echo "${CURRENT_VERSION#v}" | sed 's/-.*//')"
+    CURRENT_MAJOR_VERSION_NUMBER="${CURRENT_VERSION_NUMBER%%.*}"
+    CURRENT_MINOR_VERSION_NUMBER="$(echo "$CURRENT_VERSION_NUMBER" | awk -F '.' '{print $2}')"
+    CURRENT_MINIMUM_VERSION_NUMBER="${CURRENT_VERSION_NUMBER##*.}"
     if [[ "$RELEASE_MAJOR_VERSION_NUMBER" -gt "$CURRENT_MAJOR_VERSION_NUMBER" ]]; then
       return 0
     elif [[ "$RELEASE_MAJOR_VERSION_NUMBER" -eq "$CURRENT_MAJOR_VERSION_NUMBER" ]]; then
@@ -326,7 +334,13 @@ install_file() {
 install_v2ray() {
   # Install V2Ray binary to /usr/local/bin/ and $DAT_PATH
   install_file v2ray
-  install_file v2ctl
+  if [[ -f "${TMP_DIRECTORY}/v2ctl" ]]; then
+    install_file v2ctl
+  else
+    if [[ -f '/usr/local/bin/v2ctl' ]]; then
+      rm '/usr/local/bin/v2ctl'
+    fi
+  fi
   install -d "$DAT_PATH"
   # If the file exists, geoip.dat and geosite.dat will not be installed or updated
   if [[ ! -f "${DAT_PATH}/.undat" ]]; then
@@ -367,6 +381,12 @@ install_v2ray() {
 }
 
 install_startup_service_file() {
+  get_current_version
+  if [[ "$(echo "${CURRENT_VERSION#v}" | sed 's/-.*//' | awk -F'.' '{print $1}')" -gt "4" ]];then
+    START_COMMAND="/usr/local/bin/v2ray run"
+  else
+    START_COMMAND="/usr/local/bin/v2ray"
+  fi
   install -m 644 "${TMP_DIRECTORY}/systemd/system/v2ray.service" /etc/systemd/system/v2ray.service
   install -m 644 "${TMP_DIRECTORY}/systemd/system/v2ray@.service" /etc/systemd/system/v2ray@.service
   mkdir -p '/etc/systemd/system/v2ray.service.d'
@@ -378,7 +398,7 @@ install_startup_service_file() {
 # Or all changes you made will be lost!  # Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
 [Service]
 ExecStart=
-ExecStart=/usr/local/bin/v2ray -confdir $JSONS_PATH" |
+ExecStart=${START_COMMAND} -confdir $JSONS_PATH" |
       tee '/etc/systemd/system/v2ray.service.d/10-donot_touch_multi_conf.conf' > \
         '/etc/systemd/system/v2ray@.service.d/10-donot_touch_multi_conf.conf'
   else
@@ -388,13 +408,13 @@ ExecStart=/usr/local/bin/v2ray -confdir $JSONS_PATH" |
 # Or all changes you made will be lost!  # Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
 [Service]
 ExecStart=
-ExecStart=/usr/local/bin/v2ray -config ${JSON_PATH}/config.json" > \
+ExecStart=${START_COMMAND} -config ${JSON_PATH}/config.json" > \
       '/etc/systemd/system/v2ray.service.d/10-donot_touch_single_conf.conf'
     echo "# In case you have a good reason to do so, duplicate this file in the same directory and make your customizes there.
 # Or all changes you made will be lost!  # Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
 [Service]
 ExecStart=
-ExecStart=/usr/local/bin/v2ray -config ${JSON_PATH}/%i.json" > \
+ExecStart=${START_COMMAND} -config ${JSON_PATH}/%i.json" > \
       '/etc/systemd/system/v2ray@.service.d/10-donot_touch_single_conf.conf'
   fi
   echo "info: Systemd service files have been installed successfully!"
@@ -458,7 +478,6 @@ remove_v2ray() {
       stop_v2ray
     fi
     if ! ("rm" -r '/usr/local/bin/v2ray' \
-      '/usr/local/bin/v2ctl' \
       "$DAT_PATH" \
       '/etc/systemd/system/v2ray.service' \
       '/etc/systemd/system/v2ray@.service' \
@@ -468,7 +487,10 @@ remove_v2ray() {
       exit 1
     else
       echo 'removed: /usr/local/bin/v2ray'
-      echo 'removed: /usr/local/bin/v2ctl'
+      if [[ -f '/usr/local/bin/v2ctl' ]]; then
+        rm '/usr/local/bin/v2ctl'
+        echo 'removed: /usr/local/bin/v2ctl'
+      fi
       echo "removed: $DAT_PATH"
       echo 'removed: /etc/systemd/system/v2ray.service'
       echo 'removed: /etc/systemd/system/v2ray@.service'
@@ -563,7 +585,9 @@ main() {
   install_v2ray
   install_startup_service_file
   echo 'installed: /usr/local/bin/v2ray'
-  echo 'installed: /usr/local/bin/v2ctl'
+  if [[ -f '/usr/local/bin/v2ctl' ]]; then
+    echo 'installed: /usr/local/bin/v2ctl'
+  fi
   # If the file exists, the content output of installing or updating geoip.dat and geosite.dat will not be displayed
   if [[ ! -f "${DAT_PATH}/.undat" ]]; then
     echo "installed: ${DAT_PATH}/geoip.dat"
