@@ -302,14 +302,12 @@ download_v2ray() {
   fi
 
   # Verification of V2Ray archive
-  for LISTSUM in 'md5' 'sha1' 'sha256' 'sha512'; do
-    SUM="$(${LISTSUM}sum "$ZIP_FILE" | sed 's/ .*//')"
-    CHECKSUM="$(grep ${LISTSUM^^} "$ZIP_FILE".dgst | grep "$SUM" -o -a | uniq)"
-    if [[ "$SUM" != "$CHECKSUM" ]]; then
-      echo 'error: Check failed! Please check your network or try again.'
-      return 1
-    fi
-  done
+  CHECKSUM=$(cat "$ZIP_FILE".dgst | awk -F '= ' '/256=/ {print $2}')
+  LOCALSUM=$(sha256sum "$ZIP_FILE" | awk '{printf $1}')
+  if [[ "$CHECKSUM" != "$LOCALSUM" ]]; then
+    echo 'error: SHA256 check failed! Please check your network or try again.'
+    return 1
+  fi
 }
 
 decompression() {
