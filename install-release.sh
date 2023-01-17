@@ -217,7 +217,7 @@ install_software() {
 }
 
 get_current_version() {
-  if /usr/local/bin/v2ray -version >/dev/null 2>&1;then
+  if /usr/local/bin/v2ray -version > /dev/null 2>&1; then
     VERSION="$(/usr/local/bin/v2ray -version | awk 'NR==1 {print $2}')"
   else
     VERSION="$(/usr/local/bin/v2ray version | awk 'NR==1 {print $2}')"
@@ -380,7 +380,7 @@ install_v2ray() {
 
 install_startup_service_file() {
   get_current_version
-  if [[ "$(echo "${CURRENT_VERSION#v}" | sed 's/-.*//' | awk -F'.' '{print $1}')" -gt "4" ]];then
+  if [[ "$(echo "${CURRENT_VERSION#v}" | sed 's/-.*//' | awk -F'.' '{print $1}')" -gt "4" ]]; then
     START_COMMAND="/usr/local/bin/v2ray run"
   else
     START_COMMAND="/usr/local/bin/v2ray"
@@ -397,8 +397,7 @@ install_startup_service_file() {
 [Service]
 ExecStart=
 ExecStart=${START_COMMAND} -confdir $JSONS_PATH" |
-      tee '/etc/systemd/system/v2ray.service.d/10-donot_touch_multi_conf.conf' > \
-        '/etc/systemd/system/v2ray@.service.d/10-donot_touch_multi_conf.conf'
+      tee '/etc/systemd/system/v2ray.service.d/10-donot_touch_multi_conf.conf' > '/etc/systemd/system/v2ray@.service.d/10-donot_touch_multi_conf.conf'
   else
     "rm" -f '/etc/systemd/system/v2ray.service.d/10-donot_touch_multi_conf.conf' \
       '/etc/systemd/system/v2ray@.service.d/10-donot_touch_multi_conf.conf'
@@ -406,14 +405,12 @@ ExecStart=${START_COMMAND} -confdir $JSONS_PATH" |
 # Or all changes you made will be lost!  # Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
 [Service]
 ExecStart=
-ExecStart=${START_COMMAND} -config ${JSON_PATH}/config.json" > \
-      '/etc/systemd/system/v2ray.service.d/10-donot_touch_single_conf.conf'
+ExecStart=${START_COMMAND} -config ${JSON_PATH}/config.json" > '/etc/systemd/system/v2ray.service.d/10-donot_touch_single_conf.conf'
     echo "# In case you have a good reason to do so, duplicate this file in the same directory and make your customizes there.
 # Or all changes you made will be lost!  # Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
 [Service]
 ExecStart=
-ExecStart=${START_COMMAND} -config ${JSON_PATH}/%i.json" > \
-      '/etc/systemd/system/v2ray@.service.d/10-donot_touch_single_conf.conf'
+ExecStart=${START_COMMAND} -config ${JSON_PATH}/%i.json" > '/etc/systemd/system/v2ray@.service.d/10-donot_touch_single_conf.conf'
   fi
   echo "info: Systemd service files have been installed successfully!"
   echo "${red}warning: ${green}The following are the actual parameters for the v2ray service startup."
