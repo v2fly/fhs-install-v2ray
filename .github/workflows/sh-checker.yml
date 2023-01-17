@@ -39,10 +39,6 @@ jobs:
         uses: docker://rockylinux:8.6
         with:
           args: bash install-release.sh
-      - name: Filed-test on OpenSUSE leap 42
-        uses: docker://opensuse/leap:42
-        with:
-          args: bash install-release.sh
       - name: Filed-test on Arch Linux
         uses: docker://archlinux:latest
         with:
