@@ -35,11 +35,11 @@ jobs:
           sudo bash install-release.sh
           sudo bash install-release.sh --check
           sudo bash install-dat-release.sh
-      - name: Filed-test on CentOS
-        uses: docker://centos:centos8.1.1911
+      - name: Filed-test on Rocky Linux 8.6
+        uses: docker://rockylinux:8.6-minimal
         with:
           args: bash install-release.sh
-      - name: Filed-test on OpenSUSE
+      - name: Filed-test on OpenSUSE 42.1
         uses: docker://opensuse/archive:42.1
         with:
           args: bash install-release.sh
