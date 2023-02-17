@@ -250,9 +250,9 @@ get_version() {
   fi
   HTTP_STATUS_CODE="$(awk 'NR==1 {print $2}' "$TMP_FILE")"
   if [ "$HTTP_STATUS_CODE" != "200" ]; then
-	  "rm" "$TMP_FILE"
-	  echo "error: Failed to get release list, GitHub API response code: $HTTP_STATUS_CODE"
-	  exit 1
+    "rm" "$TMP_FILE"
+    echo "error: Failed to get release list, GitHub API response code: $HTTP_STATUS_CODE"
+    exit 1
   fi
   RELEASE_LATEST="$(sed 'y/,/\n/' "$TMP_FILE" | grep 'tag_name' | awk -F '"' '{print $4}')"
   "rm" "$TMP_FILE"
