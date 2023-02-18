@@ -382,6 +382,12 @@ install_v2ray() {
   fi
 }
 
+# Fix unable to start service in centos
+modify_service_file() {
+  local SERVICE_FILE=$1
+  sed -i -r "/^\s*User=.+/c\User=root" ${SERVICE_FILE}
+}
+
 install_startup_service_file() {
   get_current_version
   if [[ "$(echo "${CURRENT_VERSION#v}" | sed 's/-.*//' | awk -F'.' '{print $1}')" -gt "4" ]]; then
@@ -391,6 +397,11 @@ install_startup_service_file() {
   fi
   install -m 644 "${TMP_DIRECTORY}/systemd/system/v2ray.service" /etc/systemd/system/v2ray.service
   install -m 644 "${TMP_DIRECTORY}/systemd/system/v2ray@.service" /etc/systemd/system/v2ray@.service
+
+  # Fix unable to start service in centos
+   modify_service_file /etc/systemd/system/v2ray.service
+   modify_service_file /etc/systemd/system/v2ray@.service
+
   mkdir -p '/etc/systemd/system/v2ray.service.d'
   mkdir -p '/etc/systemd/system/v2ray@.service.d/'
   if [[ -n "$JSONS_PATH" ]]; then
