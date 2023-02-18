@@ -302,12 +302,16 @@ download_v2ray() {
   fi
 
   # Verification of V2Ray archive
-  CHECKSUM=$(awk -F '= ' '/256=/ {print $2}' < "${ZIP_FILE}.dgst")
-  LOCALSUM=$(sha256sum "$ZIP_FILE" | awk '{printf $1}')
-  if [[ "$CHECKSUM" != "$LOCALSUM" ]]; then
-    echo 'error: SHA256 check failed! Please check your network or try again.'
-    return 1
-  fi
+  declare -A CMD_KEY=(["md5"]="md5" ["sha1"]="sha1" ["sha256"]="sha2-256" ["sha512"]="sha2-512")
+  for LISTSUM in 'md5' 'sha1' 'sha256' 'sha512'; do
+    SUM="$(${LISTSUM}sum "$ZIP_FILE" | sed 's/ .*//')"
+    # CHECKSUM="$(grep ${LISTSUM^^} "$ZIP_FILE".dgst | grep "$SUM" -o -a | uniq)"
+    CHECKSUM="$(grep "${CMD_KEY[$LISTSUM]^^}" "$ZIP_FILE".dgst | grep "$SUM" -o -a | uniq)"
+    if [[ "$SUM" != "$CHECKSUM" ]]; then
+      echo 'error: Check failed! Please check your network or try again.'
+      return 1
+    fi
+  done
 }
 
 decompression() {
@@ -397,7 +401,8 @@ install_startup_service_file() {
 [Service]
 ExecStart=
 ExecStart=${START_COMMAND} -confdir $JSONS_PATH" |
-      tee '/etc/systemd/system/v2ray.service.d/10-donot_touch_multi_conf.conf' > '/etc/systemd/system/v2ray@.service.d/10-donot_touch_multi_conf.conf'
+      tee '/etc/systemd/system/v2ray.service.d/10-donot_touch_multi_conf.conf' > \
+        '/etc/systemd/system/v2ray@.service.d/10-donot_touch_multi_conf.conf'
   else
     "rm" -f '/etc/systemd/system/v2ray.service.d/10-donot_touch_multi_conf.conf' \
       '/etc/systemd/system/v2ray@.service.d/10-donot_touch_multi_conf.conf'
@@ -405,12 +410,14 @@ ExecStart=${START_COMMAND} -confdir $JSONS_PATH" |
 # Or all changes you made will be lost!  # Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
 [Service]
 ExecStart=
-ExecStart=${START_COMMAND} -config ${JSON_PATH}/config.json" > '/etc/systemd/system/v2ray.service.d/10-donot_touch_single_conf.conf'
+ExecStart=${START_COMMAND} -config ${JSON_PATH}/config.json" > \
+      '/etc/systemd/system/v2ray.service.d/10-donot_touch_single_conf.conf'
     echo "# In case you have a good reason to do so, duplicate this file in the same directory and make your customizes there.
 # Or all changes you made will be lost!  # Refer: https://www.freedesktop.org/software/systemd/man/systemd.unit.html
 [Service]
 ExecStart=
-ExecStart=${START_COMMAND} -config ${JSON_PATH}/%i.json" > '/etc/systemd/system/v2ray@.service.d/10-donot_touch_single_conf.conf'
+ExecStart=${START_COMMAND} -config ${JSON_PATH}/%i.json" > \
+      '/etc/systemd/system/v2ray@.service.d/10-donot_touch_single_conf.conf'
   fi
   echo "info: Systemd service files have been installed successfully!"
   echo "${red}warning: ${green}The following are the actual parameters for the v2ray service startup."
