@@ -249,7 +249,7 @@ get_version() {
     exit 1
   fi
   HTTP_STATUS_CODE=$(awk 'NR==1 {print $2}' "$TMP_FILE")
-  if [[ "$HTTP_STATUS_CODE" -ge 200 ]] || [[ "$HTTP_STATUS_CODE" -le 299 ]]; then
+  if [[ $HTTP_STATUS_CODE -lt 200 ]] || [[ $HTTP_STATUS_CODE -gt 299 ]]; then
     "rm" "$TMP_FILE"
     echo "error: Failed to get release list, GitHub API response code: $HTTP_STATUS_CODE"
     exit 1
