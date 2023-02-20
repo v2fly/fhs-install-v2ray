@@ -2,6 +2,8 @@
 
 > 欲查阅以简体中文撰写的介绍，请访问：[README.zh-Hans-CN.md](README.zh-Hans-CN.md)
 
+> For an introduction in ENGLISH, please visit: [README.ENG.md](README.ENG.md)
+
 > Bash script for installing V2Ray in operating systems such as Debian / CentOS / Fedora / openSUSE that support systemd
 
 該腳本安裝的文件符合 [Filesystem Hierarchy Standard (FHS)](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard)：
