@@ -329,6 +329,8 @@ decompression() {
 install_file() {
   NAME="$1"
   if [[ "$NAME" == 'v2ray' ]] || [[ "$NAME" == 'v2ctl' ]]; then
+    # Make sure the directory exists (sometimes it doesn't, e.g., EdgeRouter)
+    mkdir -p '/usr/local/bin'
     install -m 755 "${TMP_DIRECTORY}/$NAME" "/usr/local/bin/$NAME"
   elif [[ "$NAME" == 'geoip.dat' ]] || [[ "$NAME" == 'geosite.dat' ]]; then
     install -m 644 "${TMP_DIRECTORY}/$NAME" "${DAT_PATH}/$NAME"
